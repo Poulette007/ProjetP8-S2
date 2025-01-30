@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DE48F9D9-3CA9-430B-A913-C49CAE155235}|Project1\\Project1.vcxproj|C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\Project1\\Acteur.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{DE48F9D9-3CA9-430B-A913-C49CAE155235}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Acteur.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DE48F9D9-3CA9-430B-A913-C49CAE155235}|Project1\\Project1.vcxproj|C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\Project1\\Acteur.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{DE48F9D9-3CA9-430B-A913-C49CAE155235}|Project1\\Project1.vcxproj|solutionrelative:Project1\\Acteur.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Acteur.cpp",
+              "DocumentMoniker": "C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\Project1\\Acteur.cpp",
+              "RelativeDocumentMoniker": "Project1\\Acteur.cpp",
+              "ToolTip": "C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\Project1\\Acteur.cpp",
+              "RelativeToolTip": "Project1\\Acteur.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-01-30T18:48:45.824Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Acteur.h",
+              "DocumentMoniker": "C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\Project1\\Acteur.h",
+              "RelativeDocumentMoniker": "Project1\\Acteur.h",
+              "ToolTip": "C:\\Users\\yohan\\Documents\\git\\ProjetP8-S2\\Projet\\Project1\\Acteur.h",
+              "RelativeToolTip": "Project1\\Acteur.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-01-30T18:48:34.696Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
