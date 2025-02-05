@@ -128,17 +128,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="EcranPrincipal.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Stat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="EcranPrincipal.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Stat.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Actor.csv" />
+    <None Include="DataBase.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
