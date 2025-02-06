@@ -6,7 +6,8 @@
 #include "Actor.h"
 #include "Obstacle.h"
 #include "Plane.h"
-
+#include "Stat.h"
+#include "Player.h"
 using namespace std;
 
 
@@ -16,13 +17,15 @@ public:
 	Game();
 	vector<Actor*> listActor;
 	void generateObstacles();
+	bool isPosYPossible(int y);
 	void update();
 	void manageCollision();
 	void CollionDetected(Actor* actor);
-	int framecounter;
 	bool isCollision;
 	void gotoxy(int x, int y);
+	void afficherStat();
 	Plane *plane;
+	Stat* stat;
 	
 };
 

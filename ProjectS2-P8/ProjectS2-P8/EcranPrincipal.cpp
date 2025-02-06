@@ -36,6 +36,17 @@ void EcranPrincipal::processChoice(int choix) {
     }
 }
 
+std::string EcranPrincipal::getUserName() const
+{
+    return std::string();
+}
+
+int EcranPrincipal::getScore() const
+{
+
+    return this->score;
+}
+
 void EcranPrincipal::logIn() {
     cout << "Entrez votre nom d'utilisateur : ";
     string userName;
@@ -43,6 +54,7 @@ void EcranPrincipal::logIn() {
 
     if (userExists(userName)) {
         cout << "Connected" << endl;
+		this->userName = userName;
     }
     else {
         cout << "User not found. Please, create an account." << endl;
@@ -63,7 +75,7 @@ void EcranPrincipal::createAccount() {
         addUser(userName);
         cout << "User account successful." << endl;
     }
-    printMenu();
+	logIn();
 }
 
 bool EcranPrincipal::userExists(const std::string& userName) {
@@ -71,6 +83,7 @@ bool EcranPrincipal::userExists(const std::string& userName) {
     string line;
     while (getline(file, line)) {
         if (line == userName) {
+            
             file.close();
             return true;
         }
@@ -78,6 +91,7 @@ bool EcranPrincipal::userExists(const std::string& userName) {
     file.close();
     return false;
 }
+
 
 void EcranPrincipal::addUser(const std::string& userName) {
     ofstream file("DataBase.csv", ios::app);

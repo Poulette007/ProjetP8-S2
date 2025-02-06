@@ -1,12 +1,4 @@
-﻿  Actor.cpp
-C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Actor.cpp(11,41): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Game.cpp
-C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(46,19): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(46,22): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-  Obstacle.cpp
-  Plane.cpp
-  main.cpp
-C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\main.cpp(17,18): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\main.cpp(17,21): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-  Generating Code...
+﻿  Game.cpp
+C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(50,19): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(50,22): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
   ProjectS2-P8.vcxproj -> C:\Users\yohan\Documents\git\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe

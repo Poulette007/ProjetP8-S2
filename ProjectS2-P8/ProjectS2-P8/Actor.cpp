@@ -3,20 +3,13 @@
 Actor::Actor(int x, int y, int length, std::string sprite)
 {
     setPosition(x, y, length);
-    setSprite(sprite);
 }
 Actor::Actor(int x, int y)
 {
-    setSprite("~~~");
     setPosition(x, y, getSprite().length());
-
 }
 void Actor::setX(int x) {
     this->posX = x;
-}
-
-void Actor::setSprite(std::string sprite) {
-    this->sprite = sprite;
 }
 
 int Actor::getX() {
