@@ -4,24 +4,24 @@
 class Stat
 {
 private:
-	int fuel;
-	int speed;
-	double score;
-	int height;
-	void setFuel(int F);
-	void setSpeed(int Sp);
-	void setScore(int Sc);
-	void setHeight(int H);
+	static int fuel;
+	static int speed;
+	static int score;
+	static int height;
+	int delay;
+
 public:
+	static bool close;
 	Stat();
 	Stat(int score);
-	int getFuel();
-	int getSpeed();
-	int getScore();
-	int getHeight();
+	static int getFuel();
+	static int getSpeed();
+	static int getScore();
+	static int getHeight();
 	void readKeybord();
-	void changeFuel(int fuel);
+	static void changeFuel(int F);
+	static void changeSpeed(int Sp);
+	static void changeScore(int Sc);
+	static void changeHeight(int H);
+	void countFuel();
 };
-
-
-

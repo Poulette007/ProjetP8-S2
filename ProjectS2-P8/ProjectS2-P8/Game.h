@@ -3,6 +3,9 @@
 #include <vector>
 #include <iostream>
 #include <windows.h>
+#include <random>
+#include <algorithm>
+
 #include "Actor.h"
 #include "Obstacle.h"
 #include "Plane.h"
@@ -17,6 +20,7 @@ public:
 	Game();
 	vector<Actor*> listActor;
 	void generateObstacles();
+	bool takeoff();
 	bool isPosYPossible(int y);
 	void update();
 	void manageCollision();

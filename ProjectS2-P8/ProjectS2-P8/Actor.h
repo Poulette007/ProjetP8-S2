@@ -2,12 +2,14 @@
 
 #include <string>
 #include <iostream>
+
+#include "Stat.h"
 class Actor
 {
 public: 
 	Actor(int x, int y, int lenght, std::string);
 	Actor(int x, int y);
-	virtual void action() = 0;
+	virtual void action(Stat stat) = 0;
 	virtual void setSprite(std::string sprite) = 0;
 	//virtual bool canSpawn(int y) = 0;
 	virtual int getSpeed() const = 0;

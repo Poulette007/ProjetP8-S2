@@ -1,7 +1,12 @@
 #pragma once
 #include <iostream>
-
 #include "Actor.h"
+#include "const.h"
+
+//#define gazFuel 1
+//#define windFuel -1
+//#define birdFuel -2
+//#define maxFuel 100
 
 using namespace std;
 
@@ -12,11 +17,12 @@ public:
     }
     Gaz(int x, int y) : Actor(x, y)
     {
-        speed = 1;
+        speed = OBSTACLE_SPEED;
         setSprite("Gaz");
     }
-    void action() override {
-        std::cout << "Obstacle -- Gaz action()" << std::endl;
+    void action(Stat stat) override {
+        stat.changeFuel(GAZ_FUEL);
+        // std::cout << "Obstacle -- Gaz action()" << std::endl;
     }
     int getSpeed() const override { return speed; }
     void setSprite(std::string sprite) override {
@@ -35,10 +41,11 @@ public:
     Wind(int x, int y) : Actor(x, y)
     {
         setSprite("wind");
-		speed = 1;
+		speed = OBSTACLE_SPEED;
     }
-    void action() override {
-        std::cout << "Obstacle -- wind action()" << std::endl;
+    void action(Stat stat) override {
+		stat.changeFuel(WIND_FUEL);
+        // std::cout << "Obstacle -- wind action()" << std::endl;
     }
     int getSpeed() const override { return speed; }
     void setSprite(std::string sprite) override {
@@ -56,11 +63,12 @@ public:
     }
     Tree(int x, int y) : Actor(x, y)
     {
-        speed = 1;
+        speed = OBSTACLE_SPEED;
         setSprite("Tree");
     }
-    void action() override {
-        std::cout << "Obstacle -- Tree action()" << std::endl;
+    void action(Stat stat) override {
+        stat.close = true;
+        // std::cout << "Obstacle -- Tree action()" << std::endl;
     }
     int getSpeed() const override { return speed; }
     void setSprite(std::string sprite) override {
@@ -77,11 +85,12 @@ public:
     }
     Bird(int x, int y) : Actor(x, y)
     {
-        speed = 1;
+        speed = OBSTACLE_SPEED;
         setSprite("bird");
     }
-    void action() override {
-        std::cout << "Obstacle -- Bird action()" << std::endl;
+    void action(Stat stat) override {
+		stat.changeFuel(BIRD_FUEL);
+        // std::cout << "Obstacle -- Bird action()" << std::endl;
     }
     int getSpeed() const override { return speed; }
     void setSprite(std::string sprite) override {

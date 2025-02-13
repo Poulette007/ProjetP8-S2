@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="const.h" />
     <ClInclude Include="EcranPrincipal.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Map.h" />

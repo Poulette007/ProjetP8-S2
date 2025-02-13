@@ -7,7 +7,7 @@ Plane::Plane(int x, int y) : Actor(x, y)
 	speed = 0;
 	setSprite("::^=^>");
 }
-void Plane::action()  {
+void Plane::action(Stat stat)  {
     std::cout << "Obstacle -- plane action()" << std::endl;
 }
 int Plane::getSpeed() const {

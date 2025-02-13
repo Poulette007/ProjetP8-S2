@@ -1,4 +1,6 @@
 #include "Stat.h"
+#include "const.h"
+
 #define PALLIER_1 0
 #define PALLIER_2 1
 #define PALLIER_3 2
@@ -7,33 +9,44 @@
 #define MONTER_1_PALLIER -1
 #define DESCENDRE_1_PALLIER 1
 
-#define MAX_SPEED 100
-#define MIN_SPEED 50
-#define MAX_FUEL 100
-#define MIN_FUEL 0
 
+
+int Stat::fuel = 0;
+int Stat::speed = 0;
+int Stat::score = 0;
+int Stat::height = 0;
+bool Stat::close = false;
 
 Stat::Stat()
 {
-	fuel = 0;
-	speed = MIN_SPEED; //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
-	score = 0;
-	height = PALLIER_2; //Hauteur pour debut quand en vol (nombres semi-bullshit)
+	changeFuel(100);
+	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
+	changeScore(0);
+	changeHeight(PALLIER_2); //Hauteur pour debut quand en vol (nombres semi-bullshit)
+	delay = 0;
 }
 
-Stat::Stat(int score)
+Stat::Stat(int scoreIni)
 {
-	fuel = 0;
-	speed = MIN_SPEED;
-	this->score = score;
-	height = PALLIER_2;
+	changeFuel(100);
+	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
+	changeScore(scoreIni);
+	changeHeight(PALLIER_2); //Hauteur pour debut quand en vol (nombres semi-bullshit)
+	delay = 0;
 }
 
 
-void Stat::setFuel(int F)
+void Stat::changeFuel(int F)
 {
-	if ((fuel + F <= MAX_FUEL) && (fuel + F >= MIN_FUEL))
+	if ((fuel + F) <= 0)
 	{
+		close = true;
+	}
+	else if ((fuel + F) > MAX_FUEL)
+	{
+		fuel = MAX_FUEL;
+	}
+	else {
 		fuel += F;
 	}
 }
@@ -43,7 +56,7 @@ int Stat::getFuel()
 	return fuel;
 }
 
-void Stat::setSpeed(int Sp)
+void Stat::changeSpeed(int Sp)
 {
 	if ((speed + Sp <= MAX_SPEED) && (speed + Sp >= MIN_SPEED))
 	{
@@ -56,7 +69,7 @@ int Stat::getSpeed()
 	return speed;
 }
 
-void Stat::setScore(int Sc)
+void Stat::changeScore(int Sc)
 {
 	if (Sc > 0)
 		score += Sc;
@@ -67,11 +80,21 @@ int Stat::getScore()
 	return score;
 }
 
-void Stat::setHeight(int H)
+void Stat::changeHeight(int H)
 {
 	if (height + H >= PALLIER_1 && height + H <= PALLIER_4)
 	{
 		height += H;
+	}
+}
+
+void Stat::countFuel()
+{
+	delay++;
+	if (delay >= 50)
+	{
+		delay = 0;
+		changeFuel(-10);
 	}
 }
 
@@ -90,18 +113,20 @@ void Stat::readKeybord()
 	switch (ch)
 	{
 	case 'w': //w (monter en altitude)
-		setHeight(MONTER_1_PALLIER);
+		changeHeight(MONTER_1_PALLIER);
 		break;
 
 	case 's': //s (diminu l'altitude)
-		setHeight(DESCENDRE_1_PALLIER);
+		changeHeight(DESCENDRE_1_PALLIER);
+		break;
+	case 'a':
+		changeSpeed(-1);
+		break;
+	case 'd':
+		changeSpeed(1);
 		break;
 	default:
 		break;
 	}
 }
 
-void Stat::changeFuel(int fuel)
-{
-	setFuel(getFuel() + fuel);
-}
