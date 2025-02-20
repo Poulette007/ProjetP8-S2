@@ -7,6 +7,7 @@
 /*------------------------------ Librairies ---------------------------------*/
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include <LiquidCrystal.h>
 
 /*------------------------------ Constantes ---------------------------------*/
 
@@ -18,8 +19,6 @@ volatile bool shouldSend_ = false;  // Drapeau prêt à envoyer un message
 volatile bool shouldRead_ = false;  // Drapeau prêt à lire un message
 
 int ledState = 0;
-
-
 int pinLED = 7;
 
 //Moteur vibrant
@@ -43,13 +42,12 @@ int BP2_PIN = 51;
 int BP3_PIN = 52;
 int BP4_PIN = 53;
 
-
 //Accelerometre
 int pinX = A5;
 int pinY = A3;
 int pinZ = A4;
 
-//barnagraphe
+//bargraph
 int bar1 = 22;
 int bar2 = 24;
 int bar3 = 26;
@@ -61,6 +59,10 @@ int bar8 = 36;
 int bar9 = 38;
 int bar10 = 40;
 
+//LCD
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
 /*------------------------- Prototypes de fonctions -------------------------*/
 void sendMsg(); 
 void readMsg();
@@ -71,6 +73,7 @@ void testBouton();
 void testPotentiometre();
 void testJoystick();
 void testMoteurVibrant();
+void testEcranLCD();
 /*---------------------------- Fonctions "Main" -----------------------------*/
 
 void setup() {
@@ -98,6 +101,11 @@ void setup() {
 
   //Moteur vibrant
   pinMode(moteur_vibration, OUTPUT);
+
+  //Écran LCD
+  lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.print("hello, world!");
 }
 
 /* Boucle principale (infinie) */
@@ -114,7 +122,8 @@ void loop() {
   // testBouton();
   // testPotentiometre();
   //testJoystick();
-  testMoteurVibrant();
+  //testMoteurVibrant();
+  testEcranLCD();
 
   delay(500);  // delais de 10 ms
 }
@@ -202,7 +211,6 @@ void testBouton(){
   Serial.println(digitalRead(BP3_PIN));
   Serial.print("Etat bouton 1");
   Serial.println(digitalRead(BP4_PIN));
-
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -241,6 +249,16 @@ void testMoteurVibrant(){
     digitalWrite(moteur_vibration, LOW); 
     delay(1000);
 }
+
+/*---------------------------Definition de fonctions ------------------------
+Fonction du test le l'écran LCD
+Sortie : affichage du message à l'écran
+-----------------------------------------------------------------------------*/
+void testEcranLCD(){
+  lcd.setCursor(0, 1);
+  lcd.print(millis() / 1000);
+}
+
 /*---------------------------Definition de fonctions ------------------------
 Fonction d'envoi
 Entrée : Aucun
