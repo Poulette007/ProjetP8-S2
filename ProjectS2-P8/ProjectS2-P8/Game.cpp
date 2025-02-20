@@ -7,9 +7,12 @@ Game::Game()
 	plane = new Plane(START_PLANE_X, 2);
 	stat = new Stat();
 	isCollision = false;
+	count = 0;
+	possibleTouchDown = 500;
 }
 void Game::update()
 {
+	int ch = 0;
 	for (auto actor : listActor)
 	{
 		gotoxy(actor->getX(), actor->getY());
@@ -21,7 +24,6 @@ void Game::update()
 		}
 	}
 	stat->readKeybord();
-
 	stat->changeScore(250);
 	stat->countFuel();
 
@@ -32,6 +34,26 @@ void Game::update()
 	afficherStat();
 	manageCollision();
 	generateObstacles();
+
+	//Atterissage possible
+	if (count >= possibleTouchDown && count <= (possibleTouchDown + 200))
+	{
+		gotoxy(30, 6);
+		cout << "Atterissage possible, appuyez sur K!";
+		if (_kbhit())
+			ch = _getch();
+		if (ch == 'k')
+		{
+			stat->landing = true;
+			stat->close = true;
+		}
+		if (count == possibleTouchDown + 200)
+		{
+			count = 0;
+			possibleTouchDown += 500;
+		}
+	}
+	count++;
 }
 
 void Game::manageCollision()
@@ -56,10 +78,10 @@ void Game::gotoxy(int x, int y)
 void Game::afficherStat()
 {
 	gotoxy(0, 6);
-	cout << "Fuel : " << stat->getFuel() << endl;
-	cout << "Speed : " << stat->getSpeed() << endl;
-	cout << "Score : " << stat->getScore() << endl;
-	cout << "Height : " << stat->getHeight() << endl;
+	cout << "Gaz: " << stat->getFuel() << endl;
+	cout << "Vitesse: " << stat->getSpeed() << endl;
+	cout << "Pointage: " << stat->getScore() << endl;
+	cout << "Hauteur: " << stat->getHeight() << endl;
 }
 
 void Game::generateObstacles()
@@ -260,7 +282,277 @@ bool Game::takeoff()
 	}
 }
 
+bool Game::touchDown()
+{
+	int state = 0;
+	int ch = 0;
+	int speed = 100;
+	int count = 0;
+	int startindex = 0;
+	plane->setX(2);
+	plane->setY(0);
+	int length = rand() % 200 + 400;
+	bool atterrissageGood = false;
+	vector<char> piste(length + 200);
 
+	//On remplit la foret
+	for (int i = 0; i < 200; i++)
+	{
+		piste[i] = 'T';
+	}
+
+	//On remplit la piste
+	for (int i = 200; i < length; i++)
+	{
+		if (i % 10 == 1)
+			piste[i] = '|';
+		else if (i >= length - 5)
+			piste[i] = 'X';
+		else
+			piste[i] = '-';
+	}
+	
+	//Jeu d'aterrissage
+	while (!atterrissageGood)
+	{
+		switch (state)
+		{
+			case 0:	//Appuyer plusieurs fois sur a pour diminuer la vitesse
+				gotoxy(0, 8);
+				cout << "Diminuez la vitesse de 50%";
+				if (_kbhit())
+					ch = _getch();
+				else
+					break;
+				if (ch == 'a')
+				{
+					speed -= 5;
+					ch = 0;
+				}
+				else
+					break;
+				if (speed <= 50)
+				{
+					state = 1;
+					gotoxy(0, 8);
+					cout << "Diminuez la vitesse de 50%: OK!";
+				}
+				else
+					break;
+				break;
+			case 1: //Diminuer la hauteur de l'avion
+				gotoxy(0, 9);
+				cout << "Diminuez la hauteur de 2 positions";
+				if (_kbhit())
+					ch = _getch();
+				if (ch == 's')
+				{
+					gotoxy(plane->getX(), plane->getY());
+					cout << "      "; //Supprimer l'avion pour la deplacer
+					plane->setY(plane->getY() + 1);
+					ch = 0;
+				}
+				else
+					break;
+				if (plane->getY() == 2)
+				{
+					gotoxy(0, 9);
+					cout << "Diminuez la hauteur de 2 positions: OK!";
+					state = 2;
+				}
+				else
+					break;
+				break;
+			case 2:
+				gotoxy(0, 10);
+				cout << "Sortez le train d'atterissage en appuiant sur: T";
+				if (_kbhit())
+					ch = _getch();
+				if (ch == 't')
+				{
+					gotoxy(0, 10);
+					cout << "Sortez le train d'atterissage en appuiant sur: T: OK!";
+					state = 3;
+				}
+				else
+					break;
+				break;
+			case 3:
+				gotoxy(0, 11);
+				cout << "Diminuez la vitesse de 25%";
+				if (_kbhit())
+					ch = _getch();
+				else
+					break;
+				if (ch == 'a')
+				{
+					speed -= 1;
+					ch = 0;
+				}
+				else
+					break;
+				if (speed <= 25)
+				{
+					state = 4;
+					gotoxy(0, 11);
+					cout << "Diminuez la vitesse de 25%: OK!";
+				}
+				else
+					break;
+				break;
+			case 4:
+				gotoxy(0, 12);
+				cout << "Touchez le sol";
+				if (_kbhit())
+					ch = _getch();
+				if (ch == 's')
+				{
+					gotoxy(plane->getX(), plane->getY());
+					cout << "      ";
+					plane->setY(plane->getY() + 1);
+					ch = 0;
+				}
+				else
+					break;
+				if (plane->getY() == 5)
+				{
+					gotoxy(0, 12);
+					cout << "Touchez le sol: OK!";
+					state = 5;
+				}
+				else
+					break;
+				break;
+			case 5:
+				gotoxy(0, 13);
+				cout << "Diminuez la vitesse a 10%";
+				if (_kbhit())
+					ch = _getch();
+				else
+					break;
+				if (ch == 'a')
+				{
+					speed -= 1;
+					ch = 0;
+				}
+				else
+					break;
+				if (speed <= 10)
+				{
+					state = 6;
+					gotoxy(0, 13);
+					cout << "Diminuez la vitesse a 10%: OK!";
+				}
+				else
+					break;
+				break;
+			case 6:
+				gotoxy(0, 14);
+				cout << "Activez la propultion invese en appuiant sur: P";
+				if (_kbhit())
+					ch = _getch();
+				if (ch == 'p')
+				{
+					gotoxy(0, 14);
+					cout << "Activez la propultion invese en appuiant sur: P: OK!";
+					state = 7;
+				}
+				else
+					break;
+				break;
+			case 7:
+				count++;
+				if (count >= 10)
+				{
+					speed -= 1;
+					if (speed == 1)
+					{
+						state = 8;
+					}
+					else
+					{
+						count = 0;
+						break;
+					}
+				}
+				else
+					break;
+			case 8:
+				gotoxy(0, 15);
+				cout << "Immobiliser l'avion avec les freins en appuiant sur: F";
+				if (_kbhit())
+					ch = _getch();
+				if (ch == 'f')
+				{
+					gotoxy(0, 10);
+					cout << "Immobiliser l'avion avec les freins en appuiant sur: F: OK!";
+					gotoxy(0, 7);
+					cout << "Vitesse: 0    ";
+					gotoxy(35, 3);
+					cout << "Atterrissage reussi!!!";
+					atterrissageGood = true;
+					break;
+				}
+				else
+					break;
+				break;
+
+			default:
+				break;
+		}
+		//AFFICHAGE
+		//pour le defilement de la piste
+		if (startindex < length - ACTOR_POS_X)
+		{
+			startindex++;
+		}
+		//affichage de la portion visible de la piste
+		gotoxy(0, 6);
+		if (startindex + ACTOR_POS_X < length)
+		{
+			for (int i = 0; i < ACTOR_POS_X; i++)
+			{
+				if (i + startindex > length)
+					cout << " ";
+				else
+					cout << piste[i + startindex];
+			}
+		}
+		else //quand on arrive au bout de la piste
+		{
+			// Effacer l'ancien avion
+			gotoxy(plane->getX(), plane->getY());
+			cout << "   ";
+			plane->setX(plane->getX() + 1);
+			//Print l'avion
+			gotoxy(plane->getX(), plane->getY());
+			cout << plane->getSprite();
+		}
+
+		//Affichage de l'avion
+		gotoxy(plane->getX(), plane->getY());
+		cout << plane->getSprite();
+
+		//Affichage de la vitesse
+		gotoxy(0, 7);
+		cout << "Vitesse: " << speed << "          " << "Pointage: " << stat->getScore() << "    ";
+		
+		//Vitesse du jeu
+		int delay = max(20, 100 / speed);
+		Sleep(delay);
+
+		//Condition d'echec
+		if ((plane->getX() + startindex) >= length - 10)
+		{
+			system("cls");
+			gotoxy(35, 3);
+			cout << "Plane crashed";
+			stat->close;
+			return false;
+		}
+	}
+	return true;
+}
 bool Game::isPosYPossible(int y)
 {
 		for (auto actor : listActor)

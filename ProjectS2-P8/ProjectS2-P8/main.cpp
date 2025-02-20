@@ -27,8 +27,8 @@ int main()
 	using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
 	using std::chrono::system_clock;
 	// cout << "||---||\n||   ||\n||   ||\n||WTC||\n||   ||\n||   ||\n||   ||\n";
-	printArt();
-    sleep_for(5s);
+	/*printArt();
+    sleep_for(5s);*/
 	EcranPrincipal ecran;
 	ecran.printMenu();
 	Player *player = new Player(ecran.getUserName(), ecran.getScore());
@@ -41,6 +41,11 @@ int main()
 		system("cls");
 		game->update();
 	}
+    system("cls");
+    if (game->stat->landing)
+    {
+        game->touchDown();
+    }
 	return 0;
 }
 void printArt() {

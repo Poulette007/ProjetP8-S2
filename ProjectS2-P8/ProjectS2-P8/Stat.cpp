@@ -16,6 +16,7 @@ int Stat::speed = 0;
 int Stat::score = 0;
 int Stat::height = 0;
 bool Stat::close = false;
+bool Stat::landing = false;
 
 Stat::Stat()
 {

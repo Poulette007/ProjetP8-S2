@@ -21,6 +21,7 @@ public:
 	vector<Actor*> listActor;
 	void generateObstacles();
 	bool takeoff();
+	bool touchDown();
 	bool isPosYPossible(int y);
 	void update();
 	void manageCollision();
@@ -30,6 +31,8 @@ public:
 	void afficherStat();
 	Plane *plane;
 	Stat* stat;
+	int count;
+	int possibleTouchDown;
 	
 };
 

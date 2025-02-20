@@ -12,6 +12,7 @@ private:
 
 public:
 	static bool close;
+	static bool landing;
 	Stat();
 	Stat(int score);
 	static int getFuel();
