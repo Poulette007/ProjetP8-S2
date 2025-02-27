@@ -8,6 +8,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <LiquidCrystal.h>
+//#include <string.h>
 
 /*------------------------------ Constantes ---------------------------------*/
 
@@ -22,8 +23,10 @@ int ledState = 0;
 int pinLED = 7;
 
 //Moteur vibrant
-int moteur_vibration = 32;
+int moteur_vibration = 42;
 
+//DEL bleue
+int DEL_PIN = 33;
 
 //Joystick
 int joystickY = A1;
@@ -41,6 +44,10 @@ int BP1_PIN = 50;
 int BP2_PIN = 51;
 int BP3_PIN = 52;
 int BP4_PIN = 53;
+bool NORD = false;
+bool EST = false;
+bool SUD = false;
+bool OUEST = false;
 
 //Accelerometre
 int pinX = A5;
@@ -73,7 +80,10 @@ void testBouton();
 void testPotentiometre();
 void testJoystick();
 void testMoteurVibrant();
-void testEcranLCD();
+void testEcranLCDs(String info, int curseurX, int curseurY);
+void testEcranLCDi(int info, int curseurX, int curseurY);
+void testDEL();
+void demoAudit2();
 /*---------------------------- Fonctions "Main" -----------------------------*/
 
 void setup() {
@@ -105,7 +115,10 @@ void setup() {
   //Écran LCD
   lcd.begin(16, 2);
   // Print a message to the LCD.
-  lcd.print("hello, world!");
+  //lcd.print("hello, world!");
+
+  //DEL
+  pinMode(DEL_PIN, OUTPUT);
 }
 
 /* Boucle principale (infinie) */
@@ -116,16 +129,16 @@ void loop() {
     sendMsg();
   }
 
-  
+  demoAudit2();
   // lectureAccelerometre();
   // testBargraph();
   // testBouton();
   // testPotentiometre();
   //testJoystick();
   //testMoteurVibrant();
-  testEcranLCD();
+  //testEcranLCD();
 
-  delay(500);  // delais de 10 ms
+  delay(50000);  // delais de 10 ms
 }
 
 /*---------------------------Definition de fonctions ------------------------*/
@@ -138,12 +151,12 @@ Sortie : valeur X,Y,Z
 -----------------------------------------------------------------------------*/
 
 void lectureAccelerometre(){
-  Serial.print("x: ");
-  Serial.print(analogRead(pinX));
-  Serial.print(" y: ");
-  Serial.print(analogRead(pinY));
-  Serial.print(" z: ");
-  Serial.println(analogRead(pinZ));
+  testEcranLCDs("x:", 0, 1);
+  testEcranLCDi(analogRead(pinX), 2, 1);
+  testEcranLCDs("y:", 5, 1);
+  testEcranLCDi(analogRead(pinY), 7,1);
+  testEcranLCDs("z:", 10, 1);
+  testEcranLCDi(analogRead(pinZ), 12, 1);
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -203,6 +216,7 @@ Sortie : état du bouton
 -----------------------------------------------------------------------------*/
 
 void testBouton(){
+  /*
   Serial.print("Etat bouton 1");
   Serial.println(digitalRead(BP1_PIN));
   Serial.print("Etat bouton 1");
@@ -211,6 +225,29 @@ void testBouton(){
   Serial.println(digitalRead(BP3_PIN));
   Serial.print("Etat bouton 1");
   Serial.println(digitalRead(BP4_PIN));
+  */
+
+  if(!digitalRead(BP1_PIN)){
+    testEcranLCDs("Bouton: Ouest   ", 1, 1);
+    OUEST = true;
+    return;
+  }
+  else if (!digitalRead(BP2_PIN)){
+    testEcranLCDs("Bouton: Est     ", 1, 1);
+    EST = true;
+    return;
+  }
+  else if(!digitalRead(BP3_PIN)){
+    testEcranLCDs("Bouton: Sud     ", 1, 1);
+    SUD = true;
+    return;
+  }
+  else if(!digitalRead(BP4_PIN))
+  {
+    testEcranLCDs("Bouton: Nord    ", 1, 1);
+    NORD = true;
+    return;
+  }
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -220,8 +257,8 @@ Sortie : valeur de la résistance
 
 void testPotentiometre(){
   potValue = analogRead(pinPOT);
-  Serial.print("Valeur potentiomètre");
-  Serial.println(potValue);
+  testEcranLCDs("Valeur potentiomètre", 0,0);
+  testEcranLCDi(potValue, 5, 1);
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -231,12 +268,12 @@ Sortie : valeur de la résistance en X et en Y
 
 void testJoystick(){
   joystickYValue = analogRead(joystickY);
-  Serial.print("Valeur en Y: ");
-  Serial.println(joystickYValue);
+  testEcranLCDs("Valeur en Y: ", 0, 1);
+  testEcranLCDi(joystickYValue, 13, 1);
 
   joystickXValue = analogRead(joystickX);
-  Serial.print("Valeur en X: ");
-  Serial.println(joystickXValue);
+  testEcranLCDs("Valeur en X: ", 0, 0);
+  testEcranLCDi(joystickXValue, 13, 0);
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -244,20 +281,105 @@ Fonction du test moteur vibrant
 Sortie : vibration
 -----------------------------------------------------------------------------*/
 void testMoteurVibrant(){
-  digitalWrite(moteur_vibration, HIGH); 
-    delay(1000); 
-    digitalWrite(moteur_vibration, LOW); 
-    delay(1000);
+  digitalWrite(moteur_vibration, HIGH);
+  testEcranLCDs("Activee         ", 1, 1);
+  delay(1000);
+  lcd.clear();
+  digitalWrite(moteur_vibration, LOW);
+  testEcranLCDs("Desactivee      ", 1, 1);
+  delay(1000);
 }
 
 /*---------------------------Definition de fonctions ------------------------
 Fonction du test le l'écran LCD
 Sortie : affichage du message à l'écran
 -----------------------------------------------------------------------------*/
-void testEcranLCD(){
-  lcd.setCursor(0, 1);
-  lcd.print(millis() / 1000);
+void testEcranLCDs(String info, int curseurX, int curseurY){
+  lcd.setCursor(curseurX, curseurY);
+  lcd.print(info);
 }
+
+void testEcranLCDi(int info, int curseurX, int curseurY){
+  lcd.setCursor(curseurX, curseurY);
+  lcd.print(info);
+}
+
+void testDEL(){
+  digitalWrite(DEL_PIN, HIGH);
+  testEcranLCDs("Activee         ", 1, 1);
+  delay(1000);
+  digitalWrite(DEL_PIN, LOW);
+  testEcranLCDs("Desactivee      ", 1, 1);
+  delay(1000);
+}
+
+/*---------------------------Definition de fonctions ------------------------
+Fonction d'automatisation des tests pour l'audit
+Sortie : affichage de messages à l'écran
+-----------------------------------------------------------------------------*/
+void demoAudit2()
+{
+  testEcranLCDs("Accelerometre", 0, 0);
+  for (int i=0; i<100; i++){
+    lectureAccelerometre();
+    delay(100);
+  }
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Test du bargraph", 0, 0);
+  for (int i = 0; i < 4; i++){
+    testBargraph();
+    delay(1000);
+  }
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Test des boutons", 0, 0);
+  while (!NORD || !SUD || !EST || !OUEST){
+    testBouton();
+  }
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Test du pot", 0, 0);
+  for (int i=0; i<100; i++){
+    testPotentiometre();
+    delay(100);
+  }
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Test du joystick", 0, 0);
+  delay(1000);
+  for (int i=0; i<100; i++){
+    testJoystick();
+    delay(100);
+  }
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Test du moteur", 0, 0);
+  for (int i=0; i<2; i++){
+    testMoteurVibrant();
+    delay(100);
+  }
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Test DEL bleue", 0, 0);
+  for (int i=0; i<2; i++){
+    testDEL();
+    delay(100);
+  }  
+  delay(1000);
+  lcd.clear();
+
+  testEcranLCDs("Fin des tests!!!", 0, 0);
+  delay(1000);
+  lcd.clear();
+}
+
 
 /*---------------------------Definition de fonctions ------------------------
 Fonction d'envoi
