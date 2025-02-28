@@ -5,13 +5,13 @@ using namespace std;
 
 void EcranPrincipal::printMenu() {
     cout << "================================" << endl;
-    cout << "#### Welcome ####" << endl;
-    cout << "choose an option:" << endl;
-    cout << "1. Log In" << endl;
-    cout << "2. Create Account" << endl;
-    cout << "3. Contact Us" << endl;
+    cout << "#### Bonjour ####" << endl;
+    cout << "Choisir une option:" << endl;
+    cout << "1. Connection" << endl;
+    cout << "2. Creer un compte" << endl;
+    cout << "3. Nous contacter" << endl;
     cout << "================================" << endl;
-    cout << "Enter your choice: ";
+    cout << "Entrer votre choix: ";
 
     int choix;
     cin >> choix;

@@ -40,7 +40,7 @@ public:
     }
     Wind(int x, int y) : Actor(x, y)
     {
-        setSprite("wind");
+        setSprite("Vent");
 		speed = OBSTACLE_SPEED;
     }
     void action(Stat stat) override {
@@ -64,7 +64,7 @@ public:
     Tree(int x, int y) : Actor(x, y)
     {
         speed = OBSTACLE_SPEED;
-        setSprite("Tree");
+        setSprite("Arbre");
     }
     void action(Stat stat) override {
         stat.close = true;
@@ -86,7 +86,7 @@ public:
     Bird(int x, int y) : Actor(x, y)
     {
         speed = OBSTACLE_SPEED;
-        setSprite("bird");
+        setSprite("Oiseau");
     }
     void action(Stat stat) override {
 		stat.changeFuel(BIRD_FUEL);

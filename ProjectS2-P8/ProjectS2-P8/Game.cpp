@@ -36,7 +36,7 @@ void Game::update()
 	generateObstacles();
 
 	//Atterissage possible
-	if (count >= possibleTouchDown && count <= (possibleTouchDown + 200))
+	if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
 	{
 		gotoxy(30, 6);
 		cout << "Atterissage possible, appuyez sur K!";
@@ -47,10 +47,10 @@ void Game::update()
 			stat->landing = true;
 			stat->close = true;
 		}
-		if (count == possibleTouchDown + 200)
+		if (count == possibleTouchDown + 150)
 		{
 			count = 0;
-			possibleTouchDown += 500;
+			possibleTouchDown += 150;
 		}
 	}
 	count++;
@@ -169,7 +169,7 @@ bool Game::takeoff()
 				cout << plane->getSprite();
 
 				gotoxy(0, 8);
-				cout << "Speed : " << speed << " / " << requiredSpeed;
+				cout << "Vitesse: " << speed << " / " << requiredSpeed;
 			}
 		}
 	}
@@ -231,11 +231,11 @@ bool Game::takeoff()
 
 		//AFFICHAGE
 		gotoxy(0, 8);
-		cout << "Speed : " << speed << " / " << requiredSpeed;
+		cout << "Vitesse: " << speed << " / " << requiredSpeed;
 		if (speed == requiredSpeed)
 		{
 			gotoxy(0, 8);
-			cout << "Speed : " << speed << " / " << requiredSpeed << " - SPEED OK!!";
+			cout << "Vitesse: " << speed << " / " << requiredSpeed << " - SPEED OK!!";
 		}
 		//pour le defilement de la piste
 		if (startindex < length - ACTOR_POS_X)
@@ -273,7 +273,7 @@ bool Game::takeoff()
 		{
 			system("cls");
 			gotoxy(0, 9);
-			cout << "plane crashed";
+			cout << "L'avion s'est ecarse";
 			stat->close;
 			//sSleep(5000);
 
@@ -546,7 +546,7 @@ bool Game::touchDown()
 		{
 			system("cls");
 			gotoxy(35, 3);
-			cout << "Plane crashed";
+			cout << "L'avion s'est ecraser";
 			stat->close;
 			return false;
 		}
