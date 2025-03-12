@@ -1,5 +1,5 @@
 /* 
- * Auteurs: Jean-Samuel Lauzon    
+ * Auteurs: Émilie    
  * Date: Fevrier 2022
  * Modif : Janvier 2023, Compatible VisualStudio, JpGouin
  * Modif : Janvier 2025, 115200 BAUDS, JpGouin

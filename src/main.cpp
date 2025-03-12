@@ -129,7 +129,7 @@ void loop() {
     sendMsg();
   }
 
-  demoAudit2();
+  //demoAudit2();
   // lectureAccelerometre();
   // testBargraph();
   // testBouton();
