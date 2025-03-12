@@ -1,5 +1,96 @@
-.pio
-.vscode/.browse.c_cpp.db*
-.vscode/c_cpp_properties.json
-.vscode/launch.json
-.vscode/ipch
+# Compiled object files, static and dynamic libs/libraries
+*.o
+*.obj
+*.lo
+*.la
+*.al
+*.libs
+*.so
+*.a
+*.lib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
+*.hex
+
+# Debug files
+*.dSYM/
+*.dwarf
+
+# IDE and editor files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# PlatformIO specific files
+.pio/
+.build/
+.clangd
+*.pioenvs/
+*.piolibdeps/
+
+# CMake and Makefile generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
+CMakeUserPresets.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.pid
+*.seed
+*.bak
+*.old
+*.swp
+*.swo
+*.swn
+
+# Dependency directories
+node_modules/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Git files
+.git/
+.gitignore
+.gitmodules
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Backup and swap files
+*~
+*.swp
+*.swo
+*.swn
+*.bak
+*.orig
+
+# Other build system files
+*.dep
+*.d
+*.gcda
+*.gcno
+*.gcov
+*.moc
+*.qrc
+*.rcc
+*.qobj
+*.pch
+*.res
+*.idb
+*.pdb
+*.tlog
+*.lastbuildstate
