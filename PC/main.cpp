@@ -1,5 +1,5 @@
 /* 
- * Auteurs: Émilie    
+ * Auteurs: Jean-Samuel Lauzon    
  * Date: Fevrier 2022
  * Modif : Janvier 2023, Compatible VisualStudio, JpGouin
  * Modif : Janvier 2025, 115200 BAUDS, JpGouin
@@ -34,8 +34,8 @@ int main(){
 
     // Initialisation du port de communication
     string com;
-    cout << "Entrer le port de communication du Arduino: ";
-    cin >> com;
+    //cout << "Entrer le port de communication du Arduino: ";
+    com = "COM4";
     arduino = new SerialPort(com.c_str(), BAUD);
     
     //const char com = "\\\\.\\COM3";
@@ -48,9 +48,9 @@ int main(){
     // Structure de donnees JSON pour envoie et reception
     int led_state = 1;
     json j_msg_send, j_msg_rcv;
-
+    int iteration = 1000;
     // Boucle pour tester la communication bidirectionnelle Arduino-PC
-    for(int i=0; i<10; i++){
+    for(int i=0; i<iteration; i++){
         // Envoie message Arduino
         j_msg_send["led"] = led_state;
         if(!SendToSerial(arduino, j_msg_send)){
@@ -69,14 +69,14 @@ int main(){
             j_msg_rcv = json::parse(raw_msg);
             cout << "Message de l'Arduino: " << j_msg_rcv << endl;
         }
-        
+
         //Changement de l'etat led
-        led_state = !led_state;
+        if (i == iteration - 2)
+            led_state = !led_state;
 
         // Bloquer le fil pour environ 1 sec
-        Sleep(1000); // 1000ms
+        Sleep(100); // 1000ms
     }
-    return 0;
 }
 
 

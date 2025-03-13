@@ -35,24 +35,50 @@ int joystickYValue = 0;
 int joystickX = A2;
 int joystickXValue= 0;
 
+int joystickTresh = 10;
+
+bool clavierHaut = false;
+bool clavierBas = false;
+bool clavierDroit = false;
+bool clavierGauche = false;
+bool jeuHaut = false;
+bool jeuBas = false;
+
 //potentiometre
 int potValue = 0;
+int potTresh = 5;
 int pinPOT = A0;
 
 //Bouton poussoir
-int BP1_PIN = 50;
-int BP2_PIN = 51;
-int BP3_PIN = 52;
-int BP4_PIN = 53;
+int BoutonGauche = 50;
+int BoutonDroit = 51;
+int BoutonBas = 52;
+int BoutonHaut = 53;
+
 bool NORD = false;
 bool EST = false;
 bool SUD = false;
 bool OUEST = false;
 
+int BoutonGaucheValue = 0;
+int BoutonDroitValue = 0;
+int BoutonBasValue = 0;
+int BoutonHautValue = 0;
+
 //Accelerometre
 int pinX = A5;
 int pinY = A3;
 int pinZ = A4;
+
+int pinXValue = 0;
+int pinYValue = 0;
+int pinZValue = 0;
+
+int accTresh = 3;
+
+int angleAvion = 0;
+
+int vecteur[20] = {0};
 
 //bargraph
 int bar1 = 22;
@@ -69,6 +95,10 @@ int bar10 = 40;
 //LCD
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+
+//bool
+bool trigger = false;
 
 /*------------------------- Prototypes de fonctions -------------------------*/
 void sendMsg(); 
@@ -104,10 +134,10 @@ void setup() {
   pinMode(bar10, OUTPUT);
 
   //bouton
-  pinMode(BP1_PIN, INPUT_PULLUP);
-  pinMode(BP2_PIN, INPUT_PULLUP);
-  pinMode(BP3_PIN, INPUT_PULLUP);
-  pinMode(BP4_PIN, INPUT_PULLUP);
+  pinMode(BoutonGauche, INPUT_PULLUP);
+  pinMode(BoutonDroit, INPUT_PULLUP);
+  pinMode(BoutonBas, INPUT_PULLUP);
+  pinMode(BoutonHaut, INPUT_PULLUP);
 
   //Moteur vibrant
   pinMode(moteur_vibration, OUTPUT);
@@ -129,16 +159,20 @@ void loop() {
     sendMsg();
   }
 
-  //demoAudit2();
-  // lectureAccelerometre();
-  // testBargraph();
-  // testBouton();
-  // testPotentiometre();
-  //testJoystick();
-  //testMoteurVibrant();
-  //testEcranLCD();
+  testPotentiometre();
+  potValue = analogRead(pinPOT);
 
-  delay(50000);  // delais de 10 ms
+  testBouton();
+
+  lectureAccelerometre();
+  pinXValue = analogRead(pinX);
+
+
+  joystickXValue = analogRead(joystickX);
+  joystickYValue = analogRead(joystickY);
+  testJoystick();
+
+  delay(50);  // delais de 10 ms
 }
 
 /*---------------------------Definition de fonctions ------------------------*/
@@ -146,17 +180,130 @@ void loop() {
 void serialEvent() { shouldRead_ = true; }
 
 /*---------------------------Definition de fonctions ------------------------
+Fonction du test potentiometre
+Sortie : valeur de la résistance
+-----------------------------------------------------------------------------*/
+
+void testPotentiometre(){
+  // potValue = analogRead(pinPOT);
+  // testEcranLCDs("Valeur potentiomètre", 0,0);
+  // testEcranLCDi(potValue, 5, 1);
+  if((potValue - analogRead(pinPOT))>= potTresh){
+    trigger = true;
+  }
+  if((analogRead(pinPOT) - potValue)>= potTresh){
+    trigger = true;
+  }
+
+}
+
+/*---------------------------Definition de fonctions ------------------------
+Fonction du test bouton
+Sortie : état du bouton
+-----------------------------------------------------------------------------*/
+
+void testBouton(){
+  if(!(BoutonGaucheValue = digitalRead(BoutonGauche)))
+    trigger = true;
+  if(!(BoutonDroitValue = digitalRead(BoutonDroit)))
+    trigger = true;
+  if(!(BoutonBasValue = digitalRead(BoutonBas)))
+    trigger = true;
+  if(!(BoutonHautValue = digitalRead(BoutonHaut)))
+    trigger = true;
+}
+
+/*---------------------------Definition de fonctions ------------------------
+Fonction du test Joystick
+Sortie : valeur de la résistance en X et en Y
+-----------------------------------------------------------------------------*/
+
+void testJoystick(){
+  //tests des valeurs du joystick
+  /*if((joystickXValue - analogRead(joystickX))>= joystickTresh){
+    trigger = true;
+  }
+  if((analogRead(joystickX) - joystickXValue)>= joystickTresh){
+    trigger = true;
+  }
+  if((joystickYValue - analogRead(joystickY))>= joystickTresh){
+    trigger = true;
+  }
+  if((analogRead(joystickY) - joystickYValue)>= joystickTresh){
+    trigger = true;
+  }*/
+  if(!clavierBas && !clavierDroit && !clavierGauche && !clavierHaut && !jeuBas && !jeuHaut)
+  {
+    if(joystickYValue > 900 && joystickXValue > 150 && joystickXValue < 800)
+    {
+      clavierHaut = true;
+      trigger = true;
+    }
+    if(joystickYValue < 100 && joystickXValue > 200 && joystickXValue < 800)
+    {
+      clavierBas = true;
+      trigger = true;
+    }
+    if(joystickXValue > 900 && joystickYValue > 200 && joystickYValue < 800)
+    {
+      clavierGauche = true;
+      trigger = true;
+    }
+    if(joystickXValue < 100 && joystickYValue > 200 && joystickYValue < 800)
+    {
+      clavierDroit = true;
+      trigger = true;
+    }
+    if(joystickYValue > 850)
+    {
+      jeuHaut = true;
+      trigger = true;
+    }
+    if(joystickYValue < 150)
+    {
+      jeuBas = true;
+      trigger = true;
+    }
+  }
+  if( joystickXValue < 800 && joystickXValue > 200 &&  joystickYValue < 800 && joystickYValue > 200)
+  {
+    clavierBas = false;
+    clavierDroit = false;
+    clavierGauche = false;
+    clavierHaut = false;
+
+    jeuBas = false;
+    jeuHaut = false;
+  }
+}
+
+/*---------------------------Definition de fonctions ------------------------
 Fonction d'accélérometre
 Sortie : valeur X,Y,Z
 -----------------------------------------------------------------------------*/
 
 void lectureAccelerometre(){
-  testEcranLCDs("x:", 0, 1);
-  testEcranLCDi(analogRead(pinX), 2, 1);
-  testEcranLCDs("y:", 5, 1);
-  testEcranLCDi(analogRead(pinY), 7,1);
-  testEcranLCDs("z:", 10, 1);
-  testEcranLCDi(analogRead(pinZ), 12, 1);
+
+  if((350 >= analogRead(pinX) && analogRead(pinX)>= 302) && angleAvion != 2)
+  {
+    trigger = true;
+    angleAvion = 2;
+
+  }
+  //analogRead(pinX) - pinXValue) >= accTresh
+  if((297 >= analogRead(pinX) && analogRead(pinX)>= 278)&& angleAvion != 1)
+  {
+    trigger = true;
+    angleAvion = 1;
+
+  }
+  if((274 >= analogRead(pinX) && analogRead(pinX)>= 250)&& angleAvion != 0)
+  {
+    trigger = true;
+    angleAvion = 0;
+
+  }
+
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -210,71 +357,6 @@ void testBargraph(){
 
 }
 
-/*---------------------------Definition de fonctions ------------------------
-Fonction du test bouton
-Sortie : état du bouton
------------------------------------------------------------------------------*/
-
-void testBouton(){
-  /*
-  Serial.print("Etat bouton 1");
-  Serial.println(digitalRead(BP1_PIN));
-  Serial.print("Etat bouton 1");
-  Serial.println(digitalRead(BP2_PIN));
-  Serial.print("Etat bouton 1");
-  Serial.println(digitalRead(BP3_PIN));
-  Serial.print("Etat bouton 1");
-  Serial.println(digitalRead(BP4_PIN));
-  */
-
-  if(!digitalRead(BP1_PIN)){
-    testEcranLCDs("Bouton: Ouest   ", 1, 1);
-    OUEST = true;
-    return;
-  }
-  else if (!digitalRead(BP2_PIN)){
-    testEcranLCDs("Bouton: Est     ", 1, 1);
-    EST = true;
-    return;
-  }
-  else if(!digitalRead(BP3_PIN)){
-    testEcranLCDs("Bouton: Sud     ", 1, 1);
-    SUD = true;
-    return;
-  }
-  else if(!digitalRead(BP4_PIN))
-  {
-    testEcranLCDs("Bouton: Nord    ", 1, 1);
-    NORD = true;
-    return;
-  }
-}
-
-/*---------------------------Definition de fonctions ------------------------
-Fonction du test potentiometre
-Sortie : valeur de la résistance
------------------------------------------------------------------------------*/
-
-void testPotentiometre(){
-  potValue = analogRead(pinPOT);
-  testEcranLCDs("Valeur potentiomètre", 0,0);
-  testEcranLCDi(potValue, 5, 1);
-}
-
-/*---------------------------Definition de fonctions ------------------------
-Fonction du test Joystick
-Sortie : valeur de la résistance en X et en Y
------------------------------------------------------------------------------*/
-
-void testJoystick(){
-  joystickYValue = analogRead(joystickY);
-  testEcranLCDs("Valeur en Y: ", 0, 1);
-  testEcranLCDi(joystickYValue, 13, 1);
-
-  joystickXValue = analogRead(joystickX);
-  testEcranLCDs("Valeur en X: ", 0, 0);
-  testEcranLCDi(joystickXValue, 13, 0);
-}
 
 /*---------------------------Definition de fonctions ------------------------
 Fonction du test moteur vibrant
@@ -304,14 +386,6 @@ void testEcranLCDi(int info, int curseurX, int curseurY){
   lcd.print(info);
 }
 
-void testDEL(){
-  digitalWrite(DEL_PIN, HIGH);
-  testEcranLCDs("Activee         ", 1, 1);
-  delay(1000);
-  digitalWrite(DEL_PIN, LOW);
-  testEcranLCDs("Desactivee      ", 1, 1);
-  delay(1000);
-}
 
 /*---------------------------Definition de fonctions ------------------------
 Fonction d'automatisation des tests pour l'audit
@@ -390,15 +464,43 @@ Traitement : Envoi du message
 void sendMsg() {
   StaticJsonDocument<500> doc;
   // Elements du message
-  doc["time"] = millis();
-  doc["analog"] = potValue;
+  // doc["time"] = millis();
+  // doc["analog"] = potValue;
+  doc["potentio"] = potValue;
+  doc["BoutonGauche"] = BoutonGaucheValue;
+  doc["BoutonDroit"] = BoutonDroitValue;
+  doc["BoutonBas"] = BoutonBasValue;
+  doc["BoutonHaut"] = BoutonHautValue;
 
+  //tests des valeur
+  //doc["joystickX"] = joystickXValue;
+  //doc["joystickY"] = joystickYValue;
+
+  doc["clavierGauche"] = clavierGauche;
+  doc["clavierDroit"] = clavierDroit;
+  doc["clavierBas"] = clavierBas;
+  doc["clavierHaut"] = clavierHaut;
+  doc["jeuBas"] = jeuBas;
+  doc["jeuHaut"] = jeuHaut;
+
+  doc["accelX"] = angleAvion; 
+
+
+  // JsonArray array = doc.createNestedArray("vecteur");
+  // for (int i = 0; i < 20; i++) {
+  //   array.add(vecteur[i]);
+  // }
   // Serialisation
-  serializeJson(doc, Serial);
+
 
   // Envoie
-  Serial.println();
-  shouldSend_ = false;
+  if(trigger){
+    serializeJson(doc, Serial);
+    Serial.println();
+    trigger = false;
+    shouldSend_ = false;
+  }
+  
 }
 
 /*---------------------------Definition de fonctions ------------------------
