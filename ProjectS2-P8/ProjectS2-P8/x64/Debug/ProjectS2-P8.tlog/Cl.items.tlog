@@ -1,9 +1,11 @@
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Actor.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Actor.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\EcranPrincipal.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\EcranPrincipal.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Game.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\main.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\main.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Map.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Map.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Plane.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Plane.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Obstacle.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Obstacle.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Player.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Player.obj
-C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Stat.cpp;C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Stat.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Actor.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Actor.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ConnectionSerie.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\ConnectionSerie.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\EcranPrincipal.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\EcranPrincipal.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Game.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\include\serial\SerialPort.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\SerialPort.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\main.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\main.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Map.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Map.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Plane.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Plane.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Obstacle.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Obstacle.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Player.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Player.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Stat.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Stat.obj

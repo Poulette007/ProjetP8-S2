@@ -1,6 +1,7 @@
 #pragma once
 #include <conio.h>
 #include <iostream>
+#include "ConnectionSerie.h"
 class Stat
 {
 private:
@@ -9,7 +10,7 @@ private:
 	static int score;
 	static int height;
 	int delay;
-
+	ConnectionSerie connection;
 public:
 	static bool close;
 	static bool landing;

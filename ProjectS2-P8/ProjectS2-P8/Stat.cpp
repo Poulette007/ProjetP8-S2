@@ -20,6 +20,7 @@ bool Stat::landing = false;
 
 Stat::Stat()
 {
+	
 	changeFuel(100);
 	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
 	changeScore(0);
@@ -107,10 +108,28 @@ int Stat::getHeight()
 
 void Stat::readKeybord()
 {
+	int pot = 0;
+	int joy_haut = 0;
+	int joy_bas = 0;
 	int ch = 0;
 	if (_kbhit())
 		ch = _getch();
 
+	if (connection.hasData())
+	{
+		pot = connection.getValue("pot");
+		joy_haut = connection.getValue("JH");
+		joy_bas = connection.getValue("JB");
+	}
+	if (joy_haut == 1)
+	{
+		changeHeight(MONTER_1_PALLIER);
+	}
+	if (joy_bas == 1)
+	{
+		changeHeight(DESCENDRE_1_PALLIER);
+	}
+	
 	switch (ch)
 	{
 	case 'w': //w (monter en altitude)
