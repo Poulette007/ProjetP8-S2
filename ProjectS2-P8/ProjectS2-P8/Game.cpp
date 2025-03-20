@@ -9,10 +9,16 @@ Game::Game()
 	isCollision = false;
 	count = 0;
 	possibleTouchDown = 500;
+	msg_envoi["led"] = 1;
 }
+
 void Game::update()
 {
 	int ch = 0;
+	bool bpG = true;
+	bool bpD = true;
+	bool bpH = true;
+	bool bpB = true;
 	for (auto actor : listActor)
 	{
 		gotoxy(actor->getX(), actor->getY());
@@ -39,10 +45,18 @@ void Game::update()
 	if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
 	{
 		gotoxy(30, 6);
-		cout << "Atterissage possible, appuyez sur K!";
+		cout << "Atterissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!";
 		if (_kbhit())
 			ch = _getch();
-		if (ch == 'k')
+		else if (ConnectionSerie::hasData())		//CA RUSH EN TABAROUETTE ICI, JE SAIS PAS PK
+		{
+			bpG = ConnectionSerie::getValue("BG");
+			bpD = ConnectionSerie::getValue("BD");
+			bpH = ConnectionSerie::getValue("BH");
+			bpB = ConnectionSerie::getValue("BB");
+
+		}
+		if (ch == 'k' || bpG==0 || bpB==0||bpH==0||bpD==0)
 		{
 			stat->landing = true;
 			stat->close = true;
@@ -78,10 +92,60 @@ void Game::gotoxy(int x, int y)
 void Game::afficherStat()
 {
 	gotoxy(0, 6);
-	cout << "Gaz: " << stat->getFuel() << endl;
+	int fuel = stat->getFuel();
+	int score = stat->getScore();
+	cout << "Gaz: " << fuel << endl;
 	cout << "Vitesse: " << stat->getSpeed() << endl;
-	cout << "Pointage: " << stat->getScore() << endl;
+	cout << "Pointage: " << score << endl;
 	cout << "Hauteur: " << stat->getHeight() << endl;
+
+	//affiche gaz sur bargraph manette
+	if (fuel>100)
+	{
+		msg_envoi["BAR"] = 10;
+	}
+	else if (fuel > 90 && fuel < 100)
+	{
+		msg_envoi["BAR"] = 9;
+	}
+	else if (fuel > 80 && fuel < 90)
+	{
+		msg_envoi["BAR"] = 8;
+	}
+	else if (fuel > 70 && fuel < 80)
+	{
+		msg_envoi["BAR"] = 7;
+	}
+	else if (fuel > 60 && fuel < 70)
+	{
+		msg_envoi["BAR"] = 6;
+	}
+	else if (fuel >50 && fuel < 60)
+	{
+		msg_envoi["BAR"] = 5;
+	}
+	else if (fuel > 40 && fuel < 50)
+	{
+		msg_envoi["BAR"] = 4;
+	}
+	else if (fuel > 30 && fuel < 40)
+	{
+		msg_envoi["BAR"] = 3;
+	}
+	else if (fuel > 20 && fuel < 30)
+	{
+		msg_envoi["BAR"] = 2;
+	}
+	else if (fuel > 10 && fuel < 20)
+	{
+		msg_envoi["BAR"] = 1;
+	}
+	else if (fuel<10)
+	{
+		msg_envoi["BAR"] = 0;
+	}
+	msg_envoi["LCD"] = "score: " + std::to_string(score);
+	ConnectionSerie::Envoie(msg_envoi);
 }
 
 void Game::generateObstacles()
@@ -121,6 +185,7 @@ bool Game::takeoff()
 	int speed = 1;
 	int requiredSpeed = 100;
 	int count = 0;
+	int counttest = 0;
 	int startindex = 0;
 	int conteurReussiteHauteur = 0;
 	int conteurEchecHauteur = 0;
@@ -131,7 +196,12 @@ bool Game::takeoff()
 	bool vitesseGood = false;
 	bool hauteurGood = false;
 	vector<char> piste(length);
-	vector<char> touches = { 'w','a','s','d' };
+	vector<char> touches = { 'w','a','s','d'};
+	vector<string> directions = { "haut", "gauche", "bas", "droite" };
+	json msg_envoi;
+	msg_envoi["led"] = 1;
+	msg_envoi["gaz"] = 1;
+	ConnectionSerie::Envoie(msg_envoi);
 	//on remplit la piste
 	for (int i = 0; i < length; i++)
 	{
@@ -154,6 +224,8 @@ bool Game::takeoff()
 	//petit mouvement initiale
 	while (plane->getX() < START_PLANE_X)
 	{
+		bool hasD = ConnectionSerie::hasData();
+		// --- Avec clavier ---	//
 		if (_kbhit())
 		{
 			if (_getch() == 32)
@@ -172,8 +244,30 @@ bool Game::takeoff()
 				cout << "Vitesse: " << speed << " / " << requiredSpeed;
 			}
 		}
-	}
+		// --- Avec manette --- //
+		else if (hasD == 1)
+		{
+			bool bpbas = ConnectionSerie::getValue("BB");
+			if (!bpbas)
+			{
+				// Effacer l'ancien avion
+				gotoxy(plane->getX(), plane->getY());
+				cout << "   ";
+				speed++;
+				stat->changeSpeed(speed);
 
+				plane->setX(plane->getX() + 1);
+				gotoxy(plane->getX(), plane->getY());
+				cout << plane->getSprite();
+
+				gotoxy(0, 8);
+				cout << "Vitesse: " << speed << " / " << requiredSpeed;
+			
+			}
+
+		}
+	}
+	
 	while (!vitesseGood || !hauteurGood)
 	{
 		//phase 1 : acceleration
@@ -183,14 +277,21 @@ bool Game::takeoff()
 			if (count % 2 == 0)
 			{
 				speed -= 1;
-				//stat->setSpeed(speed);
 			}
+			bool hasD = ConnectionSerie::hasData();
 			if (_kbhit())
 			{
 				if (_getch() == 32)
 				{
 					speed += 10;
-					//stat->setSpeed(speed);
+				}
+			}
+			else if (hasD == 1)
+			{
+				bool bpB = ConnectionSerie::getValue("BB");
+				if (!bpB)
+				{
+					speed += 10;
 				}
 			}
 			if (speed <= 1)
@@ -199,7 +300,7 @@ bool Game::takeoff()
 			{
 				speed = requiredSpeed;
 				vitesseGood = true;
-				stat->changeFuel(1000 - (startindex * 2));
+				stat->changeFuel(200 - (startindex * 2));
 			}
 		}
 
@@ -208,23 +309,87 @@ bool Game::takeoff()
 		{
 			//melange les touches
 			gotoxy(15, 3);
-			cout << "APPUYEZ SUR " << touches[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
-			if (_kbhit())
+			//todo : faire que l'atterissage fonctionne avec le clavier et la manette
+			//cout << "APPUYEZ SUR " << touches[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
+			//if (_kbhit())
+			//{
+			//	touche = _getch();
+			//	if (touche == touches[0])
+			//	{
+			//		conteurReussiteHauteur++;
+			//	}
+			//	else if (touche != touches[0] && touche != 32)
+			//	{
+			//		conteurEchecHauteur++;
+			//	}
+			//	shuffle(touches.begin(), touches.end(), random_device());
+			//}
+			cout << "APPUYEZ SUR " << directions[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
+			if (ConnectionSerie::hasData())
 			{
-				touche = _getch();
-				if (touche == touches[0])
+				bool bphaut = ConnectionSerie::getValue("BH");
+				bool bpgauche = ConnectionSerie::getValue("BG");
+				bool bpdroite = ConnectionSerie::getValue("BD");
+				bool bpbas = ConnectionSerie::getValue("BB");
+				if (directions[0] == "haut")
 				{
-					conteurReussiteHauteur++;
+					if (!bphaut)
+					{
+						conteurReussiteHauteur++;
+					}
+					else if (!bpgauche || !bpdroite || !bpbas)
+					{
+						conteurEchecHauteur++;
+					}
 				}
-				else if (touche != touches[0] && touche != 32)
+				else if (directions[0] == "gauche")
 				{
-					conteurEchecHauteur++;
+					if (!bpgauche)
+					{
+						conteurReussiteHauteur++;
+					}
+					else if (!bphaut || !bpdroite || !bpbas)
+					{
+						conteurEchecHauteur++;
+					}
 				}
-				shuffle(touches.begin(), touches.end(), random_device());
+				else if (directions[0] == "droite")
+				{
+					if (!bpdroite)
+					{
+						conteurReussiteHauteur++;
+					}
+					else if (!bphaut || !bpgauche || !bpbas)
+					{
+						conteurEchecHauteur++;
+					}
+				}
+				else if (directions[0] == "bas")
+				{
+					if (!bpbas)
+					{
+						conteurReussiteHauteur++;
+					}
+					else if (!bphaut || !bpgauche || !bpdroite)
+					{
+						conteurEchecHauteur++;
+					}
+				}
+				Sleep(30);	//todo : a enlever quand on aura debouncer les boutons
+				shuffle(directions.begin(), directions.end(), random_device());
 			}
 			if (conteurReussiteHauteur >= 4)
 			{
 				hauteurGood = true;
+				plane->setX(3);
+			}
+			else if (conteurEchecHauteur >= 4)
+			{
+				system("cls");
+				gotoxy(0, 9);
+				cout << "L'avion s'est ecrase";
+				//Sleep(5000);
+				return false;
 			}
 		}
 
@@ -262,7 +427,7 @@ bool Game::takeoff()
 			plane->setX(plane->getX() + 1);
 			gotoxy(plane->getX(), plane->getY());
 			cout << plane->getSprite();
-
+			
 		}
 
 		int delay = max(20, 100 / speed);
@@ -295,6 +460,11 @@ bool Game::touchDown()
 	bool atterrissageGood = false;
 	vector<char> piste(length + 200);
 
+	bool joyBas = false;
+	bool bpG = true;
+	bool bpB = true;
+	bool bpD = true;
+	bool bpH = true;
 	//On remplit la foret
 	for (int i = 0; i < 200; i++)
 	{
@@ -319,15 +489,20 @@ bool Game::touchDown()
 		{
 			case 0:	//Appuyer plusieurs fois sur a pour diminuer la vitesse
 				gotoxy(0, 8);
-				cout << "Diminuez la vitesse de 50%";
+				cout << "Diminuez la vitesse de 50% (bouton gauche sur manette, 'A' sur clavier)";
 				if (_kbhit())
 					ch = _getch();
+				else if (ConnectionSerie::hasData())
+				{
+					bpG = ConnectionSerie::getValue("BG");
+				}
 				else
 					break;
-				if (ch == 'a')
+				if (ch == 'a' || bpG == 0)
 				{
 					speed -= 5;
 					ch = 0;
+					bpG = 1;
 				}
 				else
 					break;
@@ -336,6 +511,7 @@ bool Game::touchDown()
 					state = 1;
 					gotoxy(0, 8);
 					cout << "Diminuez la vitesse de 50%: OK!";
+					bpG = 1;
 				}
 				else
 					break;
@@ -345,12 +521,17 @@ bool Game::touchDown()
 				cout << "Diminuez la hauteur de 2 positions";
 				if (_kbhit())
 					ch = _getch();
-				if (ch == 's')
+				else if (ConnectionSerie::hasData())
+				{
+					joyBas = ConnectionSerie::getValue("JB");
+				}
+				if (ch == 's' || joyBas==1)
 				{
 					gotoxy(plane->getX(), plane->getY());
 					cout << "      "; //Supprimer l'avion pour la deplacer
 					plane->setY(plane->getY() + 1);
 					ch = 0;
+					joyBas = 0;
 				}
 				else
 					break;
@@ -365,14 +546,19 @@ bool Game::touchDown()
 				break;
 			case 2:
 				gotoxy(0, 10);
-				cout << "Sortez le train d'atterissage en appuiant sur: T";
+				cout << "Sortez le train d'atterissage en appuiant sur: T, ou BAS sur manette";
 				if (_kbhit())
 					ch = _getch();
-				if (ch == 't')
+				else if (ConnectionSerie::hasData())
+				{
+					bpB = ConnectionSerie::getValue("BB");
+				}
+				if (ch == 't' || bpB ==0)
 				{
 					gotoxy(0, 10);
 					cout << "Sortez le train d'atterissage en appuiant sur: T: OK!";
 					state = 3;
+					bpB = 1;
 				}
 				else
 					break;
@@ -382,12 +568,17 @@ bool Game::touchDown()
 				cout << "Diminuez la vitesse de 25%";
 				if (_kbhit())
 					ch = _getch();
+				else if (ConnectionSerie::hasData())
+				{
+					bpG = ConnectionSerie::getValue("BG");
+				}
 				else
 					break;
-				if (ch == 'a')
+				if (ch == 'a' || bpG==0)
 				{
 					speed -= 1;
 					ch = 0;
+					bpG = 1;
 				}
 				else
 					break;
@@ -396,6 +587,7 @@ bool Game::touchDown()
 					state = 4;
 					gotoxy(0, 11);
 					cout << "Diminuez la vitesse de 25%: OK!";
+					bpG = 1;
 				}
 				else
 					break;
@@ -405,12 +597,17 @@ bool Game::touchDown()
 				cout << "Touchez le sol";
 				if (_kbhit())
 					ch = _getch();
-				if (ch == 's')
+				else if (ConnectionSerie::hasData())
+				{
+					joyBas = ConnectionSerie::getValue("JB");
+				}
+				if (ch == 's' || joyBas==1)
 				{
 					gotoxy(plane->getX(), plane->getY());
 					cout << "      ";
 					plane->setY(plane->getY() + 1);
 					ch = 0;
+					joyBas = 0;
 				}
 				else
 					break;
@@ -419,6 +616,7 @@ bool Game::touchDown()
 					gotoxy(0, 12);
 					cout << "Touchez le sol: OK!";
 					state = 5;
+					joyBas = 0;
 				}
 				else
 					break;
@@ -428,12 +626,17 @@ bool Game::touchDown()
 				cout << "Diminuez la vitesse a 10%";
 				if (_kbhit())
 					ch = _getch();
+				else if (ConnectionSerie::hasData())
+				{
+					bpG = ConnectionSerie::getValue("BG");
+				}
 				else
 					break;
-				if (ch == 'a')
+				if (ch == 'a' || bpG==0)
 				{
 					speed -= 1;
 					ch = 0;
+					bpG = 1;
 				}
 				else
 					break;
@@ -442,20 +645,26 @@ bool Game::touchDown()
 					state = 6;
 					gotoxy(0, 13);
 					cout << "Diminuez la vitesse a 10%: OK!";
+					bpG = 1;
 				}
 				else
 					break;
 				break;
 			case 6:
 				gotoxy(0, 14);
-				cout << "Activez la propultion invese en appuiant sur: P";
+				cout << "Activez la propultion invese en appuiant sur: P, ou haut pour la manette";
 				if (_kbhit())
 					ch = _getch();
-				if (ch == 'p')
+				else if (ConnectionSerie::hasData())
+				{
+					bpH = ConnectionSerie::getValue("BH");
+				}
+				if (ch == 'p' || bpH==0)
 				{
 					gotoxy(0, 14);
 					cout << "Activez la propultion invese en appuiant sur: P: OK!";
 					state = 7;
+					bpH = 1;
 				}
 				else
 					break;
@@ -479,10 +688,14 @@ bool Game::touchDown()
 					break;
 			case 8:
 				gotoxy(0, 15);
-				cout << "Immobiliser l'avion avec les freins en appuiant sur: F";
+				cout << "Immobiliser l'avion avec les freins en appuiant sur: F, ou droit sur manette";
 				if (_kbhit())
 					ch = _getch();
-				if (ch == 'f')
+				else if (ConnectionSerie::hasData())
+				{
+					bpD = ConnectionSerie::getValue("BD");
+				}
+				if (ch == 'f' || bpD == 0)
 				{
 					gotoxy(0, 10);
 					cout << "Immobiliser l'avion avec les freins en appuiant sur: F: OK!";

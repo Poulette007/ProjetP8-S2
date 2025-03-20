@@ -15,17 +15,18 @@ class ConnectionSerie
 private:
 	
 	std::string com = "COM7";
-	string raw_msg;
-	json json_data;
+	static string raw_msg;
+	static json json_data;
 public:
-	SerialPort* SP;
+	static SerialPort* SP;
 	ConnectionSerie();
-	bool Send(SerialPort* SP, json j_msg);
-	bool ReceiveRaw(SerialPort* SP, std::string& msg);
-	bool isConnected();
+	static bool Send(SerialPort* SP, json j_msg);
+	static bool Envoie(json j_msg);
+	static bool ReceiveRaw(SerialPort* SP, std::string& msg);
+	static bool isConnected();
 
-	int getValue(const string index);
+	static int getValue(const string index);
 	json getJson();
-	bool hasData();
+	static bool hasData();
 };
 

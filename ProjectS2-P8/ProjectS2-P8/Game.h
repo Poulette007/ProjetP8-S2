@@ -11,11 +11,14 @@
 #include "Plane.h"
 #include "Stat.h"
 #include "Player.h"
+#include "ConnectionSerie.h"
 using namespace std;
 
 
 class Game
 {
+private: 
+	json msg_envoi;
 public:
 	Game();
 	vector<Actor*> listActor;
@@ -33,6 +36,5 @@ public:
 	Stat* stat;
 	int count;
 	int possibleTouchDown;
-	
 };
 

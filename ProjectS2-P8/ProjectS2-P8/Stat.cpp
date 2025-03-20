@@ -65,6 +65,11 @@ void Stat::changeSpeed(int Sp)
 		speed += Sp;
 	}
 }
+void Stat::setSpeed(int Sp)
+{
+	if (Sp >= MIN_SPEED && Sp <= MAX_SPEED)
+	speed = Sp;
+}
 
 int Stat::getSpeed()
 {
@@ -115,12 +120,13 @@ void Stat::readKeybord()
 	if (_kbhit())
 		ch = _getch();
 
-	if (connection.hasData())
+	if (ConnectionSerie::hasData())
 	{
-		pot = connection.getValue("pot");
-		joy_haut = connection.getValue("JH");
-		joy_bas = connection.getValue("JB");
+		pot = ConnectionSerie::getValue("pot");
+		joy_haut = ConnectionSerie::getValue("JH");
+		joy_bas = ConnectionSerie::getValue("JB");
 	}
+	//section pour le controle de la hauteur par le baton de joi
 	if (joy_haut == 1)
 	{
 		changeHeight(MONTER_1_PALLIER);
@@ -129,7 +135,27 @@ void Stat::readKeybord()
 	{
 		changeHeight(DESCENDRE_1_PALLIER);
 	}
-	
+	//section pour le controle de la vitesse par le pots
+	if (pot > 0 && pot < 134)
+	{
+		setSpeed(MIN_SPEED);
+	}
+	else if (pot > 134 && pot < 268)
+	{
+		setSpeed(5);
+	}
+	else if (pot > 268 && pot < 402)
+	{
+		setSpeed(10);
+	}
+	else if (pot > 402 && pot < 536)
+	{
+		setSpeed(15);
+	}
+	else if (pot > 536 && pot < 670)
+	{
+		setSpeed(25);
+	}
 	switch (ch)
 	{
 	case 'w': //w (monter en altitude)

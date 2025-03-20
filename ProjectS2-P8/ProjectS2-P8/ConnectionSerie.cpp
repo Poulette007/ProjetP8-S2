@@ -1,5 +1,7 @@
 #include "ConnectionSerie.h"
-
+std::string ConnectionSerie::raw_msg;
+json ConnectionSerie::json_data;
+SerialPort* ConnectionSerie::SP;
 ConnectionSerie::ConnectionSerie()
 {
 	SP = new SerialPort(com.c_str(), BAUD);
@@ -14,6 +16,14 @@ bool ConnectionSerie::Send(SerialPort* SP, json j_msg)
 	string msg = j_msg.dump();
 	bool ret = SP->writeSerialPort(msg.c_str(), msg.length());
 	return ret;
+}
+bool ConnectionSerie::Envoie(json j_msg)
+{
+	if (SP->isConnected())
+	{
+		return Send(SP, j_msg);
+	}
+    return false;
 }
 bool ConnectionSerie::ReceiveRaw(SerialPort* SP, string& msg)
 {
@@ -109,6 +119,7 @@ bool ConnectionSerie::hasData()
 {
     std::string tempBuffer;
 
+
     // Vérifie si on peut lire des données sans les consommer
     if (ReceiveRaw(SP, tempBuffer))
     {
@@ -119,12 +130,15 @@ bool ConnectionSerie::hasData()
             {
 				json_data = json::parse(raw_msg); //met a jour le json publix
 				raw_msg.clear();
+                //cout << "hasData() appelé, retour " << endl;
 				return true;
 			}
             catch (const nlohmann::json::parse_error& e)
             {
+             
                 //cerr << "Erreur de parsing JSON: " << e.what() << " | Données brutes: " << raw_msg << endl;
                 raw_msg.clear();  // Vide `raw_msg` pour éviter de reparser un JSON corrompu
+                json_data.clear();
                 return false;
             }
 		

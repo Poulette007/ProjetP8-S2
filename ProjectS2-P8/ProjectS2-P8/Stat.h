@@ -1,6 +1,7 @@
 #pragma once
 #include <conio.h>
 #include <iostream>
+#include "const.h"
 #include "ConnectionSerie.h"
 class Stat
 {
@@ -10,7 +11,7 @@ private:
 	static int score;
 	static int height;
 	int delay;
-	ConnectionSerie connection;
+	//ConnectionSerie connection;
 public:
 	static bool close;
 	static bool landing;
@@ -25,5 +26,6 @@ public:
 	static void changeSpeed(int Sp);
 	static void changeScore(int Sc);
 	static void changeHeight(int H);
+	static void setSpeed(int Sp);
 	void countFuel();
 };

@@ -1,8 +1,5 @@
-﻿  ConnectionSerie.cpp
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ConnectionSerie.cpp(15,56): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ConnectionSerie.cpp(124,55): warning C4101: 'e': unreferenced local variable
-  main.cpp
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\main.cpp(24,21): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\main.cpp(24,24): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-  Generating Code...
+﻿  Game.cpp
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(89,19): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(89,22): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(448,1): warning C4715: 'Game::takeoff': not all control paths return a value
   ProjectS2-P8.vcxproj -> C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe
