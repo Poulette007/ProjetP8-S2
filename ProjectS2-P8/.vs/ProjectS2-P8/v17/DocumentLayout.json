@@ -51,8 +51,7 @@
               "ViewState": "AgIAAA4AAAAAAAAAAAAAAFUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-13T17:08:11.997Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Bookmark",
@@ -72,8 +71,7 @@
               "RelativeToolTip": "ProjectS2-P8\\Game.h",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-03-20T00:27:53.858Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-20T00:27:53.858Z"
             },
             {
               "$type": "Document",
@@ -85,8 +83,7 @@
               "RelativeToolTip": "ProjectS2-P8\\ConnectionSerie.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAHgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-03-19T22:31:34.856Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-19T22:31:34.856Z"
             },
             {
               "$type": "Document",
@@ -98,8 +95,7 @@
               "RelativeToolTip": "ProjectS2-P8\\ConnectionSerie.h",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-03-19T22:31:27.828Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-19T22:31:27.828Z"
             },
             {
               "$type": "Document",
@@ -111,8 +107,7 @@
               "RelativeToolTip": "ProjectS2-P8\\Stat.h",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-02-13T16:50:51.884Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-13T16:50:51.884Z"
             },
             {
               "$type": "Document",
@@ -124,8 +119,7 @@
               "RelativeToolTip": "ProjectS2-P8\\Stat.cpp",
               "ViewState": "AgIAACcAAAAAAAAAAAAAAHEAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-03-18T01:12:20.25Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-18T01:12:20.25Z"
             },
             {
               "$type": "Document",
@@ -135,7 +129,7 @@
               "RelativeDocumentMoniker": "ProjectS2-P8\\Game.cpp",
               "ToolTip": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.cpp",
               "RelativeToolTip": "ProjectS2-P8\\Game.cpp",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAO4BAAACAAAAAAAAAA==",
+              "ViewState": "AgIAAN4BAAAAAAAAAAAAwPoBAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-06T02:17:16.531Z",
               "EditorCaption": ""
