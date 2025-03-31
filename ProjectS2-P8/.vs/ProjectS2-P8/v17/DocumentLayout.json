@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|solutionrelative:ProjectS2-P8\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|solutionrelative:ProjectS2-P8\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|solutionrelative:ProjectS2-P8\\Game.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|solutionrelative:ProjectS2-P8\\Game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0A3603D8-B20D-481A-A07F-E238D075C848}|ProjectS2-P8\\ProjectS2-P8.vcxproj|C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\ConnectionSerie.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -38,17 +38,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\main.cpp",
               "RelativeDocumentMoniker": "ProjectS2-P8\\main.cpp",
               "ToolTip": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\main.cpp",
               "RelativeToolTip": "ProjectS2-P8\\main.cpp",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAAAFAAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAAFUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-13T17:08:11.997Z",
               "IsPinned": true,
@@ -64,7 +64,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Game.h",
               "DocumentMoniker": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.h",
               "RelativeDocumentMoniker": "ProjectS2-P8\\Game.h",
@@ -77,7 +77,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ConnectionSerie.cpp",
               "DocumentMoniker": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\ConnectionSerie.cpp",
               "RelativeDocumentMoniker": "ProjectS2-P8\\ConnectionSerie.cpp",
@@ -129,13 +129,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Game.cpp",
               "DocumentMoniker": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.cpp",
               "RelativeDocumentMoniker": "ProjectS2-P8\\Game.cpp",
               "ToolTip": "C:\\Prog\\GitHub\\UNI - S2\\P8_projet\\ProjetP8-S2\\ProjectS2-P8\\ProjectS2-P8\\Game.cpp",
               "RelativeToolTip": "ProjectS2-P8\\Game.cpp",
-              "ViewState": "AgIAACoAAAAAAAAAAAAiwDkAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAO4BAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-06T02:17:16.531Z",
               "EditorCaption": ""

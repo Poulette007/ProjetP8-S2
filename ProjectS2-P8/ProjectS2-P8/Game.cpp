@@ -576,7 +576,7 @@ bool Game::touchDown()
 					break;
 				if (ch == 'a' || bpG==0)
 				{
-					speed -= 1;
+					speed -= 2;
 					ch = 0;
 					bpG = 1;
 				}
@@ -634,7 +634,7 @@ bool Game::touchDown()
 					break;
 				if (ch == 'a' || bpG==0)
 				{
-					speed -= 1;
+					speed -= 2;
 					ch = 0;
 					bpG = 1;
 				}
