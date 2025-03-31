@@ -1,0 +1,11 @@
+﻿   Qt/MSBuild: 3.3.1.1
+  Reading Qt configuration (C:/Qt/6.8.2/msvc2022_64/bin/qmake)
+   Qt: 6.8.2
+  moc Window.h
+  Window.cpp
+  main.cpp
+C:\Users\yohan\Documents\git\ProjetP8-S2\QtApplicationTuto\QtApplicationTuto\Window.cpp(1,1): warning C4828: The file contains a character starting at offset 0x27b that is illegal in the current source character set (codepage 65001).
+C:\Users\yohan\Documents\git\ProjetP8-S2\QtApplicationTuto\QtApplicationTuto\Window.cpp(1,1): warning C4828: The file contains a character starting at offset 0x28c that is illegal in the current source character set (codepage 65001).
+C:\Users\yohan\Documents\git\ProjetP8-S2\QtApplicationTuto\QtApplicationTuto\Window.cpp(1,1): warning C4828: The file contains a character starting at offset 0x2c1 that is illegal in the current source character set (codepage 65001).
+  moc_Window.cpp
+  QtApplicationTuto.vcxproj -> C:\Users\yohan\Documents\git\ProjetP8-S2\QtApplicationTuto\x64\Debug\QtApplicationTuto.exe

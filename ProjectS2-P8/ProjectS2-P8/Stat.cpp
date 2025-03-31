@@ -1,12 +1,13 @@
 #include "Stat.h"
 #include "const.h"
+#include "InputHandler.h"
 
 #define PALLIER_1 0
 #define PALLIER_2 1
 #define PALLIER_3 2
 #define PALLIER_4 3
 
-#define MONTER_1_PALLIER -1
+#define MONTER_1_PALLIER - 1
 #define DESCENDRE_1_PALLIER 1
 
 
@@ -105,29 +106,23 @@ int Stat::getHeight()
 	return height;
 }
 
-void Stat::readKeybord()
-{
-	int ch = 0;
-	if (_kbhit())
-		ch = _getch();
-
-	switch (ch)
-	{
-	case 'w': //w (monter en altitude)
-		changeHeight(MONTER_1_PALLIER);
-		break;
-
-	case 's': //s (diminu l'altitude)
-		changeHeight(DESCENDRE_1_PALLIER);
-		break;
-	case 'a':
-		changeSpeed(-1);
-		break;
-	case 'd':
-		changeSpeed(1);
-		break;
-	default:
-		break;
+void Stat::readKeybord(char key) {
+	if (key != '\0') {
+		switch (key) {
+		case 'W':
+			changeHeight(MONTER_1_PALLIER);
+			break;
+		case 'S':
+			changeHeight(DESCENDRE_1_PALLIER);
+			break;
+		case 'A':
+			changeSpeed(-1);
+			break;
+		case 'D':
+			changeSpeed(1);
+			break;
+		default:
+			break;
+		}
 	}
 }
-

@@ -1,13 +1,14 @@
 #include "Actor.h"
 
-Actor::Actor(int x, int y, int length, std::string sprite)
+
+Actor::Actor(int x, int y, const QPixmap& pixmap)
+ : posX(x), posY(y), length(pixmap.width()), pixmap(pixmap)
 {
-    setPosition(x, y, length);
 }
+
 Actor::Actor(int x, int y)
-{
-    setPosition(x, y, getSprite().length());
-}
+	: posX(x), posY(y), length(0)
+{}
 void Actor::setX(int x) {
     this->posX = x;
 }
@@ -20,10 +21,6 @@ int Actor::getY() {
     return posY;
 }
 
-void Actor::afficher()
-{
-    std::cout << getSprite();
-}
 int Actor::getLength() {
     return length;
 }
@@ -31,9 +28,14 @@ int Actor::getLength() {
 std::string Actor::getSprite() {
     return sprite;
 }
-
+QPixmap Actor::getPixmap() const {
+    return this->pixmap;
+}
 void Actor::setPosition(int x, int y, int length) {
     setX(x);
     this->posY = y;
     this->length = length;
+}
+void Actor::afficher() const {
+    std::cout << "DEBUG -- Actor à position (" << posX << ", " << posY << ") avec une longueur de " << length << std::endl;
 }

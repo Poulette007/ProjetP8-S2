@@ -6,6 +6,8 @@ Game::Game()
 	listActor = vector<Actor*>();
 	plane = new Plane(START_PLANE_X, 2);
 	stat = new Stat();
+	stat = new Stat();
+
 	isCollision = false;
 	count = 0;
 	possibleTouchDown = 500;
@@ -15,22 +17,22 @@ void Game::update()
 	int ch = 0;
 	for (auto actor : listActor)
 	{
-		gotoxy(actor->getX(), actor->getY());
-		cout << actor->getSprite();
+		//gotoxy(actor->getX(), actor->getY());
+		// //cout << actor->getSprite();
 		actor->setX(actor->getX() - actor->getSpeed());
 		if (actor->getX() <= START_PLANE_X - actor->getLength())
 		{
 			listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
 		}
 	}
-	stat->readKeybord();
+	//stat->readKeybord();
 	stat->changeScore(250);
 	stat->countFuel();
 
-	gotoxy(plane->getX(), stat->getHeight());
+	//gotoxy(plane->getX(), stat->getHeight());
 	plane->setY(stat->getHeight());
-	cout << plane->getSprite();
-
+	////cout << plane->getSprite();
+	system("cls");
 	afficherStat();
 	manageCollision();
 	generateObstacles();
@@ -39,7 +41,7 @@ void Game::update()
 	if (count >= possibleTouchDown && count <= (possibleTouchDown + 200))
 	{
 		gotoxy(30, 6);
-		cout << "Atterissage possible, appuyez sur K!";
+		//cout << "Atterissage possible, appuyez sur K!";
 		if (_kbhit())
 			ch = _getch();
 		if (ch == 'k')
@@ -72,8 +74,8 @@ void Game::CollionDetected(Actor* actor)
 }
 void Game::gotoxy(int x, int y)
 {
-		COORD coord = { x, y };
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), (coord));
+		//COORD coord = { x, y };
+		//SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), (coord));
 }
 void Game::afficherStat()
 {
@@ -145,11 +147,11 @@ bool Game::takeoff()
 
 	//affichage initiale de la piste
 	gotoxy(0, 5);
-	cout << plane->getSprite();
+	//cout << plane->getSprite();
 	gotoxy(0, 6);
 	for (int i = 0; i < ACTOR_POS_X; i++)
 	{
-		cout << piste[i];
+		//cout << piste[i];
 	}
 	//petit mouvement initiale
 	while (plane->getX() < START_PLANE_X)
@@ -160,16 +162,16 @@ bool Game::takeoff()
 			{
 				// Effacer l'ancien avion
 				gotoxy(plane->getX(), plane->getY());
-				cout << "   ";
+				//cout << "   ";
 				speed++;
 				stat->changeSpeed(speed);
 
 				plane->setX(plane->getX() + 1);
 				gotoxy(plane->getX(), plane->getY());
-				cout << plane->getSprite();
+				//cout << plane->getSprite();
 
 				gotoxy(0, 8);
-				cout << "Speed : " << speed << " / " << requiredSpeed;
+				//cout << "Speed : " << speed << " / " << requiredSpeed;
 			}
 		}
 	}
@@ -208,7 +210,7 @@ bool Game::takeoff()
 		{
 			//melange les touches
 			gotoxy(15, 3);
-			cout << "APPUYEZ SUR " << touches[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
+			//cout << "APPUYEZ SUR " << touches[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
 			if (_kbhit())
 			{
 				touche = _getch();
@@ -231,11 +233,11 @@ bool Game::takeoff()
 
 		//AFFICHAGE
 		gotoxy(0, 8);
-		cout << "Speed : " << speed << " / " << requiredSpeed;
+		//cout << "Speed : " << speed << " / " << requiredSpeed;
 		if (speed == requiredSpeed)
 		{
 			gotoxy(0, 8);
-			cout << "Speed : " << speed << " / " << requiredSpeed << " - SPEED OK!!";
+			//cout << "Speed : " << speed << " / " << requiredSpeed << " - SPEED OK!!";
 		}
 		//pour le defilement de la piste
 		if (startindex < length - ACTOR_POS_X)
@@ -258,10 +260,10 @@ bool Game::takeoff()
 		{
 			// Effacer l'ancien avion
 			gotoxy(plane->getX(), plane->getY());
-			cout << "   ";
+			//cout << "   ";
 			plane->setX(plane->getX() + 1);
 			gotoxy(plane->getX(), plane->getY());
-			cout << plane->getSprite();
+			//cout << plane->getSprite();
 
 		}
 
@@ -273,7 +275,7 @@ bool Game::takeoff()
 		{
 			system("cls");
 			gotoxy(0, 9);
-			cout << "plane crashed";
+			//cout << "plane crashed";
 			stat->close;
 			//sSleep(5000);
 
@@ -319,7 +321,7 @@ bool Game::touchDown()
 		{
 			case 0:	//Appuyer plusieurs fois sur a pour diminuer la vitesse
 				gotoxy(0, 8);
-				cout << "Diminuez la vitesse de 50%";
+				//cout << "Diminuez la vitesse de 50%";
 				if (_kbhit())
 					ch = _getch();
 				else
@@ -335,20 +337,20 @@ bool Game::touchDown()
 				{
 					state = 1;
 					gotoxy(0, 8);
-					cout << "Diminuez la vitesse de 50%: OK!";
+					//cout << "Diminuez la vitesse de 50%: OK!";
 				}
 				else
 					break;
 				break;
 			case 1: //Diminuer la hauteur de l'avion
 				gotoxy(0, 9);
-				cout << "Diminuez la hauteur de 2 positions";
+				//cout << "Diminuez la hauteur de 2 positions";
 				if (_kbhit())
 					ch = _getch();
 				if (ch == 's')
 				{
 					gotoxy(plane->getX(), plane->getY());
-					cout << "      "; //Supprimer l'avion pour la deplacer
+					//cout << "      "; //Supprimer l'avion pour la deplacer
 					plane->setY(plane->getY() + 1);
 					ch = 0;
 				}
@@ -357,7 +359,7 @@ bool Game::touchDown()
 				if (plane->getY() == 2)
 				{
 					gotoxy(0, 9);
-					cout << "Diminuez la hauteur de 2 positions: OK!";
+					//cout << "Diminuez la hauteur de 2 positions: OK!";
 					state = 2;
 				}
 				else
@@ -365,13 +367,13 @@ bool Game::touchDown()
 				break;
 			case 2:
 				gotoxy(0, 10);
-				cout << "Sortez le train d'atterissage en appuiant sur: T";
+				//cout << "Sortez le train d'atterissage en appuiant sur: T";
 				if (_kbhit())
 					ch = _getch();
 				if (ch == 't')
 				{
 					gotoxy(0, 10);
-					cout << "Sortez le train d'atterissage en appuiant sur: T: OK!";
+					//cout << "Sortez le train d'atterissage en appuiant sur: T: OK!";
 					state = 3;
 				}
 				else
@@ -379,7 +381,7 @@ bool Game::touchDown()
 				break;
 			case 3:
 				gotoxy(0, 11);
-				cout << "Diminuez la vitesse de 25%";
+				//cout << "Diminuez la vitesse de 25%";
 				if (_kbhit())
 					ch = _getch();
 				else
@@ -395,20 +397,20 @@ bool Game::touchDown()
 				{
 					state = 4;
 					gotoxy(0, 11);
-					cout << "Diminuez la vitesse de 25%: OK!";
+					//cout << "Diminuez la vitesse de 25%: OK!";
 				}
 				else
 					break;
 				break;
 			case 4:
 				gotoxy(0, 12);
-				cout << "Touchez le sol";
+				//cout << "Touchez le sol";
 				if (_kbhit())
 					ch = _getch();
 				if (ch == 's')
 				{
 					gotoxy(plane->getX(), plane->getY());
-					cout << "      ";
+					//cout << "      ";
 					plane->setY(plane->getY() + 1);
 					ch = 0;
 				}
@@ -417,7 +419,7 @@ bool Game::touchDown()
 				if (plane->getY() == 5)
 				{
 					gotoxy(0, 12);
-					cout << "Touchez le sol: OK!";
+					//cout << "Touchez le sol: OK!";
 					state = 5;
 				}
 				else
@@ -425,7 +427,7 @@ bool Game::touchDown()
 				break;
 			case 5:
 				gotoxy(0, 13);
-				cout << "Diminuez la vitesse a 10%";
+				//cout << "Diminuez la vitesse a 10%";
 				if (_kbhit())
 					ch = _getch();
 				else
@@ -441,20 +443,20 @@ bool Game::touchDown()
 				{
 					state = 6;
 					gotoxy(0, 13);
-					cout << "Diminuez la vitesse a 10%: OK!";
+					//cout << "Diminuez la vitesse a 10%: OK!";
 				}
 				else
 					break;
 				break;
 			case 6:
 				gotoxy(0, 14);
-				cout << "Activez la propultion invese en appuiant sur: P";
+				//cout << "Activez la propultion invese en appuiant sur: P";
 				if (_kbhit())
 					ch = _getch();
 				if (ch == 'p')
 				{
 					gotoxy(0, 14);
-					cout << "Activez la propultion invese en appuiant sur: P: OK!";
+					//cout << "Activez la propultion invese en appuiant sur: P: OK!";
 					state = 7;
 				}
 				else
@@ -479,17 +481,17 @@ bool Game::touchDown()
 					break;
 			case 8:
 				gotoxy(0, 15);
-				cout << "Immobiliser l'avion avec les freins en appuiant sur: F";
+				//cout << "Immobiliser l'avion avec les freins en appuiant sur: F";
 				if (_kbhit())
 					ch = _getch();
 				if (ch == 'f')
 				{
 					gotoxy(0, 10);
-					cout << "Immobiliser l'avion avec les freins en appuiant sur: F: OK!";
+					//cout << "Immobiliser l'avion avec les freins en appuiant sur: F: OK!";
 					gotoxy(0, 7);
-					cout << "Vitesse: 0    ";
+					//cout << "Vitesse: 0    ";
 					gotoxy(35, 3);
-					cout << "Atterrissage reussi!!!";
+					//cout << "Atterrissage reussi!!!";
 					atterrissageGood = true;
 					break;
 				}
@@ -522,20 +524,20 @@ bool Game::touchDown()
 		{
 			// Effacer l'ancien avion
 			gotoxy(plane->getX(), plane->getY());
-			cout << "   ";
+			//cout << "   ";
 			plane->setX(plane->getX() + 1);
 			//Print l'avion
 			gotoxy(plane->getX(), plane->getY());
-			cout << plane->getSprite();
+			//cout << plane->getSprite();
 		}
 
 		//Affichage de l'avion
 		gotoxy(plane->getX(), plane->getY());
-		cout << plane->getSprite();
+		//cout << plane->getSprite();
 
 		//Affichage de la vitesse
 		gotoxy(0, 7);
-		cout << "Vitesse: " << speed << "          " << "Pointage: " << stat->getScore() << "    ";
+		//cout << "Vitesse: " << speed << "          " << "Pointage: " << stat->getScore() << "    ";
 		
 		//Vitesse du jeu
 		int delay = max(20, 100 / speed);
@@ -546,7 +548,7 @@ bool Game::touchDown()
 		{
 			system("cls");
 			gotoxy(35, 3);
-			cout << "Plane crashed";
+			//cout << "Plane crashed";
 			stat->close;
 			return false;
 		}

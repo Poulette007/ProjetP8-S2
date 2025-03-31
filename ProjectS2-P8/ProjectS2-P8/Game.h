@@ -33,6 +33,7 @@ public:
 	Stat* stat;
 	int count;
 	int possibleTouchDown;
-	
+	//KeyboardWatcher* watcher;
+
 };
 

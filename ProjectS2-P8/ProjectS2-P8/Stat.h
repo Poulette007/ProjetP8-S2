@@ -1,6 +1,7 @@
 #pragma once
 #include <conio.h>
 #include <iostream>
+
 class Stat
 {
 private:
@@ -19,7 +20,7 @@ public:
 	static int getSpeed();
 	static int getScore();
 	static int getHeight();
-	void readKeybord();
+	void readKeybord(char key);
 	static void changeFuel(int F);
 	static void changeSpeed(int Sp);
 	static void changeScore(int Sc);
