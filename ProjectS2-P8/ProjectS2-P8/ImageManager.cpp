@@ -1,11 +1,11 @@
 #include "ImageManager.h"
 #include <iostream>
 
-#define PLANE_PATH "sprites/avion/images.png"
-#define GAZ_PATH "sprites/avion/images.png"
-#define WIND_PATH "sprites/avion/images.png"
-#define BIRD_PATH "sprites/avion/images.png"
-#define TREE_PATH "sprites/avion/images.png"
+#define PLANE_PATH "sprites/avion/avion1.png"
+#define GAZ_PATH "sprites/objet/gas.png"
+#define WIND_PATH "sprites/objet/vent.png"
+#define BIRD_PATH "sprites/objet/arbre1.png"
+#define TREE_PATH "sprites/objet/arbre2.png"
 
 ImageManager::ImageManager() {
     loadImages();
@@ -31,6 +31,8 @@ void ImageManager::loadImages() {
             std::cerr << "Erreur: Impossible de charger l'image " << path.toStdString() << std::endl;
         }
         else {
+            QSize newSize(300, 300);
+            pixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             images[type] = pixmap;
         }
     }

@@ -41,7 +41,7 @@ void Game::update()
 	bool bpD = true;
 	bool bpH = true;
 	bool bpB = true;
-	for (auto actor : listActor)
+	for (auto& actor : listActor)
 	{
 		actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
 		
@@ -179,13 +179,13 @@ void Game::afficherStat()
 
 void Game::generateObstacles()
 {
-	int random = rand() % 2000;
+	int random = rand() % 500;
 	int posY = rand() % 3;
 	bool tree = false;
 
 	if (random >= 45 && random <= 50)
 	{
-		for (auto actor : listActor)
+		for (auto& actor : listActor)
 		{
 			if (actor->y() == 3)
 			{
@@ -218,7 +218,7 @@ void Game::generateObstacles()
 }
 bool Game::isPosYPossible(int y)
 {
-	for (auto actor : listActor)
+	for (auto& actor : listActor)
 	{
 		if (actor->y() == y)
 		{
