@@ -21,10 +21,11 @@ private:
 	json msg_envoi;
 public:
 	Game();
+	void readKeyBoardGame();
 	vector<Actor*> listActor;
 	void generateObstacles();
-	bool takeoff();
-	bool touchDown();
+	//bool takeoff();
+	//bool touchDown();
 	bool isPosYPossible(int y);
 	void update();
 	void manageCollision();

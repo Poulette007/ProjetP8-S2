@@ -2,12 +2,12 @@
 #include "const.h"
 
 #define PALLIER_1 0
-#define PALLIER_2 1
-#define PALLIER_3 2
-#define PALLIER_4 3
+#define PALLIER_2 1 * 1080/4
+#define PALLIER_3 2 * 1080/4
+#define PALLIER_4 3 * 1080/4
 
-#define MONTER_1_PALLIER -1
-#define DESCENDRE_1_PALLIER 1
+#define MONTER_1_PALLIER -1080/4
+#define DESCENDRE_1_PALLIER 1080/4
 
 
 
@@ -110,15 +110,11 @@ int Stat::getHeight()
 {
 	return height;
 }
-
-void Stat::readKeybord()
+void Stat::readManette()
 {
 	int pot = 0;
 	int joy_haut = 0;
 	int joy_bas = 0;
-	int ch = 0;
-	if (_kbhit())
-		ch = _getch();
 
 	if (ConnectionSerie::hasData())
 	{
@@ -156,19 +152,25 @@ void Stat::readKeybord()
 	{
 		setSpeed(25);
 	}
-	switch (ch)
+}
+
+void Stat::readKeybord(char key)
+{
+
+	switch (key)
 	{
-	case 'w': //w (monter en altitude)
+	case 'W':
 		changeHeight(MONTER_1_PALLIER);
+		std::cout << "w";
 		break;
 
-	case 's': //s (diminu l'altitude)
+	case 'S':
 		changeHeight(DESCENDRE_1_PALLIER);
 		break;
-	case 'a':
+	case 'A':
 		changeSpeed(-1);
 		break;
-	case 'd':
+	case 'D':
 		changeSpeed(1);
 		break;
 	default:

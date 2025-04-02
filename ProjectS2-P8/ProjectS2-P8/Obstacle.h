@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Actor.h"
 #include "const.h"
+#include "ImageManager.h"
 
 //#define gazFuel 1
 //#define windFuel -1
@@ -12,22 +13,14 @@ using namespace std;
 
 class Gaz : public Actor {
 public:
-    Gaz(int x, int y, int length, std::string sprite, int speed)
-        : Actor(x, y, length, sprite), speed(speed) {
-    }
-    Gaz(int x, int y) : Actor(x, y)
-    {
+    Gaz(int x, int y) : Actor(x, y) {
         speed = OBSTACLE_SPEED;
-        setSprite("Gaz");
+        setPixmap(ImageManager::getInstance().getImage(GAZ));
     }
     void action(Stat stat) override {
         stat.changeFuel(GAZ_FUEL);
-        // std::cout << "Obstacle -- Gaz action()" << std::endl;
     }
     int getSpeed() const override { return speed; }
-    void setSprite(std::string sprite) override {
-        this->sprite = sprite;
-    }
 
 private:
     int speed;
@@ -35,67 +28,59 @@ private:
 
 class Wind : public Actor {
 public:
-    Wind(int x, int y, int length, std::string sprite, int speed)
-        : Actor(x, y, length, sprite), speed(speed) {
+    Wind(int x, int y) : Actor(x, y) {
+        speed = OBSTACLE_SPEED;
+        setPixmap(ImageManager::getInstance().getImage(WIND));
     }
-    Wind(int x, int y) : Actor(x, y)
-    {
-        setSprite("Vent");
-		speed = OBSTACLE_SPEED;
-    }
+
     void action(Stat stat) override {
-		stat.changeFuel(WIND_FUEL);
-        // std::cout << "Obstacle -- wind action()" << std::endl;
+        stat.changeFuel(WIND_FUEL);
     }
+
     int getSpeed() const override { return speed; }
-    void setSprite(std::string sprite) override {
-        this->sprite = sprite;
-    }
 
 private:
     int speed;
 };
+
 
 class Tree : public Actor {
 public:
-    Tree(int x, int y, int length, std::string sprite, int speed)
-        : Actor(x, y, length, sprite), speed(speed) {
-    }
-    Tree(int x, int y) : Actor(x, y)
-    {
+    Tree(int x, int y) : Actor(x, y) {
         speed = OBSTACLE_SPEED;
-        setSprite("Arbre");
+        setPixmap(ImageManager::getInstance().getImage(TREE));
     }
+
     void action(Stat stat) override {
         stat.close = true;
-        // std::cout << "Obstacle -- Tree action()" << std::endl;
     }
-    int getSpeed() const override { return speed; }
-    void setSprite(std::string sprite) override {
-        this->sprite = sprite;
+
+    int getSpeed() const override {
+        return speed;
     }
+
 private:
     int speed;
 };
 
+
 class Bird : public Actor {
 public:
-    Bird(int x, int y, int length, std::string sprite, int speed)
-        : Actor(x, y, length, sprite), speed(speed) {
-    }
-    Bird(int x, int y) : Actor(x, y)
-    {
+
+    Bird(int x, int y) : Actor(x, y) {
         speed = OBSTACLE_SPEED;
-        setSprite("Oiseau");
+        setPixmap(ImageManager::getInstance().getImage(BIRD));
     }
+
     void action(Stat stat) override {
-		stat.changeFuel(BIRD_FUEL);
-        // std::cout << "Obstacle -- Bird action()" << std::endl;
+        stat.changeFuel(BIRD_FUEL);
     }
-    int getSpeed() const override { return speed; }
-    void setSprite(std::string sprite) override {
-        this->sprite = sprite;
+
+    int getSpeed() const override {
+        return speed;
     }
+
 private:
     int speed;
 };
+

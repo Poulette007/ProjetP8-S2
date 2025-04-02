@@ -21,7 +21,9 @@ public:
 	static int getSpeed();
 	static int getScore();
 	static int getHeight();
-	void readKeybord();
+	void readManette();
+	void readKeybord(char);
+
 	static void changeFuel(int F);
 	static void changeSpeed(int Sp);
 	static void changeScore(int Sc);

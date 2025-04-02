@@ -1,5 +1,19 @@
 #pragma once
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <QApplication>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
+#include <QGraphicsEllipseItem>
+#include <QGraphicsDropShadowEffect>
+#include <QLabel>
+#include <QMovie>
+#include <QColor>
+#include <QTimer>
 
+extern QGraphicsScene* gameScene;
 
 #define GAZ_FUEL 30
 #define WIND_FUEL -20

@@ -1,15 +1,37 @@
 #include "Game.h"
-#define ACTOR_POS_X 100
+#define ACTOR_POS_X 1920
 #define START_PLANE_X 5
 Game::Game()
 {
 	listActor = vector<Actor*>();
 	plane = new Plane(START_PLANE_X, 2);
+	gameScene->addItem(plane);
+	plane->show();
 	stat = new Stat();
 	isCollision = false;
 	count = 0;
 	possibleTouchDown = 500;
 	msg_envoi["led"] = 1;
+}
+
+void Game::readKeyBoardGame()
+{
+	if (GetAsyncKeyState('W') < 0)   //on verifie si la fleche gauche ou D est pressee
+	{
+		stat->readKeybord('W');
+	}
+	if (GetAsyncKeyState('S') < 0)   //on verifie si la fleche gauche ou D est pressee
+	{
+		stat->readKeybord('S');
+	}
+	if (GetAsyncKeyState('A') < 0)   //on verifie si la fleche gauche ou D est pressee
+	{
+		stat->readKeybord('A');
+	}
+	if (GetAsyncKeyState('D') < 0)   //on verifie si la fleche gauche ou D est pressee
+	{
+		stat->readKeybord('D');
+	}
 }
 
 void Game::update()
@@ -21,27 +43,25 @@ void Game::update()
 	bool bpB = true;
 	for (auto actor : listActor)
 	{
-		gotoxy(actor->getX(), actor->getY());
-		cout << actor->getSprite();
-		actor->setX(actor->getX() - actor->getSpeed());
-		if (actor->getX() <= START_PLANE_X - actor->getLength())
-		{
+		actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
+		
+		if (actor->x() <= START_PLANE_X - actor->pixmap().width()) {
+			gameScene->removeItem(actor); // Retirer l'acteur de la scène Qt
 			listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
+			delete actor;
 		}
 	}
-	stat->readKeybord();
 	stat->changeScore(250);
 	stat->countFuel();
 
-	gotoxy(plane->getX(), stat->getHeight());
-	plane->setY(stat->getHeight());
-	cout << plane->getSprite();
+	plane->setPos(plane->x(), stat->getHeight());
 
 	afficherStat();
 	manageCollision();
 	generateObstacles();
 
 	//Atterissage possible
+	/*
 	if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
 	{
 		gotoxy(30, 6);
@@ -66,17 +86,26 @@ void Game::update()
 			count = 0;
 			possibleTouchDown += 150;
 		}
-	}
+	}*/
 	count++;
 }
 
 void Game::manageCollision()
 {
-	for (int i = 0; i < listActor.size(); i++)
+	for (int i = listActor.size() - 1; i >= 0; --i)
 	{
-		if (listActor[i]->getX() <= plane->getX() + plane->getLength() + START_PLANE_X && listActor[i]->getY() == plane->getY()) {
+		if (listActor[i]->x() <= plane->x() + plane->pixmap().width() + START_PLANE_X && listActor[i]->y() == plane->y())
+		{
 			CollionDetected(listActor[i]);
-			listActor.erase((listActor.begin() + i));
+
+			// Supprimer l'élément de la scène
+			gameScene->removeItem(listActor[i]);
+
+			// Libérer la mémoire
+			delete listActor[i];
+
+			// Supprimer l'élément du tableau
+			listActor.erase(listActor.begin() + i);
 		}
 	}
 }
@@ -150,7 +179,7 @@ void Game::afficherStat()
 
 void Game::generateObstacles()
 {
-	int random = rand() % 200;
+	int random = rand() % 2000;
 	int posY = rand() % 3;
 	bool tree = false;
 
@@ -158,29 +187,48 @@ void Game::generateObstacles()
 	{
 		for (auto actor : listActor)
 		{
-			if (actor->getY() == 3)
+			if (actor->y() == 3)
 			{
-				if (actor->getX() >= (ACTOR_POS_X - 3))
+				if (actor->x() >= (ACTOR_POS_X - 3))
 					tree = true;
 			}
 		}
-		if (!tree)
-			listActor.push_back(new Tree(ACTOR_POS_X, 3));
+		if (!tree) {
+			listActor.push_back(new Tree(ACTOR_POS_X, 3 * 1080 / 4));
+			gameScene->addItem(listActor.back());
+		}
+			
 	}
 	if (isPosYPossible(posY))
 	{
+		int(posY *= 1080 / 4);
 		if (random >= 1 && random <= 2) {
 			listActor.push_back(new Wind(ACTOR_POS_X, posY));
+			gameScene->addItem(listActor.back());
 		}
 		else if (random >= 3 && random <= 4) {
 			listActor.push_back(new Gaz(ACTOR_POS_X, posY));
+			gameScene->addItem(listActor.back());
 		}
 		else if (random >= 11 && random <= 12) {
 			listActor.push_back(new Bird(ACTOR_POS_X, posY));
+			gameScene->addItem(listActor.back());
 		}
 	}
 }
-bool Game::takeoff()
+bool Game::isPosYPossible(int y)
+{
+	for (auto actor : listActor)
+	{
+		if (actor->y() == y)
+		{
+			if (abs(actor->x() - ACTOR_POS_X) < 700)
+				return false;
+		}
+	}
+	return true;
+}
+/*bool Game::takeoff()
 {
 	int speed = 1;
 	int requiredSpeed = 100;
@@ -766,15 +814,4 @@ bool Game::touchDown()
 	}
 	return true;
 }
-bool Game::isPosYPossible(int y)
-{
-		for (auto actor : listActor)
-		{
-			if (actor->getY() == y) 
-			{
-				if (abs(actor->getX() - ACTOR_POS_X) < 20)
-					return false;
-			}
-		}
-		return true;
-}
+*/
