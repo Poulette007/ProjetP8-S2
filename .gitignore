@@ -53,3 +53,10 @@ compile_commands.json
 
 *_qmlcache.qrc
 .vs/
+
+# Ignorer le fichier Browse.VC.db
+ProjectS2-P8/.vs/ProjectS2-P8/v17/Browse.VC.db
+
+# Ignorer le fichier ProjectS2-P8.pdb
+ProjectS2-P8/x64/Debug/ProjectS2-P8.pdb
+
