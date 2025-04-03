@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt/qml/test">
+        <file>main.qml</file>
+        <file>login.qml</file>
+    </qresource>
+</RCC>

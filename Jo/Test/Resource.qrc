@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>tumblr_o0mrvdzLsI1unbtf2o1_640.gif</file>
+        <file>ciel.png</file>
+        <file>AvionCommercial.png</file>
+        <file>ChasseurBrun.png</file>
+        <file>HelicoNoir.png</file>
+    </qresource>
+</RCC>
