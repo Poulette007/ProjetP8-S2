@@ -77,7 +77,8 @@ int main(int argc, char* argv[])
     mainLayout->addWidget(Pages);
     Jeu.setLayout(mainLayout);
     Jeu.resize(1920, 1080);
-   
+    Jeu.showFullScreen();
+
     //Timer pour update le jeu
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
@@ -87,11 +88,68 @@ int main(int argc, char* argv[])
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
     readKeyTimer.start(100);
-    
+
     //Show et run!
     Jeu.show();
     return app.exec();
 }
+
+
+
+/*#include <stdlib.h> 
+#include <windows.h>
+
+#include "Obstacle.h"
+#include "EcranPrincipal.h"
+#include "Plane.h"
+#include "Game.h"
+#include "Player.h"
+
+#include "const.h"
+#include "login.h"
+QGraphicsScene* gameScene = nullptr;
+#include "ImageManager.h"
+#include "ConnectionSerie.h"
+#include <QStyleFactory>
+int main(int argc, char* argv[])
+{
+    QApplication app(argc, argv);
+    login *log = new login();
+    log->show();
+    gameScene = new QGraphicsScene();
+    gameScene->setSceneRect(0, 0, 1920, 1080);
+
+    QGraphicsView* view = new QGraphicsView(gameScene);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setContentsMargins(0, 0, 0, 0);
+
+    view->setFrameStyle(QFrame::NoFrame);
+    view->setBackgroundBrush(Qt::NoBrush);
+    view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+    view->showFullScreen();
+    view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+    
+    ConnectionSerie connection;
+    ImageManager& imgManager = ImageManager::getInstance();
+    QPixmap planeImg = imgManager.getImage(PLANE);
+
+    Stat *stat = new Stat();
+    Game* game = new Game(stat);
+
+    //std::cout << "tete";
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
+    timer.start(20 - stat->speedfactor);
+
+    //Timer pour lire le clavier
+    QTimer readKeyTimer;
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
+    readKeyTimer.start(100);
+
+    
+    return app.exec();
+ }*/
 
 
 

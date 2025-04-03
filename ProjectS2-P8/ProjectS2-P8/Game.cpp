@@ -230,35 +230,34 @@ void Game::setupStatOnGame()
 	
 }
 
-// Définitions des constantes pour mieux comprendre le code
+
 
 #define TREE_SPAWN_MIN 45        // Minimum pour spawn un arbre
 #define TREE_SPAWN_MAX 50        // Maximum pour spawn un arbre
 #define WIND_SPAWN_MIN 1
 #define WIND_SPAWN_MAX 4
 #define GAS_SPAWN_MIN 10
-#define GAS_SPAWN_MAX 13    // Maximum pour spawn des obstacles (Vent, Gaz, Oiseau)
-#define BIRD_SPAWN_MIN 20        // Minimum pour spawn un oiseau
-#define BIRD_SPAWN_MAX 25       // Maximum pour spawn un oiseau
-#define TREE_MIN_DIST 500        // Distance minimale entre les arbres (en pixels)
-#define OBSTACLE_MIN_DIST 700    // Distance minimale entre les autres obstacles (en pixels)
-#define SCREEN_HEIGHT 1080      // Hauteur de l'écran (1080px)
-#define RANGEE_HEIGHT (SCREEN_HEIGHT / 4) // Hauteur d'une rangée, 1/4 de l'écran
+#define GAS_SPAWN_MAX 13   
+#define BIRD_SPAWN_MIN 20       
+#define BIRD_SPAWN_MAX 25       
+#define TREE_MIN_DIST 500       
+#define OBSTACLE_MIN_DIST 700   
+#define SCREEN_HEIGHT 1080      
+#define RANGEE_HEIGHT (SCREEN_HEIGHT / 4) 
 
 void Game::generateObstacles()
 {
-	int random = rand() % 2000; // Génère un nombre aléatoire entre 0 et 499
-	int posY = rand() % 3; // Choisi une rangée aléatoire parmi les 3 premières (y = 0, 1, 2)
+	int random = rand() % 2000;
+	int posY = rand() % 3;
 	bool tree = false;
 
-	// Gestion des arbres (seulement dans la dernière ligne y = 3)
 	if (random >= TREE_SPAWN_MIN && random <= TREE_SPAWN_MAX)
 	{
 		for (auto actor : listActor)
 		{
-			if (actor->y() == 3) // Vérifie si l'acteur est déjà dans la dernière rangée
+			if (actor->y() == 3) 
 			{
-				// Vérifie si un arbre n'est pas trop proche en x
+
 				if (abs(actor->x() - ACTOR_POS_X) < TREE_MIN_DIST)
 				{
 					tree = true;
@@ -266,20 +265,16 @@ void Game::generateObstacles()
 				}
 			}
 		}
-		// Si aucun arbre trop proche n'est trouvé, on ajoute un arbre
 		if (!tree) {
 			listActor.push_back(new Tree(ACTOR_POS_X, 3 * RANGEE_HEIGHT)); // Spawne un arbre dans la dernière rangée
 			gameScene->addItem(listActor.back());
 		}
 	}
 
-	// Gestion des autres obstacles (Wind, Gaz, Bird) dans les 3 premières rangées
 	if (isPosYPossible(posY))
 	{
-		// Conversion de la position Y pour correspondre à l'échelle de l'écran
 		int yPos = posY * RANGEE_HEIGHT;
 
-		// Création des obstacles avec un random pour varier les objets
 		if (random >= WIND_SPAWN_MIN && random <= WIND_SPAWN_MAX) {
 			listActor.push_back(new Wind(ACTOR_POS_X, yPos));
 			gameScene->addItem(listActor.back());
@@ -301,11 +296,11 @@ bool Game::isPosYPossible(int y)
 	{
 		if (actor->y() == y)
 		{
-			if (abs(actor->x() - ACTOR_POS_X) < OBSTACLE_MIN_DIST) // Ajuste cette valeur si nécessaire
-				return false; // La position n'est pas possible si trop proche
+			if (abs(actor->x() - ACTOR_POS_X) < OBSTACLE_MIN_DIST) 
+				return false; 
 		}
 	}
-	return true; // Si aucune collision, la position est valide
+	return true;
 }
 
 /*
