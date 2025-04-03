@@ -6,6 +6,7 @@
 #define WIND_PATH "sprites/objet/vent.png"
 #define BIRD_PATH "sprites/objet/arbre1.png"
 #define TREE_PATH "sprites/objet/arbre2.png"
+#define LOOSE_PATH "sprites/background/Loose.png"
 
 ImageManager::ImageManager() {
     loadImages();
@@ -22,7 +23,8 @@ void ImageManager::loadImages() {
         {GAZ, GAZ_PATH},
         {WIND, WIND_PATH},
         {BIRD, BIRD_PATH},
-        {TREE, TREE_PATH}
+        {TREE, TREE_PATH},
+        {LOOSE, LOOSE_PATH}
     };
 
     for (const auto& [type, path] : paths) {
@@ -32,8 +34,19 @@ void ImageManager::loadImages() {
         }
         else {
             QSize newSize(300, 300);
-            pixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            images[type] = pixmap;
+            QPixmap scaledPixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+            // Créer une pixmap vide avec la taille cible
+            QPixmap finalPixmap(newSize);
+            finalPixmap.fill(Qt::transparent);  // Remplir avec la transparence
+
+            // Dessiner l'image redimensionnée au centre
+            QPainter painter(&finalPixmap);
+            QPoint center((newSize.width() - scaledPixmap.width()) / 2,
+                (newSize.height() - scaledPixmap.height()) / 2);
+            painter.drawPixmap(center, scaledPixmap);
+
+            images[type] = finalPixmap;
         }
     }
 }

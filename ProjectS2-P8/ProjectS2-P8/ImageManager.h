@@ -5,13 +5,16 @@
 #include <QPixmap>
 #include <unordered_map>
 #include <QString>
+#include <QPainter>
+
 
 enum ImageType {
     PLANE,
     GAZ,
     WIND,
     BIRD,
-    TREE
+    TREE,
+    LOOSE
 };
 
 class ImageManager {

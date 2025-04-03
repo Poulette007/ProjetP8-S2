@@ -1,17 +1,27 @@
 #include "Game.h"
 #define ACTOR_POS_X 1920
-#define START_PLANE_X 5
-Game::Game()
+#define START_PLANE_X int(1920/3)
+
+
+Game::Game(Stat* s)
 {
+	BackGroundVol = new QGraphicsPixmapItem();
+	BackGroundVol->setPixmap(QPixmap("sprites/background/BackgroundVol").scaled(1920 + 10, 1080 + 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	gameScene->addItem(BackGroundVol);
+	BackGroundVol->show();
+	BackGroundVol->setPos(1920 / 3 - 10, -10);
+
 	listActor = vector<Actor*>();
-	plane = new Plane(START_PLANE_X, 2);
+	plane = new Plane(START_PLANE_X, 1080/4);
 	gameScene->addItem(plane);
 	plane->show();
-	stat = new Stat();
+	
+	stat = s;
 	isCollision = false;
 	count = 0;
 	possibleTouchDown = 500;
 	msg_envoi["led"] = 1;
+	setupStatOnGame();
 }
 
 void Game::readKeyBoardGame()
@@ -36,29 +46,54 @@ void Game::readKeyBoardGame()
 
 void Game::update()
 {
-	int ch = 0;
-	bool bpG = true;
-	bool bpD = true;
-	bool bpH = true;
-	bool bpB = true;
-	for (auto& actor : listActor)
-	{
-		actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
+	bool debug = false;
+	if (stat->close && !debug) {
+		if (startLoose)
+		{
+			gameScene->clear();
+			looseBackGround = new QGraphicsPixmapItem();
+
+			looseBackGround->setPixmap(ImageManager::getInstance().getImage(LOOSE).scaled(2000, 1100));
+			gameScene->addItem(looseBackGround);
+			//looseBackGround->setScale(qMin(2000, 1100));
+			looseBackGround->show();
+			startLoose = false;
+		}
 		
-		if (actor->x() <= START_PLANE_X - actor->pixmap().width()) {
-			gameScene->removeItem(actor); // Retirer l'acteur de la scène Qt
-			listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
-			delete actor;
+
+		if (GetAsyncKeyState('M')){
+			stat->close = false;
+			startLoose = true;
 		}
 	}
-	stat->changeScore(250);
-	stat->countFuel();
+	else {
+		int ch = 0;
+		bool bpG = true;
+		bool bpD = true;
+		bool bpH = true;
+		bool bpB = true;
+		for (auto actor : listActor)
+		{
+			
+			actor->setPos(actor->x() - (actor->getSpeed() * stat->speedfactor), actor->y());
 
-	plane->setPos(plane->x(), stat->getHeight());
+			if (actor->x() <= START_PLANE_X - actor->pixmap().width()) {
+				gameScene->removeItem(actor);
+				listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
+				delete actor;
+			}
+		}
+		stat->changeScore(20);
+		stat->countFuel();
 
-	afficherStat();
-	manageCollision();
-	generateObstacles();
+		plane->setPos(plane->x(), stat->getHeight());
+
+		afficherStat();
+		manageCollision();
+		generateObstacles();
+		count++;
+	}
+	
 
 	//Atterissage possible
 	/*
@@ -87,14 +122,14 @@ void Game::update()
 			possibleTouchDown += 150;
 		}
 	}*/
-	count++;
+	
 }
 
 void Game::manageCollision()
 {
 	for (int i = listActor.size() - 1; i >= 0; --i)
 	{
-		if (listActor[i]->x() <= plane->x() + plane->pixmap().width() + START_PLANE_X && listActor[i]->y() == plane->y())
+		if (listActor[i]->x() <= plane->x() + plane->pixmap().width() && listActor[i]->y() == plane->y())
 		{
 			CollionDetected(listActor[i]);
 
@@ -120,63 +155,160 @@ void Game::gotoxy(int x, int y)
 }
 void Game::afficherStat()
 {
+	// DEBUG
 	gotoxy(0, 6);
-	int fuel = stat->getFuel();
-	int score = stat->getScore();
-	cout << "Gaz: " << fuel << endl;
+	cout << "Gaz: " << stat->getFuel() << endl;
 	cout << "Vitesse: " << stat->getSpeed() << endl;
-	cout << "Pointage: " << score << endl;
+	cout << "Pointage: " << stat->getScore() << endl;
 	cout << "Hauteur: " << stat->getHeight() << endl;
+	
+	afficherStatManette();
+	afficherStatOnGame();
+	
+}
 
+void Game::afficherStatManette()
+{
 	//affiche gaz sur bargraph manette
-	if (fuel>100)
+	if (stat->getFuel() > 100)
 	{
 		msg_envoi["BAR"] = 10;
 	}
-	else if (fuel > 90 && fuel < 100)
+	else if (stat->getFuel() > 90 && stat->getFuel() < 100)
 	{
 		msg_envoi["BAR"] = 9;
 	}
-	else if (fuel > 80 && fuel < 90)
+	else if (stat->getFuel() > 80 && stat->getFuel() < 90)
 	{
 		msg_envoi["BAR"] = 8;
 	}
-	else if (fuel > 70 && fuel < 80)
+	else if (stat->getFuel() > 70 && stat->getFuel() < 80)
 	{
 		msg_envoi["BAR"] = 7;
 	}
-	else if (fuel > 60 && fuel < 70)
+	else if (stat->getFuel() > 60 && stat->getFuel() < 70)
 	{
 		msg_envoi["BAR"] = 6;
 	}
-	else if (fuel >50 && fuel < 60)
+	else if (stat->getFuel() > 50 && stat->getFuel() < 60)
 	{
 		msg_envoi["BAR"] = 5;
 	}
-	else if (fuel > 40 && fuel < 50)
+	else if (stat->getFuel() > 40 && stat->getFuel() < 50)
 	{
 		msg_envoi["BAR"] = 4;
 	}
-	else if (fuel > 30 && fuel < 40)
+	else if (stat->getFuel() > 30 && stat->getFuel() < 40)
 	{
 		msg_envoi["BAR"] = 3;
 	}
-	else if (fuel > 20 && fuel < 30)
+	else if (stat->getFuel() > 20 && stat->getFuel() < 30)
 	{
 		msg_envoi["BAR"] = 2;
 	}
-	else if (fuel > 10 && fuel < 20)
+	else if (stat->getFuel() > 10 && stat->getFuel() < 20)
 	{
 		msg_envoi["BAR"] = 1;
 	}
-	else if (fuel<10)
+	else if (stat->getFuel() < 10)
 	{
 		msg_envoi["BAR"] = 0;
 	}
-	msg_envoi["LCD"] = "score: " + std::to_string(score);
+	msg_envoi["LCD"] = "score: " + std::to_string(stat->getScore());
 	ConnectionSerie::Envoie(msg_envoi);
 }
 
+void Game::afficherStatOnGame()
+{
+	dash->update();
+}
+
+void Game::setupStatOnGame()
+{
+	dash = new QDashboard(stat);
+	gameScene->addItem(dash);
+	
+}
+
+// Définitions des constantes pour mieux comprendre le code
+
+#define TREE_SPAWN_MIN 45        // Minimum pour spawn un arbre
+#define TREE_SPAWN_MAX 50        // Maximum pour spawn un arbre
+#define WIND_SPAWN_MIN 1
+#define WIND_SPAWN_MAX 4
+#define GAS_SPAWN_MIN 10
+#define GAS_SPAWN_MAX 13    // Maximum pour spawn des obstacles (Vent, Gaz, Oiseau)
+#define BIRD_SPAWN_MIN 20        // Minimum pour spawn un oiseau
+#define BIRD_SPAWN_MAX 25       // Maximum pour spawn un oiseau
+#define TREE_MIN_DIST 500        // Distance minimale entre les arbres (en pixels)
+#define OBSTACLE_MIN_DIST 700    // Distance minimale entre les autres obstacles (en pixels)
+#define SCREEN_HEIGHT 1080      // Hauteur de l'écran (1080px)
+#define RANGEE_HEIGHT (SCREEN_HEIGHT / 4) // Hauteur d'une rangée, 1/4 de l'écran
+
+void Game::generateObstacles()
+{
+	int random = rand() % 2000; // Génère un nombre aléatoire entre 0 et 499
+	int posY = rand() % 3; // Choisi une rangée aléatoire parmi les 3 premières (y = 0, 1, 2)
+	bool tree = false;
+
+	// Gestion des arbres (seulement dans la dernière ligne y = 3)
+	if (random >= TREE_SPAWN_MIN && random <= TREE_SPAWN_MAX)
+	{
+		for (auto actor : listActor)
+		{
+			if (actor->y() == 3) // Vérifie si l'acteur est déjà dans la dernière rangée
+			{
+				// Vérifie si un arbre n'est pas trop proche en x
+				if (abs(actor->x() - ACTOR_POS_X) < TREE_MIN_DIST)
+				{
+					tree = true;
+					break;
+				}
+			}
+		}
+		// Si aucun arbre trop proche n'est trouvé, on ajoute un arbre
+		if (!tree) {
+			listActor.push_back(new Tree(ACTOR_POS_X, 3 * RANGEE_HEIGHT)); // Spawne un arbre dans la dernière rangée
+			gameScene->addItem(listActor.back());
+		}
+	}
+
+	// Gestion des autres obstacles (Wind, Gaz, Bird) dans les 3 premières rangées
+	if (isPosYPossible(posY))
+	{
+		// Conversion de la position Y pour correspondre à l'échelle de l'écran
+		int yPos = posY * RANGEE_HEIGHT;
+
+		// Création des obstacles avec un random pour varier les objets
+		if (random >= WIND_SPAWN_MIN && random <= WIND_SPAWN_MAX) {
+			listActor.push_back(new Wind(ACTOR_POS_X, yPos));
+			gameScene->addItem(listActor.back());
+		}
+		else if (random >= GAS_SPAWN_MIN && random <= GAS_SPAWN_MAX) {
+			listActor.push_back(new Gaz(ACTOR_POS_X, yPos));
+			gameScene->addItem(listActor.back());
+		}
+		else if (random >= BIRD_SPAWN_MIN && random <= BIRD_SPAWN_MAX) {
+			listActor.push_back(new Bird(ACTOR_POS_X, yPos));
+			gameScene->addItem(listActor.back());
+		}
+	}
+}
+
+bool Game::isPosYPossible(int y)
+{
+	for (auto actor : listActor)
+	{
+		if (actor->y() == y)
+		{
+			if (abs(actor->x() - ACTOR_POS_X) < OBSTACLE_MIN_DIST) // Ajuste cette valeur si nécessaire
+				return false; // La position n'est pas possible si trop proche
+		}
+	}
+	return true; // Si aucune collision, la position est valide
+}
+
+/*
 void Game::generateObstacles()
 {
 	int random = rand() % 500;
@@ -185,7 +317,7 @@ void Game::generateObstacles()
 
 	if (random >= 45 && random <= 50)
 	{
-		for (auto& actor : listActor)
+		for (auto actor : listActor)
 		{
 			if (actor->y() == 3)
 			{
@@ -218,7 +350,7 @@ void Game::generateObstacles()
 }
 bool Game::isPosYPossible(int y)
 {
-	for (auto& actor : listActor)
+	for (auto actor : listActor)
 	{
 		if (actor->y() == y)
 		{
@@ -227,7 +359,7 @@ bool Game::isPosYPossible(int y)
 		}
 	}
 	return true;
-}
+}*/
 /*bool Game::takeoff()
 {
 	int speed = 1;

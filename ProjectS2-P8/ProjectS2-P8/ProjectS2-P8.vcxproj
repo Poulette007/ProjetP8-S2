@@ -59,7 +59,7 @@
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <QtModules>core;widgets</QtModules>
+    <QtModules>core;qml;widgets;designer</QtModules>
   </PropertyGroup>
   <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') OR !Exists('$(QtMsBuild)\Qt.props')">
@@ -148,29 +148,50 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <QtMoc Include="UserName.h" />
+    <QtMoc Include="Button.h" />
     <ClInclude Include="ConnectionSerie.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="EcranPrincipal.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="login.h" />
+    <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="QDashboard.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\serial\SerialPort.hpp" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
+    <QtMoc Include="SmallText.h" />
     <ClInclude Include="Stat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="ConnectionSerie.cpp" />
     <ClCompile Include="EcranPrincipal.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="login.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="QDashboard.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="include\serial\SerialPort.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SmallText.cpp" />
     <ClCompile Include="Stat.cpp" />
+    <ClCompile Include="UserName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Actor.csv" />

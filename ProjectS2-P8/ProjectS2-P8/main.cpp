@@ -11,11 +11,10 @@
 QGraphicsScene* gameScene = nullptr;
 #include "ImageManager.h"
 #include "ConnectionSerie.h"
-
+#include <QStyleFactory>
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-
     gameScene = new QGraphicsScene();
     gameScene->setSceneRect(0, 0, 1920, 1080);
 
@@ -34,13 +33,13 @@ int main(int argc, char* argv[])
     ImageManager& imgManager = ImageManager::getInstance();
     QPixmap planeImg = imgManager.getImage(PLANE);
 
-
-    Game* game = new Game();
+    Stat *stat = new Stat();
+    Game* game = new Game(stat);
 
     std::cout << "tete";
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
-    timer.start(16);
+    timer.start(20 - stat->speedfactor);
 
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });

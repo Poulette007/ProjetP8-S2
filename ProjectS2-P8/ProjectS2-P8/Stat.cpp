@@ -15,6 +15,7 @@ int Stat::fuel = 0;
 int Stat::speed = 0;
 int Stat::score = 0;
 int Stat::height = 0;
+int Stat::speedfactor = 0;
 bool Stat::close = false;
 bool Stat::landing = false;
 
@@ -63,6 +64,7 @@ void Stat::changeSpeed(int Sp)
 	if ((speed + Sp <= MAX_SPEED) && (speed + Sp >= MIN_SPEED))
 	{
 		speed += Sp;
+		speedfactor = speed / 2.0f;
 	}
 }
 void Stat::setSpeed(int Sp)
@@ -79,7 +81,7 @@ int Stat::getSpeed()
 void Stat::changeScore(int Sc)
 {
 	if (Sc > 0)
-		score += Sc;
+		score += Sc * speed;
 }
 
 int Stat::getScore()
@@ -101,7 +103,8 @@ void Stat::countFuel()
 	if (delay >= 50)
 	{
 		delay = 0;
-		changeFuel(-10);
+
+		changeFuel(-1 * (speed / 10) -1);
 	}
 }
 

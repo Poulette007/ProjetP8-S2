@@ -11,10 +11,13 @@ private:
 	static int score;
 	static int height;
 	int delay;
+
+	
 	//ConnectionSerie connection;
 public:
 	static bool close;
 	static bool landing;
+	static int speedfactor;
 	Stat();
 	Stat(int score);
 	static int getFuel();
