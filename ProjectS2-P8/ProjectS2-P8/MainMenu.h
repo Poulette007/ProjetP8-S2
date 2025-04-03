@@ -6,8 +6,9 @@ class MainMenu :
 {
 public:
     MainMenu();
+    Button* NextPage;
+    Button* BackPage;
 
 private:
-    UserName* Authen;
+    UserName* TextScore;
 };
-

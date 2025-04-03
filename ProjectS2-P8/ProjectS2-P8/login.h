@@ -15,6 +15,7 @@ public:
     login();
     bool Prochaine = false;
     Button* NextPage;
+    int score = 0;
 
 private:
     void PlaneCheckBox();
@@ -22,6 +23,10 @@ private:
     void JetCheckBox();
     void NewPlayerCheckBox();
     void ButtonPushed();
+    bool userExists(QString);
+    void addUser(QString userName);
+    void paintEvent(QPaintEvent* event) override;
+    QString* getBestScore(int nombre);
     UserName* Authen;
     QLineEdit* Nom;
     SmallText* New;

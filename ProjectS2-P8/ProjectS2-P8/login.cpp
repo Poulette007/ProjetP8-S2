@@ -1,4 +1,6 @@
 #include "login.h"
+#include <QFile>
+#include <QMessageBox>
 
 login::login()
 {
@@ -102,7 +104,113 @@ void login::NewPlayerCheckBox()
 
 void login::ButtonPushed()
 {
+    bool userExist = userExists(Nom->text());
+    if (PlayerIsNew && !userExist)
+    {
+        addUser(Nom->text());
+        userExists(Nom->text());
+        QMessageBox::information(nullptr, "Information", "Bienvenue : " + Nom->text() + "Vos points : ");
+    }
+    else if (PlayerIsNew && userExist) {
+        QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur existe deja\n Veuillez vous connecter ou choisir un autre nom");
+
+    }
+    else if (!PlayerIsNew && userExist) {
+        QMessageBox::information(nullptr, "Information", "content de vous revoir :" + Nom->text() + "Vos points : ");
+    } 
+    else if (!PlayerIsNew && !userExist){
+        QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur n'existe pas\n Veuillez reessayer ou choisir un autre nom");
+    }
+    else {
+        QMessageBox::critical(nullptr, "Erreur", "Probleme de logique");
+    }
+
     return;
+}
+bool login::userExists(QString userName) {
+
+    QFile file("DataBase.csv");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier !");
+        return 1;
+    }
+    QTextStream in(&file);
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList elements = line.split(",");
+        if (elements.size() == 2) {
+            QString nom = elements[0].trimmed();
+
+            if (nom == userName) {
+                score = elements[1].trimmed().toInt();
+                file.close();
+                return true;
+            }
+        }
+    }
+    file.close();
+    return false;
+}
+void login::addUser(QString userName) {
+    QFile file("DataBase.csv");
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
+        QMessageBox::critical(nullptr, "Erreur addUser", "Impossible d'ouvrir le fichier !");
+    }
+    file.write(userName.toUtf8() + ",");
+    file.write("0\n");
+    file.flush();
+    file.close();
+}
+
+QString* login::getBestScore(int nombre)
+{
+    /*QFile file("DataBase.csv");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier !");
+        return 0;
+    }
+    QTextStream in(&file);
+ 
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList elements = line.split(",");
+        if (elements.size() == 2) {
+            QString nom = elements[0].trimmed();
+
+            if (nom == userName) {
+                score = elements[1].trimmed().toInt();
+                file.close();
+                return true;
+            }
+        }
+    }
+    return nullptr;*/
+    return nullptr;
+}
+//Definition de l'image de background
+void login::paintEvent(QPaintEvent* event)
+{
+    QPainter painter(this);
+
+    //Image de fond
+    QPixmap fond("sprites/background/LoginPage.png");
+    painter.drawPixmap(0, 0, width(), height(), fond);
+
+    //Image plane
+    QPixmap plane("sprites/avion/avion1.png");
+    painter.drawPixmap(355, 430, 200, 150, plane);
+
+    //Image chopper
+    QPixmap chopper("sprites/avion/chopper.png");
+    painter.drawPixmap(635, 460, 230, 120, chopper);
+
+    //Image jet
+    QPixmap jet("sprites/avion/jet.png");
+    painter.drawPixmap(950, 460, 230, 120, jet);
+
+    //On fini le paint event
+    QWidget::paintEvent(event);
 }
 
 
