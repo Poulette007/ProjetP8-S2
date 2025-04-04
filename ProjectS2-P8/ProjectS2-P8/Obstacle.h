@@ -84,3 +84,13 @@ private:
     int speed;
 };
 
+class Runway : public Actor
+{
+public:
+	Runway(int x, int y) : Actor(x, y)
+    {
+        setPixmap(ImageManager::getInstance().getImage(RUNWAY));
+	}
+
+	};
+

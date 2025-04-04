@@ -152,6 +152,7 @@
     <ClInclude Include="const.h" />
     <ClInclude Include="EcranPrincipal.h" />
     <ClInclude Include="Game.h" />
+    <QtMoc Include="SmallTexte.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\serial\SerialPort.hpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Stat.h" />
+    <QtMoc Include="Takeoff.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -171,6 +173,7 @@
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Stat.cpp" />
+    <ClCompile Include="Takeoff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Actor.csv" />

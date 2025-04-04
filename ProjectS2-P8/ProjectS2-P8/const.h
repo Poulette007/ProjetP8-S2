@@ -12,6 +12,8 @@
 #include <QMovie>
 #include <QColor>
 #include <QTimer>
+#include <QRandomGenerator>
+
 
 extern QGraphicsScene* gameScene;
 
@@ -28,3 +30,14 @@ extern QGraphicsScene* gameScene;
 #define START_PLANE_X 5
 
 #define OBSTACLE_SPEED 2
+
+#define SPACEBAR 200
+#define CLAVIER_W 201
+#define CLAVIER_A 202
+#define CLAVIER_S 203
+#define CLAVIER_D 204
+#define BOUTON_BAS 205
+#define BOUTON_GAUCHE 206
+#define BOUTON_DROIT 207
+#define BOUTON_HAUT 208
+

@@ -11,7 +11,8 @@ enum ImageType {
     GAZ,
     WIND,
     BIRD,
-    TREE
+    TREE,
+	RUNWAY,
 };
 
 class ImageManager {

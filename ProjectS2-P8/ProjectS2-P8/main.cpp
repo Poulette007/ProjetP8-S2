@@ -6,7 +6,7 @@
 #include "Plane.h"
 #include "Game.h"
 #include "Player.h"
-
+#include "Takeoff.h"
 #include "const.h"
 QGraphicsScene* gameScene = nullptr;
 #include "ImageManager.h"
@@ -18,8 +18,8 @@ int main(int argc, char* argv[])
 
     gameScene = new QGraphicsScene();
     gameScene->setSceneRect(0, 0, 1920, 1080);
-
     QGraphicsView* view = new QGraphicsView(gameScene);
+
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setContentsMargins(0, 0, 0, 0);
@@ -37,14 +37,15 @@ int main(int argc, char* argv[])
 
     Game* game = new Game();
 
-    std::cout << "tete";
+
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
-    timer.start(16);
+    timer.start(100);
 
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
-    readKeyTimer.start(100);
+	QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->takeoff->readInputDecollage();});
+    readKeyTimer.start(60);
 
 
     return app.exec();
