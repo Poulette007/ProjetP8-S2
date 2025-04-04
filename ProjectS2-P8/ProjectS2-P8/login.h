@@ -16,17 +16,18 @@ public:
     bool Prochaine = false;
     Button* NextPage;
     int score = 0;
+    int SkinChecked = 0;
 
 private:
     void PlaneCheckBox();
     void ChopperCheckBox();
     void JetCheckBox();
     void NewPlayerCheckBox();
-    void ButtonPushed();
+    bool ButtonPushed();
     bool userExists(QString);
     void addUser(QString userName);
     void paintEvent(QPaintEvent* event) override;
-    QString* getBestScore(int nombre);
+    QMap<int, QString> getBestScore(int nombre);
     UserName* Authen;
     QLineEdit* Nom;
     SmallText* New;

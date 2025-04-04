@@ -102,30 +102,38 @@ void login::NewPlayerCheckBox()
     return;
 }
 
-void login::ButtonPushed()
+bool login::ButtonPushed()
 {
     bool userExist = userExists(Nom->text());
+    if (SkinChecked == 0)
+    {
+        QMessageBox::critical(nullptr, "Erreur", "Choisir un moyen de transport avant de continuer!");
+        return false;
+    }
     if (PlayerIsNew && !userExist)
     {
         addUser(Nom->text());
         userExists(Nom->text());
         QMessageBox::information(nullptr, "Information", "Bienvenue : " + Nom->text() + "Vos points : ");
+        return true;
     }
     else if (PlayerIsNew && userExist) {
         QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur existe deja\n Veuillez vous connecter ou choisir un autre nom");
+        return false;
 
     }
     else if (!PlayerIsNew && userExist) {
         QMessageBox::information(nullptr, "Information", "content de vous revoir :" + Nom->text() + "Vos points : ");
+        return true;
     } 
     else if (!PlayerIsNew && !userExist){
         QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur n'existe pas\n Veuillez reessayer ou choisir un autre nom");
+        return false;
     }
     else {
         QMessageBox::critical(nullptr, "Erreur", "Probleme de logique");
+        return false;
     }
-
-    return;
 }
 bool login::userExists(QString userName) {
 
@@ -162,31 +170,39 @@ void login::addUser(QString userName) {
     file.flush();
     file.close();
 }
-
-QString* login::getBestScore(int nombre)
+/* Comment les afficher:
+QMap <int, QString>  map = getBestScore(5);
+    for (auto it = map.end(); it != map.begin(); ++it) {
+        qDebug() << it.key() << ":" << it.value();
+    }
+*/
+QMap<int, QString> login::getBestScore(int nombre)
 {
-    /*QFile file("DataBase.csv");
+    QMap<int, QString> topScore;
+    QFile file("DataBase.csv");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier !");
-        return 0;
+        return topScore;
     }
     QTextStream in(&file);
- 
+
+
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList elements = line.split(",");
-        if (elements.size() == 2) {
-            QString nom = elements[0].trimmed();
-
-            if (nom == userName) {
-                score = elements[1].trimmed().toInt();
-                file.close();
-                return true;
+        QString nom = elements[0].trimmed();
+        int score = elements[1].trimmed().toInt();
+        if (topScore.size() >= 5)
+        {
+            if (topScore.firstKey() < score){
+                topScore.remove(topScore.firstKey());
+                topScore.insert(score, nom);
             }
         }
+        else
+            topScore.insert(score, nom);
     }
-    return nullptr;*/
-    return nullptr;
+    return topScore;
 }
 //Definition de l'image de background
 void login::paintEvent(QPaintEvent* event)
