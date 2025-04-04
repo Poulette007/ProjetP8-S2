@@ -12,7 +12,7 @@ login::login()
 
     //Texte Entrez votre nom:
     Authen = new UserName("Entrez votre nom:", this);
-    Authen->setGeometry(430, 255, 400, 35);
+    Authen->setGeometry(430, 250, 400, 35);
    
     //Zone d'ecriture du nom
     Nom = new QLineEdit(this);
@@ -61,9 +61,6 @@ login::login()
     
     //Connect checkbox de NewPlayer avec sa fonction
     connect(NewPlayer, &QCheckBox::clicked, this, &login::NewPlayerCheckBox);
-
-    //Connect le boutton confirmer
-    connect(NextPage, &QPushButton::clicked, this, &login::ButtonPushed);
  }
 
 void login::PlaneCheckBox()
@@ -114,7 +111,7 @@ bool login::ButtonPushed()
     {
         addUser(Nom->text());
         userExists(Nom->text());
-        QMessageBox::information(nullptr, "Information", "Bienvenue : " + Nom->text() + "Vos points : ");
+        //QMessageBox::information(nullptr, "Information", "Bienvenue : " + Nom->text() + "Vos points : ");
         return true;
     }
     else if (PlayerIsNew && userExist) {
@@ -123,7 +120,7 @@ bool login::ButtonPushed()
 
     }
     else if (!PlayerIsNew && userExist) {
-        QMessageBox::information(nullptr, "Information", "content de vous revoir :" + Nom->text() + "Vos points : ");
+        //QMessageBox::information(nullptr, "Information", "content de vous revoir :" + Nom->text() + "Vos points : ");
         return true;
     } 
     else if (!PlayerIsNew && !userExist){
@@ -170,40 +167,7 @@ void login::addUser(QString userName) {
     file.flush();
     file.close();
 }
-/* Comment les afficher:
-QMap <int, QString>  map = getBestScore(5);
-    for (auto it = map.end(); it != map.begin(); ++it) {
-        qDebug() << it.key() << ":" << it.value();
-    }
-*/
-QMap<int, QString> login::getBestScore(int nombre)
-{
-    QMap<int, QString> topScore;
-    QFile file("DataBase.csv");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier !");
-        return topScore;
-    }
-    QTextStream in(&file);
 
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList elements = line.split(",");
-        QString nom = elements[0].trimmed();
-        int score = elements[1].trimmed().toInt();
-        if (topScore.size() >= 5)
-        {
-            if (topScore.firstKey() < score){
-                topScore.remove(topScore.firstKey());
-                topScore.insert(score, nom);
-            }
-        }
-        else
-            topScore.insert(score, nom);
-    }
-    return topScore;
-}
 //Definition de l'image de background
 void login::paintEvent(QPaintEvent* event)
 {

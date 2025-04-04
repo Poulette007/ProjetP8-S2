@@ -5,9 +5,7 @@ MainMenu::MainMenu()
 	setWindowTitle("Menu Principale");
 	resize(1920, 1080);
 
-	TextScore = new UserName("Tableau des meilleurs scores", this);
-	TextScore->setGeometry(430, 125, 650, 35);
-
+    
 	//Bouton commencer le jeu
 	NextPage = new Button(this);
 	NextPage->setText("Commencer!");
@@ -17,6 +15,20 @@ MainMenu::MainMenu()
 	BackPage = new Button(this);
 	BackPage->setText("Revenir");
 	BackPage->setGeometry(5, 865, 150, 50);
+
+    //Afficher 5 meilleurs scores
+    QMap <int, QString>  map = getBestScore(5);
+    auto it = map.end();
+    while (it != map.begin()) {
+        --it;
+        BestScores += QString("%1 %2 %3k \n\n")
+            .arg(QString::number(i++))
+            .arg(it.value(), -9, QChar(' '))
+            .arg(QString::number(it.key()));
+    }
+    TextScore = new UserName(BestScores, this);
+    TextScore->setGeometry(1055, 200, 1000, 500);
+    TextScore->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
 void MainMenu::paintEvent(QPaintEvent* event)
@@ -45,11 +57,46 @@ void MainMenu::paintEvent(QPaintEvent* event)
 
 	//Image du tableau des scores
     QPixmap bord("sprites/background/LeaderbordTableau.png");
-    painter.drawPixmap(505, 295, 485, 485, bord);
+    painter.drawPixmap(1050, 160, 450, 550, bord);
 	QPixmap crown("sprites/background/LeaderbordCrown.png");
-	painter.drawPixmap(505, 100, 485, 195, crown);
+	painter.drawPixmap(1050, 10, 450, 150, crown);
 
 
     //On fini le paint event
     QWidget::paintEvent(event);
+}
+
+/* Comment les afficher:
+QMap <int, QString>  map = getBestScore(5);
+    for (auto it = map.end(); it != map.begin(); ++it) {
+        qDebug() << it.key() << ":" << it.value();
+    }
+*/
+QMap<int, QString> MainMenu::getBestScore(int nombre)
+{
+    QMap<int, QString> topScore;
+    QFile file("DataBase.csv");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::critical(nullptr, "Erreur", "Impossible d'ouvrir le fichier !");
+        return topScore;
+    }
+    QTextStream in(&file);
+
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList elements = line.split(",");
+        QString nom = elements[0].trimmed();
+        int score = elements[1].trimmed().toInt();
+        if (topScore.size() >= 5)
+        {
+            if (topScore.firstKey() < score) {
+                topScore.remove(topScore.firstKey());
+                topScore.insert(score, nom);
+            }
+        }
+        else
+            topScore.insert(score, nom);
+    }
+    return topScore;
 }
