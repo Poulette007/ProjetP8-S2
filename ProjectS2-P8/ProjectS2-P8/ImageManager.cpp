@@ -2,6 +2,8 @@
 #include <iostream>
 
 #define PLANE_PATH "sprites/avion/avion1.png"
+#define JET_PATH "sprites/avion/jet.png"
+#define CHOPPER_PATH "sprites/avion/chopper.png"
 #define GAZ_PATH "sprites/objet/gas.png"
 #define WIND_PATH "sprites/objet/vent.png"
 #define BIRD_PATH "sprites/objet/arbre1.png"
@@ -20,6 +22,8 @@ ImageManager& ImageManager::getInstance() {
 void ImageManager::loadImages() {
     std::unordered_map<ImageType, QString> paths = {
         {PLANE, PLANE_PATH},
+        {JET, JET_PATH},
+        {CHOPPER, CHOPPER_PATH},
         {GAZ, GAZ_PATH},
         {WIND, WIND_PATH},
         {BIRD, BIRD_PATH},

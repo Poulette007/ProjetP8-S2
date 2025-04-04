@@ -1,4 +1,4 @@
 ﻿   Qt/MSBuild: 3.3.1.1
-  Reading Qt configuration (C:/Qt/6.8.3/msvc2022_64/bin/qmake)
-   Qt: 6.8.3
-  ProjectS2-P8.vcxproj -> C:\Users\yohan\Documents\uds\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe
+  Reading Qt configuration (C:/UdeS/Logiciel/Qt/6.8.2/msvc2022_64/bin/qmake)
+   Qt: 6.8.2
+  ProjectS2-P8.vcxproj -> C:\Users\Jonat\OneDrive\Documents\GitHub\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe
