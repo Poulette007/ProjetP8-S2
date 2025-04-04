@@ -13,7 +13,6 @@ class login :
 {
 public:
     login();
-    bool ButtonPushed();
     bool Prochaine = false;
     Button* NextPage;
     int score = 0;
@@ -24,10 +23,11 @@ private:
     void ChopperCheckBox();
     void JetCheckBox();
     void NewPlayerCheckBox();
+    bool ButtonPushed();
     bool userExists(QString);
     void addUser(QString userName);
     void paintEvent(QPaintEvent* event) override;
-    QString* getBestScore(int nombre);
+    QMap<int, QString> getBestScore(int nombre);
     UserName* Authen;
     QLineEdit* Nom;
     SmallText* New;
@@ -35,6 +35,7 @@ private:
     QCheckBox* Plane;
     QCheckBox* Chopper;
     QCheckBox* Jet;
+    int SkinChecked = 0;
     bool PlayerIsNew = false;
 
 };
