@@ -63,7 +63,7 @@ login::login()
     connect(NewPlayer, &QCheckBox::clicked, this, &login::NewPlayerCheckBox);
 
     //Connect le boutton confirmer
-    connect(NextPage, &QPushButton::clicked, this, &login::ButtonPushed);
+    //connect(NextPage, &QPushButton::clicked, this, &login::ButtonPushed);
  }
 
 void login::PlaneCheckBox()
@@ -102,30 +102,39 @@ void login::NewPlayerCheckBox()
     return;
 }
 
-void login::ButtonPushed()
+bool login::ButtonPushed()
 {
     bool userExist = userExists(Nom->text());
+    if (SkinChecked == 0)
+    {
+        QMessageBox::critical(nullptr, "Erreur", "Choisir un moyen de transport avant de continuer!");
+        return false;
+    }    
     if (PlayerIsNew && !userExist)
     {
         addUser(Nom->text());
         userExists(Nom->text());
         QMessageBox::information(nullptr, "Information", "Bienvenue : " + Nom->text() + "Vos points : ");
+        return true;
     }
     else if (PlayerIsNew && userExist) {
         QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur existe deja\n Veuillez vous connecter ou choisir un autre nom");
-
+        return false;
     }
     else if (!PlayerIsNew && userExist) {
-        QMessageBox::information(nullptr, "Information", "content de vous revoir :" + Nom->text() + "Vos points : ");
+        QMessageBox::information(nullptr, "Information", "Content de vous revoir :" + Nom->text() + "\nVos points : ");
+        return true;
     } 
     else if (!PlayerIsNew && !userExist){
         QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur n'existe pas\n Veuillez reessayer ou choisir un autre nom");
+        return false;
     }
     else {
         QMessageBox::critical(nullptr, "Erreur", "Probleme de logique");
+        return false;
     }
 
-    return;
+    return false;
 }
 bool login::userExists(QString userName) {
 
@@ -203,7 +212,7 @@ void login::paintEvent(QPaintEvent* event)
 
     //Image chopper
     QPixmap chopper("sprites/avion/chopper.png");
-    painter.drawPixmap(635, 460, 230, 120, chopper);
+    painter.drawPixmap(630, 460, 230, 120, chopper);
 
     //Image jet
     QPixmap jet("sprites/avion/jet.png");

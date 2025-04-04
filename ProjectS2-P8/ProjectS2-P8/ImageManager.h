@@ -10,6 +10,8 @@
 
 enum ImageType {
     PLANE,
+    JET,
+    CHOPPER,
     GAZ,
     WIND,
     BIRD,

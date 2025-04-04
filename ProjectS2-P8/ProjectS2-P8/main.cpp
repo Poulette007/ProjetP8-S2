@@ -15,6 +15,8 @@ QGraphicsScene* gameScene = nullptr;
 #include "ConnectionSerie.h"
 #include <QStyleFactory>
 #include <QStackedWidget>
+
+
 int main(int argc, char* argv[])
 {
     //Set-Up
@@ -25,11 +27,16 @@ int main(int argc, char* argv[])
 
     ConnectionSerie connection;
 
-    ImageManager& imgManager = ImageManager::getInstance();
-    QPixmap planeImg = imgManager.getImage(PLANE);
-
     Stat* stat = new Stat();
     Game* game = new Game(stat);
+
+    //Timer pour update le jeu
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
+
+    //Timer pour lire le clavier
+    QTimer readKeyTimer;
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
 
     //Creation du widget qui contien tous les autres
     QWidget Jeu;
@@ -48,13 +55,11 @@ int main(int argc, char* argv[])
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setContentsMargins(0, 0, 0, 0);
-
     view->setFrameStyle(QFrame::NoFrame);
     view->setBackgroundBrush(Qt::NoBrush);
     view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
     view->showFullScreen();
     view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
-
 
     //Ajout des pages dans le stack
     Pages->addWidget(LoginPage);
@@ -62,14 +67,17 @@ int main(int argc, char* argv[])
     Pages->addWidget(view);
 
     //Connect les bouttons pour changer de page
-    QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [Pages]() {
-        Pages->setCurrentIndex(1);
+    QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
+        if(LoginPage->ButtonPushed())
+            Pages->setCurrentIndex(1);
         });
-    QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [Pages]() {
+    QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
         });
-    QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [Pages]() {
+    QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(2);
+        timer.start(20 - stat->speedfactor);
+        readKeyTimer.start(100);
         });
 
     //Cree le layout pour notre fenetre
@@ -77,20 +85,9 @@ int main(int argc, char* argv[])
     mainLayout->addWidget(Pages);
     Jeu.setLayout(mainLayout);
     Jeu.resize(1920, 1080);
-    Jeu.showFullScreen();
-
-    //Timer pour update le jeu
-    QTimer timer;
-    QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
-    timer.start(20 - stat->speedfactor);
-
-    //Timer pour lire le clavier
-    QTimer readKeyTimer;
-    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
-    readKeyTimer.start(100);
-
+  
     //Show et run!
-    Jeu.show();
+    Jeu.showFullScreen();
     return app.exec();
 }
 

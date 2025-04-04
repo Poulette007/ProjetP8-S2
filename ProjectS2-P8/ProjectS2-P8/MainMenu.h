@@ -1,5 +1,5 @@
 #pragma once
-#include <login.h>
+#include "login.h"
 
 class MainMenu :
     public QWidget
@@ -11,4 +11,5 @@ public:
 
 private:
     UserName* TextScore;
+    void paintEvent(QPaintEvent* event) override;
 };
