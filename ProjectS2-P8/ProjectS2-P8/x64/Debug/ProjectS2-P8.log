@@ -1,23 +1,37 @@
 ﻿   Qt/MSBuild: 3.3.1.1
   Reading Qt configuration (C:/Qt/6.7.3/msvc2022_64/bin/qmake)
    Qt: 6.7.3
-  Takeoff.cpp
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Takeoff.cpp(1,1): warning C4828: The file contains a character starting at offset 0x68d that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Takeoff.cpp(1,1): warning C4828: The file contains a character starting at offset 0x697 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Takeoff.cpp(1,1): warning C4828: The file contains a character starting at offset 0x6ae that is illegal in the current source character set (codepage 65001).
+  Game.cpp
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0x648 that is illegal in the current source character set (codepage 65001).
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xd99 that is illegal in the current source character set (codepage 65001).
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xda9 that is illegal in the current source character set (codepage 65001).
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xde2 that is illegal in the current source character set (codepage 65001).
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xdeb that is illegal in the current source character set (codepage 65001).
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xe20 that is illegal in the current source character set (codepage 65001).
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x16e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
+  (compiling source file 'Game.cpp')
+  
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'Game.cpp')
   
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x164 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
+  (compiling source file 'Game.cpp')
   
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x168 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
+  (compiling source file 'Game.cpp')
   
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1ad that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
+  (compiling source file 'Game.cpp')
   
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(14,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'Takeoff.cpp')
+  (compiling source file 'Game.cpp')
   
-  ProjectS2-P8.vcxproj -> C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(5,9): warning C4005: 'ACTOR_POS_X': macro redefinition
+      C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\const.h(29,9):
+      see previous definition of 'ACTOR_POS_X'
+  
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(89,23): error C2102: '&' requires l-value
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(89,43): error C2102: '&' requires l-value
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(138,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(161,19): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(161,22): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion

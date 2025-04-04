@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "Player.h"
 #include "Takeoff.h"
+#include "Landing.h"
 #include "const.h"
 QGraphicsScene* gameScene = nullptr;
 #include "ImageManager.h"
@@ -34,9 +35,7 @@ int main(int argc, char* argv[])
     ImageManager& imgManager = ImageManager::getInstance();
     QPixmap planeImg = imgManager.getImage(PLANE);
 
-
     Game* game = new Game();
-
 
     QTimer timer;
     QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
@@ -45,6 +44,14 @@ int main(int argc, char* argv[])
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
 	QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->takeoff->readInputDecollage();});
+	QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() 
+    {
+		if (game->state == Game::Gamestate::Landing)
+        {
+            game->landing->readInputAtterrissage();
+        }
+        
+    });
     readKeyTimer.start(60);
 
 

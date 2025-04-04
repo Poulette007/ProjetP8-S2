@@ -16,6 +16,7 @@
 
 using namespace std;
 class Takeoff; // évite l'inclusion circulaire
+class Landing; // évite l'inclusion circulaire
 
 class Game
 {
@@ -33,26 +34,27 @@ public:
 
 	Game();
 	void readKeyBoardGame();
-	vector<Actor*> listActor;
 	void generateObstacles();
-	//bool takeoff();
-	//bool touchDown();
 	bool isPosYPossible(int y);
 	void update();
 	void updateGameplay();
 	void manageCollision();
 	void CollionDetected(Actor* actor);
-	bool isCollision;
 	void gotoxy(int x, int y);
 	void afficherStat();
-	//void setState(Gamestate);
+	bool possibleLanding();
+
+	vector<Actor*> listActor;
 	Plane *plane;
 	Takeoff* takeoff;
+	Landing* landing;
 	Stat* stat;
-	int count;
-	int possibleTouchDown;
 	QGraphicsTextItem* promptText;
 	Gamestate state;
 
+	int count;
+	//int possibleTouchDown;
+	bool isCollision;
+	int landingCount;
 };
 

@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "Takeoff.h"	//a garder pour eviter inclusion circulaire
+#include "Landing.h"	//a garder pour eviter inclusion circulaire
+
 #define ACTOR_POS_X 1920
 #define START_PLANE_X 5
 Game::Game()
@@ -11,7 +13,7 @@ Game::Game()
 	plane->show();
 	isCollision = false;
 	count = 0;
-	possibleTouchDown = 500;
+	landingCount = 200;
 	msg_envoi["led"] = 1;
 	promptText = new QGraphicsTextItem();
 	promptText->setDefaultTextColor(Qt::yellow);
@@ -20,29 +22,29 @@ Game::Game()
 	gameScene->addItem(promptText);
 	stat = new Stat();
 	takeoff = new Takeoff(this, plane, stat, promptText);
+	
 }
 
 void Game::readKeyBoardGame()
 {
 
-	if (GetAsyncKeyState('W') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('W') < 0)
 	{
 		stat->readKeybord('W');
 	}
-	if (GetAsyncKeyState('S') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('S') < 0)
 	{
 		stat->readKeybord('S');
 	}
-	if (GetAsyncKeyState('A') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('A') < 0)
 	{
 		stat->readKeybord('A');
 	}
-	if (GetAsyncKeyState('D') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('D') < 0)
 	{
 		stat->readKeybord('D');
-	}
+	}	
 }
-
 void Game::update()
 {
 	switch (state) {
@@ -53,7 +55,7 @@ void Game::update()
 		updateGameplay();
 		break;
 	case Gamestate::Landing:
-		//updateLanding();
+		landing->updateLanding();
 		break;
 	case Gamestate::GameOver:
 		break;
@@ -61,11 +63,6 @@ void Game::update()
 }
 void Game::updateGameplay()
 {
-	int ch = 0;
-	bool bpG = true;
-	bool bpD = true;
-	bool bpH = true;
-	bool bpB = true;
 	for (auto actor : listActor)
 	{
 		actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
@@ -78,13 +75,34 @@ void Game::updateGameplay()
 	}
 	stat->changeScore(250);
 	stat->countFuel();
-
 	plane->setPos(plane->x(), stat->getHeight());
-
 	afficherStat();
 	manageCollision();
 	generateObstacles();
-
+	if (true)
+	{
+		promptText->setPlainText("Atterrissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!");
+		if (GetAsyncKeyState('K') < 0)
+		{
+			for (auto actor : listActor)
+			{
+				if (actor != plane)
+				{
+					gameScene->removeItem(actor);
+					delete actor;
+				}if (actor == plane)
+				{
+				}
+			}
+			gameScene->clear();
+			landing = new Landing(this, plane, stat, promptText);
+			state = Gamestate::Landing;
+		}
+	}
+	else
+	{
+		promptText->setPlainText("");
+	}
 	//Atterissage possible
 	/*if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
 	{
@@ -112,8 +130,6 @@ void Game::updateGameplay()
 		}
 	}
 	count++;*/
-	
-
 }
 
 
@@ -203,7 +219,6 @@ void Game::afficherStat()
 	msg_envoi["LCD"] = "score: " + std::to_string(score);
 	ConnectionSerie::Envoie(msg_envoi);
 }
-
 void Game::generateObstacles()
 {
 	int random = rand() % 500;
@@ -254,6 +269,22 @@ bool Game::isPosYPossible(int y)
 		}
 	}
 	return true;
+}
+bool Game::possibleLanding()
+{
+	qDebug() << "count:" << count;
+	qDebug() << "landingCount:" << landingCount;
+	if (plane->y() < 360 && count >= landingCount && count <= (landingCount + 150))
+	{
+		return true;
+	}
+	else if (count == landingCount + 150)
+	{
+		count = 0;
+		landingCount += 150;
+	}
+	count++;
+	return false;
 }
 /*
 bool Game::touchDown()

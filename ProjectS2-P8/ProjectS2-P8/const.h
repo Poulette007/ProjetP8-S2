@@ -40,4 +40,8 @@ extern QGraphicsScene* gameScene;
 #define BOUTON_GAUCHE 206
 #define BOUTON_DROIT 207
 #define BOUTON_HAUT 208
+#define JOY_HAUT 209
+#define JOY_BAS 210
+#define JOY_GAUCHE 211
+#define JOY_DROIT 212
 

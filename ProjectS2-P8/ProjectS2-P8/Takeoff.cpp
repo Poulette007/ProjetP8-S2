@@ -15,8 +15,6 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 	plane->setPos(0, 1080-plane->pixmap().height()-10);
 	plane->setZValue(1);	//1er plan
 	shuffleDirection();
-
-
 }
 void Takeoff::initPiste()
 {
@@ -260,7 +258,7 @@ void Takeoff::animationTakeoff()
 			plane->setRotation(0);
 		}
 		qDebug() << "toute la piste:" << touteLaPiste;
-		if (touteLaPiste && plane->y() > 1080 / 3)
+		if (touteLaPiste && plane->y() < 1080 / 2)
 		{
 			plane->setRotation(0);
 			takeoffTimer->stop();
