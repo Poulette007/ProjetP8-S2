@@ -160,10 +160,12 @@
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\serial\SerialPort.hpp" />
+    <QtMoc Include="Landing.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Stat.h" />
+    <QtMoc Include="Takeoff.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -185,10 +187,12 @@
     </ClCompile>
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="include\serial\SerialPort.cpp" />
+    <ClCompile Include="Landing.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Stat.cpp" />
+    <ClCompile Include="Takeoff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Actor.csv" />

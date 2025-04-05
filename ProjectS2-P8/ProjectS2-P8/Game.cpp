@@ -1,4 +1,7 @@
 #include "Game.h"
+#include "Takeoff.h"	//a garder pour eviter inclusion circulaire
+#include "Landing.h"	//a garder pour eviter inclusion circulaire
+
 #define ACTOR_POS_X 1920
 #define START_PLANE_X int(1920/3)
 
@@ -14,90 +17,101 @@ Game::Game(Stat* s)
 	listActor = vector<Actor*>();
 	plane = new Plane(START_PLANE_X, 1080/4);
 	gameScene->addItem(plane);
+	plane->setPos(0, 2 * 1080 / 4);
 	plane->show();
 	
 	stat = s;
 	isCollision = false;
 	count = 0;
-	possibleTouchDown = 500;
+	landingCount = 200;
 	msg_envoi["led"] = 1;
-	setupStatOnGame();
+	promptText = new QGraphicsTextItem();
+	promptText->setDefaultTextColor(Qt::yellow);
+	promptText->setFont(QFont("Consolas", 24));
+	promptText->setPos(100, 100);
+	gameScene->addItem(promptText);
+	stat = new Stat();
+	takeoff = new Takeoff(this, plane, stat, promptText);
+	
 }
 
 void Game::readKeyBoardGame()
 {
-	if (GetAsyncKeyState('W') < 0)   //on verifie si la fleche gauche ou D est pressee
+
+	if (GetAsyncKeyState('W') < 0)
 	{
 		stat->readKeybord('W');
 	}
-	if (GetAsyncKeyState('S') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('S') < 0)
 	{
 		stat->readKeybord('S');
 	}
-	if (GetAsyncKeyState('A') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('A') < 0)
 	{
 		stat->readKeybord('A');
 	}
-	if (GetAsyncKeyState('D') < 0)   //on verifie si la fleche gauche ou D est pressee
+	if (GetAsyncKeyState('D') < 0)
 	{
 		stat->readKeybord('D');
-	}
+	}	
 }
-
 void Game::update()
 {
-	bool debug = false;
-	if (stat->close && !debug) {
-		if (startLoose)
-		{
-			gameScene->clear();
-			looseBackGround = new QGraphicsPixmapItem();
+	switch (state) {
+	case Gamestate::Decollage:
+		takeoff->updateTakeoff();
+		break;
+	case Gamestate::Gameplay:
+		updateGameplay();
+		break;
+	case Gamestate::Landing:
+		landing->updateLanding();
+		break;
+	case Gamestate::GameOver:
+		break;
+	}
+}
+void Game::updateGameplay()
+{
+	for (auto actor : listActor)
+	{
+		actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
 
-			looseBackGround->setPixmap(ImageManager::getInstance().getImage(LOOSE).scaled(2000, 1100));
-			gameScene->addItem(looseBackGround);
-			//looseBackGround->setScale(qMin(2000, 1100));
-			looseBackGround->show();
-			startLoose = false;
-		}
-		
-
-		if (GetAsyncKeyState('M')){
-			stat->close = false;
-			startLoose = true;
+		if (actor->x() <= START_PLANE_X - actor->pixmap().width()) {
+			gameScene->removeItem(actor); // Retirer l'acteur de la scène Qt
+			listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
+			delete actor;
 		}
 	}
-	else {
-		int ch = 0;
-		bool bpG = true;
-		bool bpD = true;
-		bool bpH = true;
-		bool bpB = true;
-		for (auto actor : listActor)
+	stat->changeScore(250);
+	stat->countFuel();
+	plane->setPos(plane->x(), stat->getHeight());
+	afficherStat();
+	manageCollision();
+	generateObstacles();
+	if (true)
+	{
+		promptText->setPlainText("Atterrissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!");
+		if (GetAsyncKeyState('K') < 0)
 		{
-			
-			actor->setPos(actor->x() - (actor->getSpeed() * stat->speedfactor), actor->y());
-
-			if (actor->x() <= START_PLANE_X - actor->pixmap().width()) {
-				gameScene->removeItem(actor);
+			for (auto actor : listActor)
+			{
+				actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
+				gameScene->removeItem(actor); // Retirer l'acteur de la scène Qt
 				listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
 				delete actor;
+				
 			}
+			landing = new Landing(this, plane, stat, promptText);
+			state = Gamestate::Landing;
 		}
-		stat->changeScore(20);
-		stat->countFuel();
-
-		plane->setPos(plane->x(), stat->getHeight());
-
-		afficherStat();
-		manageCollision();
-		generateObstacles();
-		count++;
 	}
-	
-
+	else
+	{
+		promptText->setPlainText("");
+	}
 	//Atterissage possible
-	/*
-	if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
+	/*if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
 	{
 		gotoxy(30, 6);
 		cout << "Atterissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!";
@@ -111,7 +125,7 @@ void Game::update()
 			bpB = ConnectionSerie::getValue("BB");
 
 		}
-		if (ch == 'k' || bpG==0 || bpB==0||bpH==0||bpD==0)
+		if (ch == 'k' || bpG == 0 || bpB == 0 || bpH == 0 || bpD == 0)
 		{
 			stat->landing = true;
 			stat->close = true;
@@ -121,9 +135,10 @@ void Game::update()
 			count = 0;
 			possibleTouchDown += 150;
 		}
-	}*/
-	
+	}
+	count++;*/
 }
+
 
 void Game::manageCollision()
 {
@@ -312,7 +327,7 @@ void Game::generateObstacles()
 
 	if (random >= 45 && random <= 50)
 	{
-		for (auto actor : listActor)
+		for (auto& actor : listActor)
 		{
 			if (actor->y() == 3)
 			{
@@ -345,7 +360,7 @@ void Game::generateObstacles()
 }
 bool Game::isPosYPossible(int y)
 {
-	for (auto actor : listActor)
+	for (auto& actor : listActor)
 	{
 		if (actor->y() == y)
 		{
@@ -354,47 +369,19 @@ bool Game::isPosYPossible(int y)
 		}
 	}
 	return true;
-}*/
-/*bool Game::takeoff()
+}
+bool Game::possibleLanding()
 {
-	int speed = 1;
-	int requiredSpeed = 100;
-	int count = 0;
-	int counttest = 0;
-	int startindex = 0;
-	int conteurReussiteHauteur = 0;
-	int conteurEchecHauteur = 0;
-	char touche = ' ';
-	plane->setX(0);
-	plane->setY(5);
-	int length = rand() % 200 + 300;
-	bool vitesseGood = false;
-	bool hauteurGood = false;
-	vector<char> piste(length);
-	vector<char> touches = { 'w','a','s','d'};
-	vector<string> directions = { "haut", "gauche", "bas", "droite" };
-	json msg_envoi;
-	msg_envoi["led"] = 1;
-	msg_envoi["gaz"] = 1;
-	ConnectionSerie::Envoie(msg_envoi);
-	//on remplit la piste
-	for (int i = 0; i < length; i++)
+	qDebug() << "count:" << count;
+	qDebug() << "landingCount:" << landingCount;
+	if (plane->y() < 360 && count >= landingCount && count <= (landingCount + 150))
 	{
-		if (i % 10 == 1)
-			piste[i] = '|';
-		else if (i >= length - 5)
-			piste[i] = 'X';
-		else
-			piste[i] = '-';
+		return true;
 	}
-
-	//affichage initiale de la piste
-	gotoxy(0, 5);
-	cout << plane->getSprite();
-	gotoxy(0, 6);
-	for (int i = 0; i < ACTOR_POS_X; i++)
+	else if (count == landingCount + 150)
 	{
-		cout << piste[i];
+		count = 0;
+		landingCount += 150;
 	}
 	//petit mouvement initiale
 	while (plane->getX() < START_PLANE_X)

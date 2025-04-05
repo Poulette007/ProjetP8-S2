@@ -16,6 +16,8 @@ enum ImageType {
     WIND,
     BIRD,
     TREE,
+	RUNWAY,
+    TREE,
     LOOSE
 };
 

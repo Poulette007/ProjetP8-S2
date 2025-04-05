@@ -6,6 +6,8 @@
 #include "Plane.h"
 #include "Game.h"
 #include "Player.h"
+#include "Takeoff.h"
+#include "Landing.h"
 #include "MainMenu.h"
 #include "login.h"
 
@@ -117,7 +119,6 @@ int main(int argc, char* argv[])
     log->show();
     gameScene = new QGraphicsScene();
     gameScene->setSceneRect(0, 0, 1920, 1080);
-
     QGraphicsView* view = new QGraphicsView(gameScene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -144,7 +145,16 @@ int main(int argc, char* argv[])
     //Timer pour lire le clavier
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
-    readKeyTimer.start(100);
+	QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->takeoff->readInputDecollage();});
+	QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() 
+    {
+		if (game->state == Game::Gamestate::Landing)
+        {
+            game->landing->readInputAtterrissage();
+        }
+        
+    });
+    readKeyTimer.start(60);
 
     
     return app.exec();

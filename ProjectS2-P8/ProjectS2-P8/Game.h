@@ -13,10 +13,14 @@
 #include "Stat.h"
 #include "Player.h"
 #include "ConnectionSerie.h"
+#include "include/json.hpp""
+#include "SmallTexte.h"
+
 #include <qlayout.h>
 #include <QDashboard.h>
 using namespace std;
-
+class Takeoff; // évite l'inclusion circulaire
+class Landing; // évite l'inclusion circulaire
 
 class Game
 {
@@ -29,25 +33,40 @@ private:
 	// Stat QT 
 	QDashboard *dash;
 public:
-	Game(Stat*);
+	enum class Gamestate
+	{
+		Decollage,
+		Gameplay,
+		Landing,
+		GameOver
+	};
+
+	Game();
 	void readKeyBoardGame();
-	vector<Actor*> listActor;
 	void generateObstacles();
-	//bool takeoff();
-	//bool touchDown();
 	bool isPosYPossible(int y);
 	void update();
+	void updateGameplay();
 	void manageCollision();
 	void CollionDetected(Actor* actor);
-	bool isCollision;
 	void gotoxy(int x, int y);
 	void afficherStat();
+	bool possibleLanding();
+
+	vector<Actor*> listActor;
 	void afficherStatManette();
 	void afficherStatOnGame();
 	void setupStatOnGame();
 	Plane *plane;
+	Takeoff* takeoff;
+	Landing* landing;
 	Stat* stat;
+	QGraphicsTextItem* promptText;
+	Gamestate state;
+
 	int count;
-	int possibleTouchDown;
+	//int possibleTouchDown;
+	bool isCollision;
+	int landingCount;
 };
 

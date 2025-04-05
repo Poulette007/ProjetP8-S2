@@ -9,6 +9,7 @@
 #define BIRD_PATH "sprites/objet/arbre1.png"
 #define TREE_PATH "sprites/objet/arbre2.png"
 #define LOOSE_PATH "sprites/background/Loose.png"
+#define RUNWAY_PATH "sprites/background/piste.png"
 
 ImageManager::ImageManager() {
     loadImages();
@@ -27,6 +28,8 @@ void ImageManager::loadImages() {
         {GAZ, GAZ_PATH},
         {WIND, WIND_PATH},
         {BIRD, BIRD_PATH},
+		{TREE, TREE_PATH},
+		{RUNWAY, RUNWAY_PATH}
         {TREE, TREE_PATH},
         {LOOSE, LOOSE_PATH}
     };
