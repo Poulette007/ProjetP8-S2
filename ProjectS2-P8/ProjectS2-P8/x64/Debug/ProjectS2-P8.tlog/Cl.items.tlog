@@ -1,7 +1,11 @@
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Actor.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Actor.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Button.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Button.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ConnectionSerie.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\ConnectionSerie.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\EcranPrincipal.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\EcranPrincipal.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Game.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\login.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\login.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\MainMenu.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\MainMenu.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\QDashboard.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\QDashboard.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\ImageManager.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\include\serial\SerialPort.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\SerialPort.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Landing.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Landing.obj
@@ -10,6 +14,7 @@ C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Plane.cp
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Player.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Player.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Stat.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Stat.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Takeoff.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\Takeoff.obj
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\qt\moc\moc_SmallTexte.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\moc_SmallTexte.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\qt\moc\moc_UserName.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\moc_UserName.obj
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\qt\moc\moc_Button.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\moc_Button.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\qt\moc\moc_Landing.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\moc_Landing.obj
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\qt\moc\moc_Takeoff.cpp;C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\x64\Debug\moc_Takeoff.obj

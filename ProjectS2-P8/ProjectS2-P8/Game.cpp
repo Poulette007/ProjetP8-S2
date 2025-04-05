@@ -30,7 +30,6 @@ Game::Game(Stat* s)
 	promptText->setFont(QFont("Consolas", 24));
 	promptText->setPos(100, 100);
 	gameScene->addItem(promptText);
-	stat = new Stat();
 	takeoff = new Takeoff(this, plane, stat, promptText);
 	
 }

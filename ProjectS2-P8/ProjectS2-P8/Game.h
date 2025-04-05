@@ -41,7 +41,7 @@ public:
 		GameOver
 	};
 
-	Game();
+	Game(Stat* stat);
 	void readKeyBoardGame();
 	void generateObstacles();
 	bool isPosYPossible(int y);

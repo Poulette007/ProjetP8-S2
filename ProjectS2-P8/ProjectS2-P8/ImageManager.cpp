@@ -29,8 +29,7 @@ void ImageManager::loadImages() {
         {WIND, WIND_PATH},
         {BIRD, BIRD_PATH},
 		{TREE, TREE_PATH},
-		{RUNWAY, RUNWAY_PATH}
-        {TREE, TREE_PATH},
+		{RUNWAY, RUNWAY_PATH},
         {LOOSE, LOOSE_PATH}
     };
 
