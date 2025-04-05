@@ -86,15 +86,12 @@ void Game::updateGameplay()
 		{
 			for (auto actor : listActor)
 			{
-				if (actor != plane)
-				{
-					gameScene->removeItem(actor);
-					delete actor;
-				}if (actor == plane)
-				{
-				}
+				actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
+				gameScene->removeItem(actor); // Retirer l'acteur de la scène Qt
+				listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
+				delete actor;
+				
 			}
-			gameScene->clear();
 			landing = new Landing(this, plane, stat, promptText);
 			state = Gamestate::Landing;
 		}

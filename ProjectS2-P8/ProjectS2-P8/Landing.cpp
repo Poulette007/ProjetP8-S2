@@ -86,6 +86,7 @@ void Landing::updateRalentissement()
 		}
 		if (speed <= 50)
 		{
+			promptText->setPlainText("Ralentir l'avion de 50%\nVitesse: " + vitesse);
 			landingPhase = LandingPhase::Descente;
 			speed = 50;
 			input = 0;
