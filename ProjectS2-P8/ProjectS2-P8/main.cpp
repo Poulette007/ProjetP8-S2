@@ -60,7 +60,6 @@ int main(int argc, char* argv[])
     view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
     view->showFullScreen();
     view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
-
     //Ajout des pages dans le stack
     Pages->addWidget(LoginPage);
     Pages->addWidget(MenuPage);
@@ -73,11 +72,13 @@ int main(int argc, char* argv[])
         });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
+        view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
         });
     QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(2);
         timer.start(20 - stat->speedfactor);
         readKeyTimer.start(100);
+
         });
 
     //Cree le layout pour notre fenetre
@@ -85,7 +86,8 @@ int main(int argc, char* argv[])
     mainLayout->addWidget(Pages);
     Jeu.setLayout(mainLayout);
     Jeu.resize(1920, 1080);
-  
+    view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+	//Jeu.setStyle(QStyleFactory::create("Fusion"));
     //Show et run!
     Jeu.showFullScreen();
     return app.exec();

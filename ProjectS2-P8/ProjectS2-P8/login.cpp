@@ -11,7 +11,7 @@ login::login()
     
 
     //Texte Entrez votre nom:
-    Authen = new UserName("Entrez votre nom:", this);
+    Authen = new UserName("Entrez votre nom:", this, 20, TITLE);
     Authen->setGeometry(430, 250, 400, 35);
    
     //Zone d'ecriture du nom
@@ -26,7 +26,7 @@ login::login()
         "background: rgba(194, 255, 255, 1);""}");
 
     //Texte Nouveau joueur:
-    New = new SmallText("Nouveau joueur?", this);
+    New = new UserName("Nouveau joueur?", this, 10, TEXTE);
     New->setGeometry(433, 329, 165, 20);
 
     //Creation boite a cocher pour savoir si nouveau joueur
@@ -107,7 +107,7 @@ bool login::ButtonPushed()
         QMessageBox::critical(nullptr, "Erreur", "Choisir un moyen de transport avant de continuer!");
         return false;
     }
-    if (PlayerIsNew && !userExist)
+    else if (PlayerIsNew && !userExist)
     {
         addUser(Nom->text());
         userExists(Nom->text());

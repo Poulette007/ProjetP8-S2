@@ -30,7 +30,7 @@ private:
     QMap<int, QString> getBestScore(int nombre);
     UserName* Authen;
     QLineEdit* Nom;
-    SmallText* New;
+    UserName* New;
     QCheckBox* NewPlayer;
     QCheckBox* Plane;
     QCheckBox* Chopper;

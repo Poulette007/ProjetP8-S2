@@ -163,7 +163,6 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Player.h" />
-    <QtMoc Include="SmallText.h" />
     <ClInclude Include="Stat.h" />
   </ItemGroup>
   <ItemGroup>
@@ -189,9 +188,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SmallText.cpp" />
     <ClCompile Include="Stat.cpp" />
-    <ClCompile Include="UserName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Actor.csv" />
