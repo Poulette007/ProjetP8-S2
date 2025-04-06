@@ -8,11 +8,11 @@
 
 Game::Game(Stat* s)
 {
-	BackGroundVol = new QGraphicsPixmapItem();
-	BackGroundVol->setPixmap(QPixmap("sprites/background/BackgroundVol").scaled(1920 + 10, 1080 + 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	//BackGroundVol = new QGraphicsPixmapItem();
+	//BackGroundVol->setPixmap(QPixmap("sprites/background/BackgroundVol").scaled(1920 + 10, 1080 + 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 	gameScene->addItem(BackGroundVol);
-	BackGroundVol->show();
-	BackGroundVol->setPos(1920 / 3 - 10, -10);
+	//BackGroundVol->show();
+	//BackGroundVol->setPos(1920 / 3 - 10, -10);
 
 	listActor = vector<Actor*>();
 	plane = new Plane(START_PLANE_X, 1080/4);
@@ -31,6 +31,7 @@ Game::Game(Stat* s)
 	promptText->setPos(100, 100);
 	gameScene->addItem(promptText);
 	takeoff = new Takeoff(this, plane, stat, promptText);
+	//state = Gamestate::Decollage;
 	
 }
 
@@ -137,7 +138,22 @@ void Game::updateGameplay()
 	}
 	count++;*/
 }
-
+bool Game::possibleLanding()
+{
+	qDebug() << "count:" << count;
+	qDebug() << "landingCount:" << landingCount;
+	if (plane->y() < 360 && count >= landingCount && count <= (landingCount + 150))
+	{
+		return true;
+	}
+	else if (count == landingCount + 150)
+	{
+		count = 0;
+		landingCount += 150;
+	}
+	count++;
+	return false;
+}
 
 void Game::manageCollision()
 {

@@ -18,7 +18,7 @@ void Landing::initPiste()
 {
 	longeurPiste = QRandomGenerator::global()->bounded(100, 300);
 	//pour remplir le debut de la piste d'arbres
-	for (int i = 0; i < longeurPiste / 4; i++)
+	for (int i = 0; i < longeurPiste / 8; i++)
 	{
 		QGraphicsPixmapItem* arbre = new QGraphicsPixmapItem();
 		arbre->setPixmap(ImageManager::getInstance().getImage(TREE));
@@ -28,12 +28,12 @@ void Landing::initPiste()
 		runwayTilePixmap.push_back(arbre);
 	}
 	//remplissage du reste de la piste par des tuiles de piste
-	for (int i = longeurPiste / 4; i < longeurPiste; i++)
+	for (int i = longeurPiste / 8; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
-		runwayTile->setScale(0.5);
-		runwayTile->setPos(i * runwayTile->pixmap().width() / 2, 1080 - runwayTile->pixmap().height() / 2);
+		runwayTile->setScale(0.65);
+		runwayTile->setPos(i * runwayTile->pixmap().width() / 2, 1080 - (runwayTile->pixmap().height() / 2) - 60);
 		runwayTile->setZValue(0);	//arriere plan
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);
@@ -95,9 +95,11 @@ void Landing::updateRalentissement()
 }
 void Landing::updateDescente()
 {
+	QString hauteur = QString::number(plane->y());
 	//diminuer la hauteur de l'avion de 2 positions
 	if(speed == 50)
 	{
+		promptText->setPlainText("Descendre de moitié " + QString::number(speed));
 		if (plane->y() <= 1080 / 2)
 		{
 			if (input == CLAVIER_S || input == JOY_BAS)

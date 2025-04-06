@@ -39,6 +39,6 @@ private:
 	int inputCount;
 	int input;
 	int speed=0;
-	int recquiredSpeed = 250;
+	int recquiredSpeed = 200;
 };
 

@@ -33,6 +33,7 @@ MainMenu::MainMenu()
 
 void MainMenu::paintEvent(QPaintEvent* event)
 {
+
     QPainter painter(this);
 
     //Image de fond
@@ -64,6 +65,7 @@ void MainMenu::paintEvent(QPaintEvent* event)
 
     //On fini le paint event
     QWidget::paintEvent(event);
+   
 }
 
 /* Comment les afficher:

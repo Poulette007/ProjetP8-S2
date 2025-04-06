@@ -5,7 +5,7 @@
 login::login()
 {
     setWindowTitle("Authentification");
-    resize(1920, 1080);
+    //resize(1920, 1080);
     
     //Image de fond
     

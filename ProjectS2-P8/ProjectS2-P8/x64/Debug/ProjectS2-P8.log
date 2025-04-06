@@ -1,52 +1,12 @@
 ﻿   Qt/MSBuild: 3.3.1.1
   Reading Qt configuration (C:/Qt/6.7.3/msvc2022_64/bin/qmake)
    Qt: 6.7.3
-  Game.cpp
-  ImageManager.cpp
-  Landing.cpp
-  main.cpp
-  Plane.cpp
   Takeoff.cpp
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.cpp(1,1): warning C4828: The file contains a character starting at offset 0x274 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0x78d that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xa18 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.cpp(1,1): warning C4828: The file contains a character starting at offset 0x590 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xf33 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.cpp(1,1): warning C4828: The file contains a character starting at offset 0x664 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xf43 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.cpp(1,1): warning C4828: The file contains a character starting at offset 0x7fc that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.cpp(1,1): warning C4828: The file contains a character starting at offset 0x8cb that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xf7c that is illegal in the current source character set (codepage 65001).
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
   (compiling source file 'Takeoff.cpp')
   
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xf85 that is illegal in the current source character set (codepage 65001).
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
   (compiling source file 'Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0xfba that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0x1abc that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'ImageManager.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'ImageManager.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(1,1): warning C4828: The file contains a character starting at offset 0x1ac4 that is illegal in the current source character set (codepage 65001).
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'ImageManager.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Game.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Game.cpp')
   
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
   (compiling source file 'Takeoff.cpp')
@@ -57,116 +17,7 @@ C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageMan
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
   (compiling source file 'Takeoff.cpp')
   
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Landing.cpp')
-  
 C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   (compiling source file 'Takeoff.cpp')
   
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Plane.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Plane.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Plane.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'main.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'main.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'main.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'main.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'main.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'main.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Game.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Game.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Game.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'Game.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(5,9): warning C4005: 'ACTOR_POS_X': macro redefinition
-      C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\const.h(31,9):
-      see previous definition of 'ACTOR_POS_X'
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(6,9): warning C4005: 'START_PLANE_X': macro redefinition
-      C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\const.h(32,9):
-      see previous definition of 'START_PLANE_X'
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(144,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(167,19): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.cpp(167,22): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\UserName.h(1,1): warning C4828: The file contains a character starting at offset 0x46b that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'main.cpp')
-  
-  moc_UserName.cpp
-  moc_Button.cpp
-  moc_Landing.cpp
-  moc_Takeoff.cpp
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\UserName.h(1,1): warning C4828: The file contains a character starting at offset 0x46b that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_UserName.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'x64/Debug/qt/moc/moc_Landing.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'x64/Debug/qt/moc/moc_Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'x64/Debug/qt/moc/moc_Takeoff.cpp')
-  
-  LINK : C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe not found or not built by the last incremental link; performing full link
   ProjectS2-P8.vcxproj -> C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe

@@ -39,6 +39,15 @@ int main(int argc, char* argv[])
     //Timer pour lire le clavier
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->takeoff->readInputDecollage();});
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]()
+        {
+            if (game->state == Game::Gamestate::Landing)
+            {
+                game->landing->readInputAtterrissage();
+            }
+
+        });
 
     //Creation du widget qui contien tous les autres
     QWidget Jeu;
@@ -61,7 +70,6 @@ int main(int argc, char* argv[])
     view->setBackgroundBrush(Qt::NoBrush);
     view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
     view->showFullScreen();
-    view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
     //Ajout des pages dans le stack
     Pages->addWidget(LoginPage);
     Pages->addWidget(MenuPage);
@@ -70,7 +78,11 @@ int main(int argc, char* argv[])
     //Connect les bouttons pour changer de page
     QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
         if(LoginPage->ButtonPushed())
-            Pages->setCurrentIndex(1);
+            //Pages->setCurrentIndex(1);
+            Pages->setCurrentIndex(2);
+            timer.start(20 - stat->speedfactor);
+            readKeyTimer.start(60);
+
         });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
@@ -79,15 +91,17 @@ int main(int argc, char* argv[])
     QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(2);
         timer.start(20 - stat->speedfactor);
-        readKeyTimer.start(100);
+        readKeyTimer.start(60);
 
         });
+
+
 
     //Cree le layout pour notre fenetre
     QVBoxLayout* mainLayout = new QVBoxLayout(&Jeu);
     mainLayout->addWidget(Pages);
     Jeu.setLayout(mainLayout);
-    Jeu.resize(1920, 1080);
+    //Jeu.resize(1920, 1080);
     view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
 	//Jeu.setStyle(QStyleFactory::create("Fusion"));
     //Show et run!

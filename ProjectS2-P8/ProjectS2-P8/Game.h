@@ -68,5 +68,6 @@ public:
 	//int possibleTouchDown;
 	bool isCollision;
 	int landingCount;
+	
 };
 

@@ -18,13 +18,13 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 }
 void Takeoff::initPiste()
 {
-	longeurPiste = QRandomGenerator::global()->bounded(100, 200);
+	longeurPiste = QRandomGenerator::global()->bounded(100, 500);
 	for (int i = 0; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
-		runwayTile->setScale(0.5);
-		runwayTile->setPos(i*runwayTile->pixmap().width()/2, 1080-runwayTile->pixmap().height()/2);
+		runwayTile->setScale(0.65);
+		runwayTile->setPos(i*runwayTile->pixmap().width()/2, 1080-(runwayTile->pixmap().height()/2)-60);
 		runwayTile->setZValue(0);	//arriere plan
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);
@@ -96,7 +96,9 @@ void Takeoff::updateAcceleration()
 	countRalentissement++;
 	if (countRalentissement % 2 == 0)
 	{
-		speed -= 3;
+		speed -= 1;
+		if (speed < 10)
+			speed = 10;
 	}
 	stat->changeSpeed(speed);
 	if (speed >= recquiredSpeed)
