@@ -952,3 +952,7 @@ CONFIG += no_fixpath
 QT = core qml widgets designer
 CONFIG += no_fixpath
 QT = core qml widgets designer
+CONFIG += no_fixpath
+QT = core qml widgets designer
+CONFIG += no_fixpath
+QT = core qml widgets designer
