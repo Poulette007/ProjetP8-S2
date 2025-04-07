@@ -15,6 +15,7 @@
 #include "ConnectionSerie.h"
 #include "include/json.hpp""
 #include "SmallTexte.h"
+#include "GameOver.h"
 
 #include <qlayout.h>
 #include <QDashboard.h>
@@ -28,10 +29,15 @@ private:
 	json msg_envoi;
 	QGraphicsPixmapItem* looseBackGround;
 	QGraphicsPixmapItem* BackGroundVol;
-
+	GameOver* overGame;
 	bool startLoose = true;
 	// Stat QT 
 	QDashboard *dash;
+
+	int random;
+	int obstacle;
+	int posY;
+	int distance;
 public:
 	enum class Gamestate
 	{
@@ -44,9 +50,11 @@ public:
 	Game(Stat* stat);
 	void readKeyBoardGame();
 	void generateObstacles();
+	void createObstacle(int obstacle, int posY);
 	bool isPosYPossible(int y);
 	void update();
 	void updateGameplay();
+	void changePlanePixmap();
 	void manageCollision();
 	void CollionDetected(Actor* actor);
 	void gotoxy(int x, int y);
@@ -62,7 +70,7 @@ public:
 	Landing* landing;
 	Stat* stat;
 	QGraphicsTextItem* promptText;
-	Gamestate state;
+	Gamestate state; 
 
 	int count;
 	//int possibleTouchDown;

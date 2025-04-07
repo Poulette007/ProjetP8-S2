@@ -3,6 +3,7 @@
 #include <iostream>
 #include "const.h"
 #include "ConnectionSerie.h"
+#include "Button.h"
 class Stat
 {
 private:
@@ -11,13 +12,17 @@ private:
 	static int score;
 	static int height;
 	int delay;
+	
+
 
 	
 	//ConnectionSerie connection;
 public:
+	static int skinPlane;
 	static bool close;
 	static bool landing;
 	static int speedfactor;
+	static bool muonTrue;
 	Stat();
 	Stat(int score);
 	static int getFuel();

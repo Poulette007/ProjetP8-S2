@@ -1,6 +1,7 @@
 #include "login.h"
 #include <QFile>
 #include <QMessageBox>
+#include <Stat.h>
 
 login::login()
 {
@@ -69,7 +70,7 @@ void login::PlaneCheckBox()
     Chopper->setChecked(false);
     Jet->setChecked(false);
     SkinChecked = 1;
-    return;
+	Stat::skinPlane = 0;
 }
 
 void login::ChopperCheckBox()
@@ -78,7 +79,7 @@ void login::ChopperCheckBox()
     Chopper->setChecked(true);
     Jet->setChecked(false);
     SkinChecked = 2;
-    return;
+    Stat::skinPlane = 1;
 }
 
 void login::JetCheckBox()
@@ -87,7 +88,7 @@ void login::JetCheckBox()
     Chopper->setChecked(false);
     Jet->setChecked(true);
     SkinChecked = 3;
-    return;
+    Stat::skinPlane = 2;
 }
 
 void login::NewPlayerCheckBox()

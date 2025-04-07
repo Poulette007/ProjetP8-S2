@@ -17,7 +17,9 @@ enum ImageType {
     BIRD,
     TREE,
 	RUNWAY,
-    LOOSE
+    LOOSE,
+	CADRAN,
+	AIGUILLE
 };
 
 class ImageManager {

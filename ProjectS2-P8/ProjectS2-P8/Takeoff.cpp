@@ -18,7 +18,7 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 }
 void Takeoff::initPiste()
 {
-	longeurPiste = QRandomGenerator::global()->bounded(100, 200);
+	longeurPiste = QRandomGenerator::global()->bounded(400, 500);
 	for (int i = 0; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
@@ -96,7 +96,11 @@ void Takeoff::updateAcceleration()
 	countRalentissement++;
 	if (countRalentissement % 2 == 0)
 	{
-		speed -= 3;
+		speed -= 1;
+		if (speed < 0)
+		{
+			speed = 0;
+		}
 	}
 	stat->changeSpeed(speed);
 	if (speed >= recquiredSpeed)

@@ -10,6 +10,7 @@
 #include "Landing.h"
 #include "MainMenu.h"
 #include "login.h"
+#include "GameOver.h"
 
 #include "const.h"
 QGraphicsScene* gameScene = nullptr;
@@ -39,7 +40,26 @@ int main(int argc, char* argv[])
     //Timer pour lire le clavier
     QTimer readKeyTimer;
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
+        QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() {
+                if (game->state == Game::Gamestate::Decollage)
+                {
+                    game->takeoff->readInputDecollage();
+                }
+        });
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]()
+        {
+            if (game->state == Game::Gamestate::Landing)
+            {
+                game->landing->readInputAtterrissage();
+            }
 
+        });
+    QTimer GenereObstacle;
+    QObject::connect(&GenereObstacle, &QTimer::timeout, [&]()
+        {
+			game->generateObstacles();
+
+        });
     //Creation du widget qui contien tous les autres
     QWidget Jeu;
 
@@ -51,6 +71,8 @@ int main(int argc, char* argv[])
 
     //Creation de la page de menu
     MainMenu* MenuPage = new MainMenu();
+
+	
 
     //Creation de la view
     QGraphicsView* view = new QGraphicsView(gameScene);
@@ -66,22 +88,28 @@ int main(int argc, char* argv[])
     Pages->addWidget(LoginPage);
     Pages->addWidget(MenuPage);
     Pages->addWidget(view);
+	//Pages->addWidget(overGame);
 
     //Connect les bouttons pour changer de page
-    QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
+    /*QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
         if(LoginPage->ButtonPushed())
             Pages->setCurrentIndex(1);
-        });
+        });*/
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
         view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
         });
-    QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [&]() {
+    QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(2);
-        timer.start(20 - stat->speedfactor);
-        readKeyTimer.start(100);
+        game->changePlanePixmap();
+        timer.start(16 - stat->speedfactor);
+        readKeyTimer.start(80);
+		GenereObstacle.start(2000);
+    });
+	/*QObject::connect(overGame->NextPage, &QPushButton::clicked, [&]() {
+        Pages->setCurrentIndex(1);
+	});*/
 
-        });
 
     //Cree le layout pour notre fenetre
     QVBoxLayout* mainLayout = new QVBoxLayout(&Jeu);

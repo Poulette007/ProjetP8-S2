@@ -10,6 +10,8 @@
 #define TREE_PATH "sprites/objet/arbre2.png"
 #define LOOSE_PATH "sprites/background/Loose.png"
 #define RUNWAY_PATH "sprites/background/piste.png"
+#define AIGUILLE_PATH "sprites/Stat/Baton.png"
+#define CADRAN_PATH "sprites/Stat/CadranT.png"
 
 ImageManager::ImageManager() {
     loadImages();
@@ -30,9 +32,28 @@ void ImageManager::loadImages() {
         {BIRD, BIRD_PATH},
 		{TREE, TREE_PATH},
 		{RUNWAY, RUNWAY_PATH},
-        {LOOSE, LOOSE_PATH}
-    };
+        {LOOSE, LOOSE_PATH},
+		{CADRAN, CADRAN_PATH},
+        {AIGUILLE, AIGUILLE_PATH}
 
+    };
+    //for (const auto& [type, path] : paths) {
+    //    QPixmap pixmap(path);
+    //    if (pixmap.isNull()) {
+    //        std::cerr << "Erreur: Impossible de charger l'image " << path.toStdString() << std::endl;
+    //    }
+    //    else {
+    //        // Redimensionner tout en gardant le ratio, sans ajouter de zone transparente
+    //        QSize newSize(300, 300); // ou une taille qui te convient
+    //        QPixmap scaledPixmap = pixmap.scaled(
+    //            newSize,
+    //            Qt::KeepAspectRatio,
+    //            Qt::SmoothTransformation
+    //        );
+
+    //        images[type] = scaledPixmap;
+    //    }
+    //}
     for (const auto& [type, path] : paths) {
         QPixmap pixmap(path);
         if (pixmap.isNull()) {
@@ -59,7 +80,7 @@ void ImageManager::loadImages() {
 
 QPixmap ImageManager::getImage(ImageType type) const{
     std::cout << "getImage() appelé avec type: " << type << std::endl;
-    if (type >= 0 && type < images.size()) {
+    if (type >= 0 && type < images.size() + 1) {
         std::cout << "type: " << type << std::endl;
         return images.at(type);
     }

@@ -47,3 +47,6 @@ extern QGraphicsScene* gameScene;
 #define JOY_GAUCHE 211
 #define JOY_DROIT 212
 
+// new defines
+#define WIDTH_DASHBOARD 1920 / 5 + 10
+#define HEIGHT_DASHBOARD 1080 + 10

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Takeoff.h"	//a garder pour eviter inclusion circulaire
 #include "Landing.h"	//a garder pour eviter inclusion circulaire
+#include <GameOver.h>
 
 #define ACTOR_POS_X 1920
 #define START_PLANE_X int(1920/3)
@@ -12,12 +13,12 @@ Game::Game(Stat* s)
 	BackGroundVol->setPixmap(QPixmap("sprites/background/BackgroundVol").scaled(1920 + 10, 1080 + 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 	gameScene->addItem(BackGroundVol);
 	BackGroundVol->show();
-	BackGroundVol->setPos(1920 / 3 - 10, -10);
+	BackGroundVol->setPos(WIDTH_DASHBOARD, -10);
 
 	listActor = vector<Actor*>();
 	plane = new Plane(START_PLANE_X, 1080/4);
 	gameScene->addItem(plane);
-	plane->setPos(0, 2 * 1080 / 4);
+	plane->setPos(WIDTH_DASHBOARD, 2 * 1080 / 4);
 	plane->show();
 	
 	stat = s;
@@ -30,7 +31,13 @@ Game::Game(Stat* s)
 	promptText->setFont(QFont("Consolas", 24));
 	promptText->setPos(100, 100);
 	gameScene->addItem(promptText);
-	takeoff = new Takeoff(this, plane, stat, promptText);
+	//takeoff = new Takeoff(this, plane, stat, promptText);
+
+
+	// Dashboard 
+	setupStatOnGame();
+	state = Gamestate::Gameplay;
+
 	
 }
 
@@ -56,10 +63,12 @@ void Game::readKeyBoardGame()
 }
 void Game::update()
 {
+	
 	switch (state) {
-	case Gamestate::Decollage:
-		takeoff->updateTakeoff();
-		break;
+	//case Gamestate::Decollage:
+	//	//updateGameplay();
+	//	takeoff->updateTakeoff();
+	//	break;
 	case Gamestate::Gameplay:
 		updateGameplay();
 		break;
@@ -67,11 +76,17 @@ void Game::update()
 		landing->updateLanding();
 		break;
 	case Gamestate::GameOver:
+		overGame = new GameOver();
 		break;
 	}
 }
 void Game::updateGameplay()
 {
+	if(stat->close){
+		Gamestate::GameOver;
+ 		qDebug() << "Game Over";
+		return;
+	}
 	for (auto actor : listActor)
 	{
 		actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
@@ -82,13 +97,12 @@ void Game::updateGameplay()
 			delete actor;
 		}
 	}
-	stat->changeScore(250);
+	stat->changeScore(1);
 	stat->countFuel();
 	plane->setPos(plane->x(), stat->getHeight());
 	afficherStat();
 	manageCollision();
-	generateObstacles();
-	if (true)
+	if (false)
 	{
 		promptText->setPlainText("Atterrissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!");
 		if (GetAsyncKeyState('K') < 0)
@@ -109,33 +123,25 @@ void Game::updateGameplay()
 	{
 		promptText->setPlainText("");
 	}
-	//Atterissage possible
-	/*if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
-	{
-		gotoxy(30, 6);
-		cout << "Atterissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!";
-		if (_kbhit())
-			ch = _getch();
-		else if (ConnectionSerie::hasData())		//CA RUSH EN TABAROUETTE ICI, JE SAIS PAS PK
-		{
-			bpG = ConnectionSerie::getValue("BG");
-			bpD = ConnectionSerie::getValue("BD");
-			bpH = ConnectionSerie::getValue("BH");
-			bpB = ConnectionSerie::getValue("BB");
+}
 
-		}
-		if (ch == 'k' || bpG == 0 || bpB == 0 || bpH == 0 || bpD == 0)
-		{
-			stat->landing = true;
-			stat->close = true;
-		}
-		if (count == possibleTouchDown + 150)
-		{
-			count = 0;
-			possibleTouchDown += 150;
-		}
+void Game::changePlanePixmap()
+{
+	switch (stat->skinPlane)
+	{
+	case 0: // Plane
+		plane->changePixmap(PLANE);
+		break;
+	case 1: // Chopper
+		plane->changePixmap(CHOPPER);
+		break;
+	case 2: // Jet
+		plane->changePixmap(JET);
+		break;
+	default:
+		plane->changePixmap(PLANE);
+		break;
 	}
-	count++;*/
 }
 
 
@@ -146,14 +152,8 @@ void Game::manageCollision()
 		if (listActor[i]->x() <= plane->x() + plane->pixmap().width() && listActor[i]->y() == plane->y())
 		{
 			CollionDetected(listActor[i]);
-
-			// Supprimer l'élément de la scène
 			gameScene->removeItem(listActor[i]);
-
-			// Libérer la mémoire
 			delete listActor[i];
-
-			// Supprimer l'élément du tableau
 			listActor.erase(listActor.begin() + i);
 		}
 	}
@@ -251,7 +251,7 @@ void Game::setupStatOnGame()
 #define WIND_SPAWN_MIN 1
 #define WIND_SPAWN_MAX 4
 #define GAS_SPAWN_MIN 10
-#define GAS_SPAWN_MAX 13   
+#define GAS_SPAWN_MAX 13
 #define BIRD_SPAWN_MIN 20       
 #define BIRD_SPAWN_MAX 25       
 #define TREE_MIN_DIST 500       
@@ -259,63 +259,135 @@ void Game::setupStatOnGame()
 #define SCREEN_HEIGHT 1080      
 #define RANGEE_HEIGHT (SCREEN_HEIGHT / 4) 
 
-void Game::generateObstacles()
-{
-	int random = rand() % 2000;
-	int posY = rand() % 3;
-	bool tree = false;
 
-	if (random >= TREE_SPAWN_MIN && random <= TREE_SPAWN_MAX)
+void Game::generateObstacles() {
+	random = rand() % 7;
+	obstacle = rand() % 3;
+	posY = rand() % 3;
+	distance = 0;
+	switch (random)
 	{
-		for (auto actor : listActor)
-		{
-			if (actor->y() == 3) 
-			{
-
-				if (abs(actor->x() - ACTOR_POS_X) < TREE_MIN_DIST)
-				{
-					tree = true;
-					break;
-				}
-			}
+	case 0: // Deux obstacles côte à côte
+		distance = rand() % 400;
+		createObstacle(obstacle, posY);
+		createObstacle(rand() % 4, (posY + 1) % 3);
+		break;
+	case 1: // Muon et obstacle
+		distance = rand() % 400;
+		createObstacle(obstacle, posY);
+		stat->muonTrue = true;
+		break;
+	case 2: // Obstacle simple
+		createObstacle(obstacle, posY);
+		break;
+	case 3: // Mur complet
+		for (int i = 0; i < 3; ++i){
+			createObstacle(rand() % 4, i);
+			distance = rand() % 150 + 50 * i;
 		}
-		if (!tree) {
-			listActor.push_back(new Tree(ACTOR_POS_X, 3 * RANGEE_HEIGHT)); // Spawne un arbre dans la dernière rangée
-			gameScene->addItem(listActor.back());
-		}
+		break;
+	case 4: // Centre seulement
+		distance = rand() % 100 + 50;
+		createObstacle(rand() % 4, 1);
+		break;
+	case 5: // Trou au milieu
+		distance = rand() % 100 + 75;
+		createObstacle(rand() % 4, 0);
+		distance = rand() % 200 + 150;
+		createObstacle(rand() % 4, 2);
+		stat->muonTrue = true;
+		break;
+	case 6: // 2 vent + 1 random
+		createObstacle(1, posY);
+		distance = 350;
+		createObstacle(1, posY);
+		distance = random % 400;
+		createObstacle(rand() % 4, (posY + 1 )% 3);
+		break;
 	}
 
-	if (isPosYPossible(posY))
+	if (stat->muonTrue)
 	{
-		int yPos = posY * RANGEE_HEIGHT;
+		listActor.push_back(new Tree(ACTOR_POS_X, 1080 * 3/4));
+		gameScene->addItem(listActor.back());
+		stat->muonTrue = false;
+	}
 
-		if (random >= WIND_SPAWN_MIN && random <= WIND_SPAWN_MAX) {
-			listActor.push_back(new Wind(ACTOR_POS_X, yPos));
-			gameScene->addItem(listActor.back());
-		}
-		else if (random >= GAS_SPAWN_MIN && random <= GAS_SPAWN_MAX) {
-			listActor.push_back(new Gaz(ACTOR_POS_X, yPos));
-			gameScene->addItem(listActor.back());
-		}
-		else if (random >= BIRD_SPAWN_MIN && random <= BIRD_SPAWN_MAX) {
-			listActor.push_back(new Bird(ACTOR_POS_X, yPos));
-			gameScene->addItem(listActor.back());
-		}
+}
+void Game::createObstacle(int obstacle, int posY)
+{
+	int yPos = posY * RANGEE_HEIGHT;
+	if (obstacle == 0) {
+		listActor.push_back(new Wind(ACTOR_POS_X + distance, yPos));
+		gameScene->addItem(listActor.back());
+	}
+	else if (obstacle == 1) {
+		listActor.push_back(new Gaz(ACTOR_POS_X + distance, yPos));
+		gameScene->addItem(listActor.back());
+	}
+	else if (obstacle == 2) {
+		listActor.push_back(new Bird(ACTOR_POS_X + distance, yPos));
+		gameScene->addItem(listActor.back());
 	}
 }
-
-bool Game::isPosYPossible(int y)
-{
-	for (auto actor : listActor)
-	{
-		if (actor->y() == y)
-		{
-			if (abs(actor->x() - ACTOR_POS_X) < OBSTACLE_MIN_DIST) 
-				return false; 
-		}
-	}
-	return true;
-}
+//void Game::generateObstacles()
+//{
+//
+//	int random = rand() % 2000;
+//	int posY = rand() % 3;
+//	bool tree = false;
+//
+//	if (random >= TREE_SPAWN_MIN && random <= TREE_SPAWN_MAX)
+//	{
+//		for (auto actor : listActor)
+//		{
+//			if (actor->y() == 3) 
+//			{
+//
+//				if (abs(actor->x() - ACTOR_POS_X) < TREE_MIN_DIST)
+//				{
+//					tree = true;
+//					break;
+//				}
+//			}
+//		}
+//		if (!tree) {
+//			listActor.push_back(new Tree(ACTOR_POS_X, 3 * RANGEE_HEIGHT)); // Spawne un arbre dans la dernière rangée
+//			gameScene->addItem(listActor.back());
+//		}
+//	}
+//
+//	if (isPosYPossible(posY))
+//	{
+//		int yPos = posY * RANGEE_HEIGHT;
+//
+//		if (random >= WIND_SPAWN_MIN && random <= WIND_SPAWN_MAX) {
+//			listActor.push_back(new Wind(ACTOR_POS_X, yPos));
+//			gameScene->addItem(listActor.back());
+//		}
+//		else if (random >= GAS_SPAWN_MIN && random <= GAS_SPAWN_MAX) {
+//			listActor.push_back(new Gaz(ACTOR_POS_X, yPos));
+//			gameScene->addItem(listActor.back());
+//		}
+//		else if (random >= BIRD_SPAWN_MIN && random <= BIRD_SPAWN_MAX) {
+//			listActor.push_back(new Bird(ACTOR_POS_X, yPos));
+//			gameScene->addItem(listActor.back());
+//		}
+//	}
+//}
+//
+//bool Game::isPosYPossible(int y)
+//{
+//	for (auto actor : listActor)
+//	{
+//		if (actor->y() == y)
+//		{
+//			if (abs(actor->x() - ACTOR_POS_X) < OBSTACLE_MIN_DIST) 
+//				return false; 
+//		}
+//	}
+//	return true;
+//}
 
 /*
 void Game::generateObstacles()

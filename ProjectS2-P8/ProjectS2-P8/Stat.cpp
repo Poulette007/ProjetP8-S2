@@ -10,7 +10,6 @@
 #define DESCENDRE_1_PALLIER 1080/4
 
 
-
 int Stat::fuel = 0;
 int Stat::speed = 0;
 int Stat::score = 0;
@@ -18,6 +17,8 @@ int Stat::height = 0;
 int Stat::speedfactor = 0;
 bool Stat::close = false;
 bool Stat::landing = false;
+bool Stat::muonTrue = false;
+int Stat::skinPlane = 0;
 
 Stat::Stat()
 {
@@ -64,7 +65,11 @@ void Stat::changeSpeed(int Sp)
 	if ((speed + Sp <= MAX_SPEED) && (speed + Sp >= MIN_SPEED))
 	{
 		speed += Sp;
-		speedfactor = speed / 2.0f;
+		speedfactor = speed / 3.0f;
+		if (Sp > 0)
+		{
+			changeFuel(-1);
+		}
 	}
 }
 void Stat::setSpeed(int Sp)
@@ -104,7 +109,7 @@ void Stat::countFuel()
 	{
 		delay = 0;
 
-		changeFuel(-1 * (speed / 10) -1);
+		changeFuel(-1);
 	}
 }
 
