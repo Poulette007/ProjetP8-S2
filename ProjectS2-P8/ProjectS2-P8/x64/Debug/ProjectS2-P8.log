@@ -1,23 +1,8 @@
 ﻿   Qt/MSBuild: 3.3.1.1
   Reading Qt configuration (C:/Qt/6.7.3/msvc2022_64/bin/qmake)
    Qt: 6.7.3
-  Takeoff.cpp
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1b5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(1,1): warning C4828: The file contains a character starting at offset 0x1e5 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x19e that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1a2 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\ImageManager.h(1,1): warning C4828: The file contains a character starting at offset 0x1e7 that is illegal in the current source character set (codepage 65001).
-  (compiling source file 'Takeoff.cpp')
-  
-C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\Game.h(16,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  (compiling source file 'Takeoff.cpp')
+  GameOver.cpp
+C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\ProjectS2-P8\UserName.h(1,1): warning C4828: The file contains a character starting at offset 0x46b that is illegal in the current source character set (codepage 65001).
+  (compiling source file 'GameOver.cpp')
   
   ProjectS2-P8.vcxproj -> C:\Prog\GitHub\UNI - S2\P8_projet\ProjetP8-S2\ProjectS2-P8\x64\Debug\ProjectS2-P8.exe

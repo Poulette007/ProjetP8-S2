@@ -6,7 +6,7 @@
 #define START_PLANE_X int(1920/3)
 
 
-Game::Game(Stat* s)
+Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 {
 	//BackGroundVol = new QGraphicsPixmapItem();
 	//BackGroundVol->setPixmap(QPixmap("sprites/background/BackgroundVol").scaled(1920 + 10, 1080 + 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -30,7 +30,8 @@ Game::Game(Stat* s)
 	promptText->setFont(QFont("Consolas", 24));
 	promptText->setPos(100, 100);
 	gameScene->addItem(promptText);
-	takeoff = new Takeoff(this, plane, stat, promptText);
+
+	takeoff = new Takeoff(this, plane, stat, promptText, stack, gameOverPage);
 	//state = Gamestate::Decollage;
 	
 }
@@ -89,10 +90,10 @@ void Game::updateGameplay()
 	afficherStat();
 	manageCollision();
 	generateObstacles();
-	if (true)
+	if (/*possibleLanding()*/true)
 	{
-		promptText->setPlainText("Atterrissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!");
-		if (GetAsyncKeyState('K') < 0)
+		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible et appuyez sur k pout initialiser la sequence datterissage!");
+		if (GetAsyncKeyState('K') < 0 && plane->y()<1080/4)
 		{
 			for (auto actor : listActor)
 			{
@@ -110,33 +111,6 @@ void Game::updateGameplay()
 	{
 		promptText->setPlainText("");
 	}
-	//Atterissage possible
-	/*if (count >= possibleTouchDown && count <= (possibleTouchDown + 150))
-	{
-		gotoxy(30, 6);
-		cout << "Atterissage possible, appuyez sur Gauche, ou k, pout initialiser la sequence datterissage!";
-		if (_kbhit())
-			ch = _getch();
-		else if (ConnectionSerie::hasData())		//CA RUSH EN TABAROUETTE ICI, JE SAIS PAS PK
-		{
-			bpG = ConnectionSerie::getValue("BG");
-			bpD = ConnectionSerie::getValue("BD");
-			bpH = ConnectionSerie::getValue("BH");
-			bpB = ConnectionSerie::getValue("BB");
-
-		}
-		if (ch == 'k' || bpG == 0 || bpB == 0 || bpH == 0 || bpD == 0)
-		{
-			stat->landing = true;
-			stat->close = true;
-		}
-		if (count == possibleTouchDown + 150)
-		{
-			count = 0;
-			possibleTouchDown += 150;
-		}
-	}
-	count++;*/
 }
 bool Game::possibleLanding()
 {
@@ -334,295 +308,6 @@ bool Game::isPosYPossible(int y)
 }
 
 /*
-void Game::generateObstacles()
-{
-	int random = rand() % 500;
-	int posY = rand() % 3;
-	bool tree = false;
-
-	if (random >= 45 && random <= 50)
-	{
-		for (auto& actor : listActor)
-		{
-			if (actor->y() == 3)
-			{
-				if (actor->x() >= (ACTOR_POS_X - 3))
-					tree = true;
-			}
-		}
-		if (!tree) {
-			listActor.push_back(new Tree(ACTOR_POS_X, 3 * 1080 / 4));
-			gameScene->addItem(listActor.back());
-		}
-			
-	}
-	if (isPosYPossible(posY))
-	{
-		int(posY *= 1080 / 4);
-		if (random >= 1 && random <= 2) {
-			listActor.push_back(new Wind(ACTOR_POS_X, posY));
-			gameScene->addItem(listActor.back());
-		}
-		else if (random >= 3 && random <= 4) {
-			listActor.push_back(new Gaz(ACTOR_POS_X, posY));
-			gameScene->addItem(listActor.back());
-		}
-		else if (random >= 11 && random <= 12) {
-			listActor.push_back(new Bird(ACTOR_POS_X, posY));
-			gameScene->addItem(listActor.back());
-		}
-	}
-}
-bool Game::isPosYPossible(int y)
-{
-	for (auto& actor : listActor)
-	{
-		if (actor->y() == y)
-		{
-			if (abs(actor->x() - ACTOR_POS_X) < 700)
-				return false;
-		}
-	}
-	return true;
-}
-bool Game::possibleLanding()
-{
-	qDebug() << "count:" << count;
-	qDebug() << "landingCount:" << landingCount;
-	if (plane->y() < 360 && count >= landingCount && count <= (landingCount + 150))
-	{
-		return true;
-	}
-	else if (count == landingCount + 150)
-	{
-		count = 0;
-		landingCount += 150;
-	}
-	//petit mouvement initiale
-	while (plane->getX() < START_PLANE_X)
-	{
-		bool hasD = ConnectionSerie::hasData();
-		// --- Avec clavier ---	//
-		if (_kbhit())
-		{
-			if (_getch() == 32)
-			{
-				// Effacer l'ancien avion
-				gotoxy(plane->getX(), plane->getY());
-				cout << "   ";
-				speed++;
-				stat->changeSpeed(speed);
-
-				plane->setX(plane->getX() + 1);
-				gotoxy(plane->getX(), plane->getY());
-				cout << plane->getSprite();
-
-				gotoxy(0, 8);
-				cout << "Vitesse: " << speed << " / " << requiredSpeed;
-			}
-		}
-		// --- Avec manette --- //
-		else if (hasD == 1)
-		{
-			bool bpbas = ConnectionSerie::getValue("BB");
-			if (!bpbas)
-			{
-				// Effacer l'ancien avion
-				gotoxy(plane->getX(), plane->getY());
-				cout << "   ";
-				speed++;
-				stat->changeSpeed(speed);
-
-				plane->setX(plane->getX() + 1);
-				gotoxy(plane->getX(), plane->getY());
-				cout << plane->getSprite();
-
-				gotoxy(0, 8);
-				cout << "Vitesse: " << speed << " / " << requiredSpeed;
-			
-			}
-
-		}
-	}
-	
-	while (!vitesseGood || !hauteurGood)
-	{
-		//phase 1 : acceleration
-		if (!vitesseGood)
-		{
-			count++;
-			if (count % 2 == 0)
-			{
-				speed -= 1;
-			}
-			bool hasD = ConnectionSerie::hasData();
-			if (_kbhit())
-			{
-				if (_getch() == 32)
-				{
-					speed += 10;
-				}
-			}
-			else if (hasD == 1)
-			{
-				bool bpB = ConnectionSerie::getValue("BB");
-				if (!bpB)
-				{
-					speed += 10;
-				}
-			}
-			if (speed <= 1)
-				speed = 1;
-			else if (speed >= requiredSpeed)
-			{
-				speed = requiredSpeed;
-				vitesseGood = true;
-				stat->changeFuel(200 - (startindex * 2));
-			}
-		}
-
-		//phase 2 : decollage
-		if (vitesseGood == true && hauteurGood == false)
-		{
-			//melange les touches
-			gotoxy(15, 3);
-			//todo : faire que l'atterissage fonctionne avec le clavier et la manette
-			//cout << "APPUYEZ SUR " << touches[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
-			//if (_kbhit())
-			//{
-			//	touche = _getch();
-			//	if (touche == touches[0])
-			//	{
-			//		conteurReussiteHauteur++;
-			//	}
-			//	else if (touche != touches[0] && touche != 32)
-			//	{
-			//		conteurEchecHauteur++;
-			//	}
-			//	shuffle(touches.begin(), touches.end(), random_device());
-			//}
-			cout << "APPUYEZ SUR " << directions[0] << " ECHEC --> " << conteurEchecHauteur << "/4" << " REUSSITE --> " << conteurReussiteHauteur << "/4";
-			if (ConnectionSerie::hasData())
-			{
-				bool bphaut = ConnectionSerie::getValue("BH");
-				bool bpgauche = ConnectionSerie::getValue("BG");
-				bool bpdroite = ConnectionSerie::getValue("BD");
-				bool bpbas = ConnectionSerie::getValue("BB");
-				if (directions[0] == "haut")
-				{
-					if (!bphaut)
-					{
-						conteurReussiteHauteur++;
-					}
-					else if (!bpgauche || !bpdroite || !bpbas)
-					{
-						conteurEchecHauteur++;
-					}
-				}
-				else if (directions[0] == "gauche")
-				{
-					if (!bpgauche)
-					{
-						conteurReussiteHauteur++;
-					}
-					else if (!bphaut || !bpdroite || !bpbas)
-					{
-						conteurEchecHauteur++;
-					}
-				}
-				else if (directions[0] == "droite")
-				{
-					if (!bpdroite)
-					{
-						conteurReussiteHauteur++;
-					}
-					else if (!bphaut || !bpgauche || !bpbas)
-					{
-						conteurEchecHauteur++;
-					}
-				}
-				else if (directions[0] == "bas")
-				{
-					if (!bpbas)
-					{
-						conteurReussiteHauteur++;
-					}
-					else if (!bphaut || !bpgauche || !bpdroite)
-					{
-						conteurEchecHauteur++;
-					}
-				}
-				Sleep(30);	//todo : a enlever quand on aura debouncer les boutons
-				shuffle(directions.begin(), directions.end(), random_device());
-			}
-			if (conteurReussiteHauteur >= 4)
-			{
-				hauteurGood = true;
-				plane->setX(3);
-			}
-			else if (conteurEchecHauteur >= 4)
-			{
-				system("cls");
-				gotoxy(0, 9);
-				cout << "L'avion s'est ecrase";
-				//Sleep(5000);
-				return false;
-			}
-		}
-
-
-		//AFFICHAGE
-		gotoxy(0, 8);
-		cout << "Vitesse: " << speed << " / " << requiredSpeed;
-		if (speed == requiredSpeed)
-		{
-			gotoxy(0, 8);
-			cout << "Vitesse: " << speed << " / " << requiredSpeed << " - SPEED OK!!";
-		}
-		//pour le defilement de la piste
-		if (startindex < length - ACTOR_POS_X)
-		{
-			startindex++;
-		}
-		//affichage de la portion visible de la piste
-		gotoxy(0, 6);
-		if (startindex + ACTOR_POS_X < length)
-		{
-			for (int i = 0; i < ACTOR_POS_X; i++)
-			{
-				if (i + startindex > length)
-					cout << " ";
-				else
-					cout << piste[i + startindex];
-			}
-		}
-		else //quand on arrive au bout de la piste
-		{
-			// Effacer l'ancien avion
-			gotoxy(plane->getX(), plane->getY());
-			cout << "   ";
-			plane->setX(plane->getX() + 1);
-			gotoxy(plane->getX(), plane->getY());
-			cout << plane->getSprite();
-			
-		}
-
-		int delay = max(20, 100 / speed);
-		Sleep(delay);
-
-		//condition d'echec
-		if ((plane->getX() + startindex) >= length - 10)
-		{
-			system("cls");
-			gotoxy(0, 9);
-			cout << "L'avion s'est ecarse";
-			stat->close;
-			//sSleep(5000);
-
-			return false;
-		}
-	}
-}
 
 bool Game::touchDown()
 {
@@ -839,9 +524,9 @@ bool Game::touchDown()
 				if (ch == 'p' || bpH==0)
 				{
 					gotoxy(0, 14);
-					cout << "Activez la propultion invese en appuiant sur: P: OK!";
+					cout << "Activez la propultioninvese en appuiant sur: P: OK!";
 					state = 7;
-					bpH = 1;
+					bpH = 1;	
 				}
 				else
 					break;

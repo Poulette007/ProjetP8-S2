@@ -51,6 +51,18 @@
     <ClInclude Include="ImageManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="login.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QDashboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
@@ -89,6 +101,21 @@
     <ClCompile Include="Landing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="login.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QDashboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DataBase.csv">
@@ -107,10 +134,13 @@
     <QtMoc Include="Takeoff.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="SmallTexte.h">
+    <QtMoc Include="Landing.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Landing.h">
+    <QtMoc Include="UserName.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Button.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

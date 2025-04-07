@@ -1,7 +1,7 @@
 #include "Takeoff.h"
 #include "ImageManager.h"
 #include "const.h"
-Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
+Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStackedWidget* stack, GameOver* gameOverPage)
 {
 	initPiste();
 	takeoffTimer = new QTimer(this);
@@ -11,6 +11,8 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 	stat = s;
 	gameref = game;
 	promptText = prompt;
+	this->stack = stack;
+	this->gameOver = gameOverPage;
 	inputCount = 0;
 	plane->setPos(0, 1080-plane->pixmap().height()-10);
 	plane->setZValue(1);	//1er plan
@@ -64,6 +66,8 @@ void Takeoff::updateTakeoff()
 		animationTakeoff();
 		break;
 	case TakeoffPhase::Failure:
+		gameOver->setVictoire(false); 
+		stack->setCurrentWidget(gameOver);
 		break;
 	}
 }

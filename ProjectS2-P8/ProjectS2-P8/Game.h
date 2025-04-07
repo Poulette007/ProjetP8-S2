@@ -15,9 +15,10 @@
 #include "ConnectionSerie.h"
 #include "include/json.hpp""
 #include "SmallTexte.h"
-
+#include "GameOver.h"
 #include <qlayout.h>
 #include <QDashboard.h>
+#include <QStackedWidget>
 using namespace std;
 class Takeoff; // évite l'inclusion circulaire
 class Landing; // évite l'inclusion circulaire
@@ -41,7 +42,7 @@ public:
 		GameOver
 	};
 
-	Game(Stat* stat);
+	Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage);
 	void readKeyBoardGame();
 	void generateObstacles();
 	bool isPosYPossible(int y);
@@ -63,7 +64,8 @@ public:
 	Stat* stat;
 	QGraphicsTextItem* promptText;
 	Gamestate state;
-
+	QStackedWidget* s;
+	GameOver* gameOver;
 	int count;
 	//int possibleTouchDown;
 	bool isCollision;

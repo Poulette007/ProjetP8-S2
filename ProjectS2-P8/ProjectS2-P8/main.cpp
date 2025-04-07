@@ -10,13 +10,14 @@
 #include "Landing.h"
 #include "MainMenu.h"
 #include "login.h"
+#include "GameOver.h"
 
 #include "const.h"
 QGraphicsScene* gameScene = nullptr;
 #include "ImageManager.h"
 #include "ConnectionSerie.h"
 #include <QStyleFactory>
-#include <QStackedWidget>
+
 
 
 int main(int argc, char* argv[])
@@ -29,8 +30,40 @@ int main(int argc, char* argv[])
 
     ConnectionSerie connection;
 
+
+    //Creation du widget qui contien tous les autres
+    QWidget Jeu;
+
+    //Creation du stack de widget
+    QStackedWidget* Pages = new QStackedWidget(&Jeu);
+
+    //Creation de la page de login
+    login* LoginPage = new login();
+
+    //page de Gameover
+	GameOver* GameOverPage = new GameOver(false);
+
+    //Creation de la page de menu
+    MainMenu* MenuPage = new MainMenu();
+
+
+    //Creation de la view
+    QGraphicsView* view = new QGraphicsView(gameScene);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setContentsMargins(0, 0, 0, 0);
+    view->setFrameStyle(QFrame::NoFrame);
+    view->setBackgroundBrush(Qt::NoBrush);
+    view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
+    view->showFullScreen();
+    //Ajout des pages dans le stack
+    Pages->addWidget(LoginPage);
+    Pages->addWidget(MenuPage);
+    Pages->addWidget(view);
+	Pages->addWidget(GameOverPage);
+
     Stat* stat = new Stat();
-    Game* game = new Game(stat);
+    Game* game = new Game(stat, Pages, GameOverPage);
 
     //Timer pour update le jeu
     QTimer timer;
@@ -49,32 +82,6 @@ int main(int argc, char* argv[])
 
         });
 
-    //Creation du widget qui contien tous les autres
-    QWidget Jeu;
-
-    //Creation du stack de widget
-    QStackedWidget* Pages = new QStackedWidget(&Jeu);
-
-    //Creation de la page de login
-    login* LoginPage = new login();
-
-    //Creation de la page de menu
-    MainMenu* MenuPage = new MainMenu();
-
-    //Creation de la view
-    QGraphicsView* view = new QGraphicsView(gameScene);
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setContentsMargins(0, 0, 0, 0);
-    view->setFrameStyle(QFrame::NoFrame);
-    view->setBackgroundBrush(Qt::NoBrush);
-    view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
-    view->showFullScreen();
-    //Ajout des pages dans le stack
-    Pages->addWidget(LoginPage);
-    Pages->addWidget(MenuPage);
-    Pages->addWidget(view);
-
     //Connect les bouttons pour changer de page
     QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
         if(LoginPage->ButtonPushed())
@@ -82,7 +89,6 @@ int main(int argc, char* argv[])
             Pages->setCurrentIndex(2);
             timer.start(20 - stat->speedfactor);
             readKeyTimer.start(60);
-
         });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
@@ -94,7 +100,9 @@ int main(int argc, char* argv[])
         readKeyTimer.start(60);
 
         });
-
+	QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
+	
+		});
 
 
     //Cree le layout pour notre fenetre
