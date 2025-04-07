@@ -20,13 +20,13 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStac
 }
 void Takeoff::initPiste()
 {
-	longeurPiste = QRandomGenerator::global()->bounded(100, 500);
+	longeurPiste = QRandomGenerator::global()->bounded(100, 300);
 	for (int i = 0; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
 		runwayTile->setScale(0.65);
-		runwayTile->setPos(i*runwayTile->pixmap().width()/2, 1080-(runwayTile->pixmap().height()/2)-60);
+		runwayTile->setPos(i*runwayTile->pixmap().width()/2 + (1080/5), 1080-(runwayTile->pixmap().height()/2)-60);
 		runwayTile->setZValue(0);	//arriere plan
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);

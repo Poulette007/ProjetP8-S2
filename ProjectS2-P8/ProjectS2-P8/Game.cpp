@@ -36,8 +36,6 @@ Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 
 	// Dashboard 
 	setupStatOnGame();
-	state = Gamestate::Gameplay;
-
 	
 
 	takeoff = new Takeoff(this, plane, stat, promptText, stack, gameOverPage);
@@ -69,10 +67,10 @@ void Game::update()
 {
 	
 	switch (state) {
-	//case Gamestate::Decollage:
-	//	//updateGameplay();
-	//	takeoff->updateTakeoff();
-	//	break;
+	case Gamestate::Decollage:
+		//updateGameplay();
+		takeoff->updateTakeoff();
+		break;
 	case Gamestate::Gameplay:
 		updateGameplay();
 		break;
@@ -80,7 +78,7 @@ void Game::update()
 		landing->updateLanding();
 		break;
 	case Gamestate::GameOver:
-		overGame = new GameOver();
+		overGame = new GameOver(false);
 		break;
 	}
 }
@@ -143,7 +141,6 @@ bool Game::possibleLanding()
 	}
 	count++;
 	return false;
-}
 }
 
 void Game::changePlanePixmap()

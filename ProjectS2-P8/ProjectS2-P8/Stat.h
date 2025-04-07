@@ -12,12 +12,12 @@ private:
 	static int score;
 	static int height;
 	int delay;
-	
-
 
 	
 	//ConnectionSerie connection;
 public:
+	static QString playerName;
+
 	static int skinPlane;
 	static bool close;
 	static bool landing;

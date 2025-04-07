@@ -29,37 +29,6 @@ int main(int argc, char* argv[])
     gameScene->setSceneRect(0, 0, 1920, 1080);
 
     ConnectionSerie connection;
-
-    Stat* stat = new Stat();
-    Game* game = new Game(stat);
-
-    //Timer pour update le jeu
-    QTimer timer;
-    QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
-
-    //Timer pour lire le clavier
-    QTimer readKeyTimer;
-    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
-        QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() {
-                if (game->state == Game::Gamestate::Decollage)
-                {
-                    game->takeoff->readInputDecollage();
-                }
-        });
-    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]()
-        {
-            if (game->state == Game::Gamestate::Landing)
-            {
-                game->landing->readInputAtterrissage();
-            }
-
-        });
-    QTimer GenereObstacle;
-    QObject::connect(&GenereObstacle, &QTimer::timeout, [&]()
-        {
-			game->generateObstacles();
-
-        });
     //Creation du widget qui contien tous les autres
     QWidget Jeu;
 
@@ -70,12 +39,11 @@ int main(int argc, char* argv[])
     login* LoginPage = new login();
 
     //page de Gameover
-	GameOver* GameOverPage = new GameOver(false);
+    GameOver* GameOverPage = new GameOver(false);
 
     //Creation de la page de menu
     MainMenu* MenuPage = new MainMenu();
 
-    //Creation de la view
     QGraphicsView* view = new QGraphicsView(gameScene);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -88,36 +56,51 @@ int main(int argc, char* argv[])
     Pages->addWidget(LoginPage);
     Pages->addWidget(MenuPage);
     Pages->addWidget(view);
-	Pages->addWidget(GameOverPage);
+    Pages->addWidget(GameOverPage);
 
     Stat* stat = new Stat();
     Game* game = new Game(stat, Pages, GameOverPage);
 
-    //Timer pour update le jeu
+
+    //Create QTimer :
     QTimer timer;
-    QObject::connect(&timer, &QTimer::timeout, [&]() { game->update(); });
-
-    //Timer pour lire le clavier
     QTimer readKeyTimer;
-    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->readKeyBoardGame(); });
-    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { game->takeoff->readInputDecollage();});
-    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]()
-        {
-            if (game->state == Game::Gamestate::Landing)
-            {
-                game->landing->readInputAtterrissage();
-            }
+    QTimer GenereObstacle;
 
-        });
-
+    // Game
+    QObject::connect(&timer, &QTimer::timeout, [&]() {
+        if (game->state == Game::Gamestate::Gameplay) {
+            game->update();
+    }});
+    QObject::connect(&GenereObstacle, &QTimer::timeout, [&]() {
+        if (game->state == Game::Gamestate::Gameplay) {
+            game->generateObstacles();
+    }});
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() {
+        if (game->state == Game::Gamestate::Gameplay) {
+            game->readKeyBoardGame();
+    }});
+    // Decollage
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { 
+        if (game->state == Game::Gamestate::Decollage) {
+            game->takeoff->readInputDecollage();
+    }});
+	// Atterrissage
+    QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() {
+        if (game->state == Game::Gamestate::Landing) {
+            game->landing->readInputAtterrissage();
+    }});
+    
+   
     //Connect les bouttons pour changer de page
-    /*QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
-        if(LoginPage->ButtonPushed())
-            //Pages->setCurrentIndex(1);
-            Pages->setCurrentIndex(2);
-            timer.start(20 - stat->speedfactor);
-            readKeyTimer.start(60);
-        });
+    // Start et stop les timers 
+    //QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
+    //    if(LoginPage->ButtonPushed())
+    //        //Pages->setCurrentIndex(1);
+    //        Pages->setCurrentIndex(2);
+    //        timer.start(20 - stat->speedfactor);
+    //        readKeyTimer.start(60);
+    //    });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
         view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
@@ -129,17 +112,10 @@ int main(int argc, char* argv[])
         readKeyTimer.start(80);
 		GenereObstacle.start(2000);
     });
-	/*QObject::connect(overGame->NextPage, &QPushButton::clicked, [&]() {
-        Pages->setCurrentIndex(1);
-	});*/
-
-        timer.start(20 - stat->speedfactor);
-        readKeyTimer.start(60);
+    QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
 
         });
-	QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
 	
-		});
 
 
     //Cree le layout pour notre fenetre
