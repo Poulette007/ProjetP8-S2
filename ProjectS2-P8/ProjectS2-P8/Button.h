@@ -31,9 +31,9 @@ protected:
         else {
             painter.setBrush(QBrush(Qt::lightGray));  // Normal color
         }
-        
-        
 
+        
+       
         QPen borderPen(QColor(0, 0, 0), 5);  
         borderPen.setStyle(Qt::SolidLine);  
         painter.setPen(borderPen);
@@ -49,7 +49,7 @@ protected:
 
         
 
-        //QPushButton::paintEvent(event); 
+        //QPushButton::paintEvent(event);        
     }
 
     void mousePressEvent(QMouseEvent* event) override {
