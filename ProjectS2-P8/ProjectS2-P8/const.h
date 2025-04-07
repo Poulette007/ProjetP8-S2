@@ -25,7 +25,7 @@ extern QGraphicsScene* gameScene;
 
 #define MAX_SPEED 100
 #define MIN_SPEED 2
-#define MAX_FUEL 500
+#define MAX_FUEL 100
 #define MIN_FUEL 0
 
 #define ACTOR_POS_X 100

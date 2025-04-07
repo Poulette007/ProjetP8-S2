@@ -27,7 +27,7 @@ void Takeoff::initPiste()
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
 		runwayTile->setScale(0.65);
 		runwayTile->setPos(i*runwayTile->pixmap().width()/2 + (1080/5), 1080-(runwayTile->pixmap().height()/2)-60);
-		runwayTile->setZValue(0);	//arriere plan
+		runwayTile->setZValue(0);
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);
 	}
@@ -43,6 +43,7 @@ void Takeoff::updateTakeoff()
 		for (auto tile : runwayTilePixmap) {
 			tile->setPos(tile->x() - scrollSpeed, tile->y());
 		}
+		gameref->afficherStat();
 	}
 	if (takeoffPhase == TakeoffPhase::Acceleration || takeoffPhase == TakeoffPhase::Height) 
 	{
@@ -86,6 +87,8 @@ void Takeoff::updateAccelerationInitiale()
 		else
 		{
 			takeoffPhase = TakeoffPhase::Acceleration;
+			gameref->setupStatOnGame();
+
 		}
 		input = 0;	//faut juste etre sur de le reset a cause de ma logique de merde
 	}
@@ -104,7 +107,7 @@ void Takeoff::updateAcceleration()
 		if (speed < 10)
 			speed = 10;
 	}
-	stat->changeSpeed(speed);
+	// stat->changeSpeed(speed);
 	if (speed >= recquiredSpeed)
 	{
 		takeoffPhase = TakeoffPhase::Height;

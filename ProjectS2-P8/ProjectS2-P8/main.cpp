@@ -84,33 +84,33 @@ int main(int argc, char* argv[])
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { 
         if (game->state == Game::Gamestate::Decollage) {
             game->takeoff->readInputDecollage();
+            GenereObstacle.stop();
     }});
 	// Atterrissage
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() {
         if (game->state == Game::Gamestate::Landing) {
             game->landing->readInputAtterrissage();
+            GenereObstacle.stop();
+
     }});
     
    
-    //Connect les bouttons pour changer de page
+    // Connect les bouttons pour changer de page
     // Start et stop les timers 
-    //QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
-    //    if(LoginPage->ButtonPushed())
-    //        //Pages->setCurrentIndex(1);
-    //        Pages->setCurrentIndex(2);
-    //        timer.start(20 - stat->speedfactor);
-    //        readKeyTimer.start(60);
-    //    });
+    QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
+        if(LoginPage->ButtonPushed())
+            Pages->setCurrentIndex(1);
+        });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(0);
         view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
         });
-    QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
+    QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [&]() {
         Pages->setCurrentIndex(2);
         game->changePlanePixmap();
         timer.start(16 - stat->speedfactor);
         readKeyTimer.start(80);
-		GenereObstacle.start(2000);
+	    GenereObstacle.start(2000);
     });
     QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
 

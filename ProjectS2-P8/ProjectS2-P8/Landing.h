@@ -20,7 +20,6 @@ private:
 		Descente,
 		TrainAtterrissage,
 		Atterissage,
-		Frein,
 		Success,
 		Failure
 	};
