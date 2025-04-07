@@ -20,6 +20,7 @@ bool Stat::landing = false;
 bool Stat::muonTrue = false;
 int Stat::skinPlane = 0;
 QString Stat::playerName = "Player";
+int Stat::previousScore = 0;
 
 Stat::Stat()
 {

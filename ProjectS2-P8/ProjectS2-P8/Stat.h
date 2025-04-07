@@ -13,10 +13,9 @@ private:
 	static int height;
 	int delay;
 
-	
-	//ConnectionSerie connection;
 public:
 	static QString playerName;
+	static int previousScore;
 
 	static int skinPlane;
 	static bool close;
