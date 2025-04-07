@@ -1,22 +1,40 @@
 #include "GameOver.h"
-#include <QFile>
-#include <QMessageBox>
-GameOver::GameOver()
+
+GameOver::GameOver(bool victoire)
 {
 	setWindowTitle("Game Over");
+	estVictoire = victoire;
+	Retour = new Button(this);
+	Retour->setText("Retour au menu");
+	Retour->setGeometry(1360, 865, 150, 50);
 	resize(1920, 1080);
 
-	//Bouton recommencer le jeu
-	NextPage = new Button(this);
-	NextPage->setText("Recommencer!");
-	NextPage->setGeometry(1360, 865, 150, 50);
+}
+
+bool GameOver::ButtonPushed()
+{
+	return false;
+}
+void GameOver::setVictoire(bool victoire)
+{
+	estVictoire = victoire;
+	update();	//refait le paint event
 }
 
 void GameOver::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-	//Image de fond
-	QPixmap fond("sprites/background/GameOver.png");
-	painter.drawPixmap(0, 0, width(), height(), fond);
-
+	if (estVictoire) {
+		//Image de fond
+		QPixmap fond("sprites/background/youwin.png");
+		painter.drawPixmap(rect(), fond);
+		qDebug() << "Victoire";
+	}
+	else {
+		//Image de fond
+		QPixmap fond("sprites/background/gameover.png");
+		painter.drawPixmap(rect(), fond);
+		qDebug() << "Defaite";
+	}
+	QWidget::paintEvent(event);
 }

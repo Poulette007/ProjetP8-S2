@@ -13,7 +13,6 @@ public slots:
 	void updateDescente();
 	void updateTrainAtterrissage();
 	void updateAtterrissage();
-	void updateFrein();
 private: 
 	enum class LandingPhase
 	{
@@ -36,5 +35,6 @@ private:
 	int input=0;
 	int longeurPiste;
 	int speed = 100;
+	bool trainSorti = false;
 };
 

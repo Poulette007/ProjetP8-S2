@@ -70,7 +70,7 @@ void QDashboard::update()
 }
 
 void QDashboard::updateTexte() {
-	QString textHtml = "<div style='"
+	/*QString textHtml = "<div style='"
 		"color: #39200d;"
 		"font-size: 50px;"
 		"font-weight: bold;"
@@ -83,7 +83,7 @@ void QDashboard::updateTexte() {
 		"Vitesse: " + QString::number(stat->getSpeed()) + "<br><br>"
 		"Score: " + QString::number(stat->getScore()) +
 		"</div>";
-	statsText->setHtml(textHtml);
+	statsText->setHtml(textHtml);*/
 }
 
 void QDashboard::updatePixmapTank()

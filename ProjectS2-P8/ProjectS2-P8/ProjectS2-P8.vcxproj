@@ -154,6 +154,7 @@
     <ClInclude Include="const.h" />
     <ClInclude Include="EcranPrincipal.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="login.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="QDashboard.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="ConnectionSerie.cpp" />
     <ClCompile Include="EcranPrincipal.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="login.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="QDashboard.cpp">
