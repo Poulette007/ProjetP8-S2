@@ -15,6 +15,7 @@ public:
 
 private:
     UserName* TextScore;
+    UserName* Welcome;
     QString BestScores;
     QString Bonjour;
     int i = 1;

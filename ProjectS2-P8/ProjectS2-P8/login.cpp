@@ -111,6 +111,7 @@ bool login::ButtonPushed()
     {
         addUser(Nom->text());
         userExists(Nom->text());
+        Stat::playerName = Nom->text();
         //QMessageBox::information(nullptr, "Information", "Bienvenue : " + Nom->text() + "Vos points : ");
         return true;
     }
@@ -121,6 +122,8 @@ bool login::ButtonPushed()
     }
     else if (!PlayerIsNew && userExist) {
         //QMessageBox::information(nullptr, "Information", "content de vous revoir :" + Nom->text() + "Vos points : ");
+        Stat::playerName = Nom->text();
+        Stat::previousScore = score;
         return true;
     } 
     else if (!PlayerIsNew && !userExist){

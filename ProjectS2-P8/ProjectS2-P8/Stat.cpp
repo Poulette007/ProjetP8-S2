@@ -18,6 +18,8 @@ int Stat::height = 0;
 int Stat::speedfactor = 0;
 bool Stat::close = false;
 bool Stat::landing = false;
+QString Stat::playerName = "player";
+int Stat::previousScore = 0;
 
 Stat::Stat()
 {

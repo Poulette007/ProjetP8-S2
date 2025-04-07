@@ -15,6 +15,8 @@ private:
 	
 	//ConnectionSerie connection;
 public:
+	static QString playerName;
+	static int previousScore;
 	static bool close;
 	static bool landing;
 	static int speedfactor;
