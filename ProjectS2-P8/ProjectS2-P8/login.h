@@ -7,6 +7,7 @@
 #include <QCheckBox>
 #include <QlineEdit>
 #include <MainMenu.h>
+#include "Stat.h"
 
 class login :
     public QWidget

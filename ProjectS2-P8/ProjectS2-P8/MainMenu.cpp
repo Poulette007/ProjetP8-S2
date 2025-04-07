@@ -4,31 +4,33 @@ MainMenu::MainMenu()
 {
 	setWindowTitle("Menu Principale");
 	resize(1920, 1080);
-
     
 	//Bouton commencer le jeu
 	NextPage = new Button(this);
 	NextPage->setText("Commencer!");
-	NextPage->setGeometry(1360, 865, 150, 50);
+	NextPage->setGeometry(1360, 745, 150, 50);
 
 	//Bouton pour passer a la page suivante
 	BackPage = new Button(this);
 	BackPage->setText("Revenir");
-	BackPage->setGeometry(5, 865, 150, 50);
+	BackPage->setGeometry(5, 745, 150, 50);
 
     //Afficher 5 meilleurs scores
     QMap <int, QString>  map = getBestScore(5);
     auto it = map.end();
     while (it != map.begin()) {
         --it;
-        BestScores += QString("%1 %2 %3k \n\n")
+        BestScores += QString("%1%2 %3k \n\n\n")
             .arg(QString::number(i++))
-            .arg(it.value(), -9, QChar(' '))
+            .arg(it.value(), -10, QChar('\t'))
             .arg(QString::number(it.key()));
     }
-    TextScore = new UserName(BestScores, this);
-    TextScore->setGeometry(1055, 200, 1000, 500);
+    TextScore = new UserName(BestScores, this, 25, TEXTE, Qt::black);
+    TextScore->setGeometry(1070, 157, 1000, 550);
     TextScore->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+
+    //Welcome = new UserName()
 }
 
 void MainMenu::paintEvent(QPaintEvent* event)
@@ -42,25 +44,25 @@ void MainMenu::paintEvent(QPaintEvent* event)
 
 	//Image Tour de control
 	QPixmap tower("sprites/background/ControlTower.png");
-	painter.drawPixmap(0, 175, 175, 725, tower);
+	painter.drawPixmap(0, 55, 175, 725, tower);
 
 	//Image aeroport
 	QPixmap airport("sprites/background/Airport.png");
-	painter.drawPixmap(0, 650, 624, 242, airport);
+	painter.drawPixmap(0, 560, 624, 242, airport);
 
 	//Image de la piste
 	QPixmap runway("sprites/background/PisteComplete.png");
-	painter.drawPixmap(0, 850, runway);
+	painter.drawPixmap(0, 760, runway);
 
 	//Image avion
 	QPixmap avion("sprites/avion/avion1.png");
-	painter.drawPixmap(150, 795, 200, 150, avion);
+	painter.drawPixmap(150, 705, 200, 150, avion);
 
 	//Image du tableau des scores
     QPixmap bord("sprites/background/LeaderbordTableau.png");
-    painter.drawPixmap(1050, 160, 450, 550, bord);
+    painter.drawPixmap(1050, 150, 450, 550, bord);
 	QPixmap crown("sprites/background/LeaderbordCrown.png");
-	painter.drawPixmap(1050, 10, 450, 150, crown);
+	painter.drawPixmap(1050, 0, 450, 150, crown);
 
 
     //On fini le paint event
