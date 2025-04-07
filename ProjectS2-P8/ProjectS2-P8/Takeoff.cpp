@@ -20,7 +20,7 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStac
 }
 void Takeoff::initPiste()
 {
-	longeurPiste = QRandomGenerator::global()->bounded(100, 500);
+	longeurPiste = QRandomGenerator::global()->bounded(100, 250);
 	for (int i = 0; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
@@ -119,7 +119,9 @@ void Takeoff::updateHeight()
 {
 	//affichage de la direction recquise a lecran
 	QString prompt = QString::fromStdString("Appuyez sur " + directionPrompt);
-	promptText->setPlainText("Appuyez sur: " + QString::fromStdString(directionPrompt));
+	promptText->setPlainText("Appuyez sur: " + QString::fromStdString(directionPrompt)+ " Reussite: "+ QString::number(successCount)+ 
+		"/4 Echec: "+ QString::number(failCount)+ "/5");
+
  	if (directionPrompt == "haut")
 	{
 		if (input == CLAVIER_W || input == BOUTON_HAUT)
@@ -179,10 +181,10 @@ void Takeoff::updateHeight()
 		}	
 	}
 	
-	if (successCount >= 6) {
+	if (successCount >= 4) {
 		takeoffPhase = TakeoffPhase::Success;
 	}
-	else if (failCount >= 10) {
+	else if (failCount >= 5) {
 		takeoffPhase = TakeoffPhase::Failure;
 	}
 

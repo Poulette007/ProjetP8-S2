@@ -9,13 +9,13 @@ MainMenu::MainMenu()
 	//Bouton commencer le jeu
 	NextPage = new Button(this);
 	NextPage->setText("Commencer!");
-	NextPage->setGeometry(1360, 865, 150, 50);
-
+	//NextPage->setGeometry(1360, 865, 150, 50);
+    NextPage->setGeometry(1000, 500, 150, 50);          //TEMPORAIRE, POUR QUE JE LE VOIS DANS MON ECRAN -JS
 	//Bouton pour passer a la page suivante
 	BackPage = new Button(this);
 	BackPage->setText("Revenir");
-	BackPage->setGeometry(5, 865, 150, 50);
-
+	//BackPage->setGeometry(5, 865, 150, 50);   
+	BackPage->setGeometry(150, 500, 150, 50);		  //TEMPORAIRE, POUR QUE JE LE VOIS DANS MON ECRAN -JS
     //Afficher 5 meilleurs scores
     QMap <int, QString>  map = getBestScore(5);
     auto it = map.end();
