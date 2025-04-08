@@ -4,7 +4,7 @@
 #include "Landing.h"
 #include <algorithm>
 
-Landing::Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
+Landing::Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStackedWidget* stack, GameOver* gameOverPage)
 {
 	initPiste();
 	landingTimer = new QTimer(this);
@@ -12,8 +12,10 @@ Landing::Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 	landingTimer->start(30);
 	plane = p;
 	stat = s;
+	this->stack = stack;
 	gameref = game;
 	promptText = prompt;
+	this->gameOver = gameOverPage;
 	
 }
 
@@ -71,9 +73,15 @@ void Landing::updateLanding()
 		updateAtterrissage();
 		break;
 	case LandingPhase::Success:
+		qDebug() << "Game Over";
+		gameOver->setVictoire(true);
+		stack->setCurrentWidget(gameOver);
 		saveScore();
 		break;
 	case LandingPhase::Failure:
+		qDebug() << "Game Over";
+		gameOver->setVictoire(false);
+		stack->setCurrentWidget(gameOver);
 		break;
 	}
 }

@@ -19,6 +19,7 @@
 
 extern QGraphicsScene* gameScene;
 extern QGraphicsPixmapItem* BackGroundVol;
+
 #define GAZ_FUEL 15
 #define WIND_FUEL -10
 #define BIRD_FUEL -20

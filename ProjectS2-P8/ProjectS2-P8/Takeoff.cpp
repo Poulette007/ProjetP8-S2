@@ -21,28 +21,51 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, FormatTextPixmap* prompt, QStack
 void Takeoff::initPiste()
 {
 	longeurPiste = QRandomGenerator::global()->bounded(100, 250);
+	// Chargement et redimensionnement de l'aéroport
+	QPixmap originalAirport = ImageManager::getInstance().getImage(AIRPORT);
+	QPixmap resizedAirport = originalAirport.scaled(800, 700, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	QGraphicsPixmapItem* airport = new QGraphicsPixmapItem(resizedAirport);
+
+	// Chargement et redimensionnement de la tour de contrôle
+	//QPixmap originalTower = ImageManager::getInstance().getImage(TOUR);
+	//QPixmap resizedTower = originalTower.scaled(1000, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	//QGraphicsPixmapItem* controlTower = new QGraphicsPixmapItem(resizedTower);
+
+	// Positionnement
+	airport->setPos(500, 1080 - resizedAirport.height() - 50);
+
+//	controlTower->setPos(800, 1080 - resizedTower.height() - 150);
+
+	// Z-order et ajout à la scène
+	airport->setZValue(0);
+	//controlTower->setZValue(0);
+	gameScene->addItem(airport);
+	//gameScene->addItem(controlTower);
+
+	// Ajout au vecteur de défilement
+	runwayTilePixmap.push_back(airport);
+	//runwayTilePixmap.push_back(controlTower);
+
 	int i = 0;
 	for (i = 0; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
 		runwayTile->setScale(0.65);
-		runwayTile->setPos(i*runwayTile->pixmap().width()/2 - 40, 1080-(runwayTile->pixmap().height()/2)-60);
+		runwayTile->setPos(i * runwayTile->pixmap().width() / 2 - 40, 1080 - (runwayTile->pixmap().height() / 2) - 60);
 		runwayTile->setZValue(1);
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);
 	}
-	//Image Tour de control
-	
-	//QPixmap towerPixmap("sprites/background/ControlTower.png");
-	//towerPixmap = towerPixmap.scaled(400, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	//ajout une barriere de fin de piste
+	QGraphicsPixmapItem* barriere = new QGraphicsPixmapItem();
+	barriere->setPixmap(ImageManager::getInstance().getImage(BARRIERE));
+	barriere->setScale(1.5);
+	barriere->setPos(i * barriere->pixmap().width() / 2 + (1080 / 5), 1080 - (barriere->pixmap().height() / 2) - 250);
+	barriere->setZValue(1);
+	gameScene->addItem(barriere);
+	runwayTilePixmap.push_back(barriere);
 
-	//QGraphicsPixmapItem* controlTower = new QGraphicsPixmapItem();
-	//controlTower->setPixmap(towerPixmap);
-	//controlTower->setPos(i * controlTower->pixmap().width() / 4 + (1080 / 5), 1080 - (controlTower->pixmap().height()));
-	//controlTower->setZValue(1);
-	//runwayTilePixmap.push_back(controlTower);
-	//gameScene->addItem(controlTower);
 }
 void Takeoff::updateTakeoff()
 {

@@ -1,9 +1,11 @@
 #pragma once
 #include "login.h"
+#include "Stat.h"
 #include <QMessageBox>
 #include <QFile>
 #include <QString>
 #include <QMap>
+#include "ImageManager.h"
 
 class MainMenu :
     public QWidget

@@ -8,12 +8,16 @@
 #define WIND_PATH "sprites/objet/vent.png"
 #define BIRD_PATH "sprites/objet/bird.png"
 #define TREE_PATH "sprites/objet/arbre2.png"
-#define LOOSE_PATH "sprites/background/Loose.png"
+#define LOOSE_PATH "sprites/background/GameOver.png"
 #define RUNWAY_PATH "sprites/background/piste.png"
 #define AIGUILLE_PATH "sprites/Stat/Baton.png"
 #define CADRAN_PATH "sprites/Stat/CadranT.png"
 #define BACKGROUND_GAME_PATH "sprites/background/BackgroundGame.png"
 #define BACKGROUND_ATTERRISSAGE_DECOLAGE_PATH "sprites/background/BackgroundDecoAtte.png"
+#define AIRPORT_PATH "sprites/background/Airport.png"
+#define TOUR_PATH "sprites/background/ControlTower.png"
+#define BARRIERE_PATH "sprites/objet/barriere.png"
+
 
 ImageManager::ImageManager() {
     loadImages();
@@ -38,8 +42,10 @@ void ImageManager::loadImages() {
 		{CADRAN, CADRAN_PATH},
         {AIGUILLE, AIGUILLE_PATH},
 		{BACKGROUND_GAME, BACKGROUND_GAME_PATH},
-		{BACKGROUND_ATTERRISSAGE_DECOLAGE, BACKGROUND_ATTERRISSAGE_DECOLAGE_PATH}
-
+		{BACKGROUND_ATTERRISSAGE_DECOLAGE, BACKGROUND_ATTERRISSAGE_DECOLAGE_PATH},
+		{BARRIERE, BARRIERE_PATH},
+		{TOUR, TOUR_PATH},
+		{AIRPORT, AIRPORT_PATH}
     };
     //for (const auto& [type, path] : paths) {
     //    QPixmap pixmap(path);

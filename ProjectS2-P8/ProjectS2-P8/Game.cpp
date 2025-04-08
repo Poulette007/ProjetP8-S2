@@ -13,14 +13,14 @@ Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 	BackGroundVol->setPixmap(QPixmap(ImageManager::getInstance().getImage(BACKGROUND_ATTERRISSAGE_DECOLAGE)));
 	gameScene->addItem(BackGroundVol);
 	BackGroundVol->setPos(0, 0);
-
+	this->gameOver = gameOverPage;
 
 	listActor = vector<Actor*>();	
 	plane = new Plane(START_PLANE_X, 1080/4);
 	gameScene->addItem(plane);
 	plane->setPos(WIDTH_DASHBOARD, 2 * 1080 / 4);
 	plane->show();
-	
+	this->stack = stack;
 	stat = s;
 	isCollision = false;
 	count = 0;
@@ -57,7 +57,7 @@ void Game::readKeyBoardGame()
 void Game::update()
 {
 	
-	switch (state) {
+ 	switch (state) {
 	case Gamestate::Decollage:
 		//updateGameplay();
 		takeoff->updateTakeoff();
@@ -69,15 +69,17 @@ void Game::update()
 		landing->updateLanding();
 		break;
 	case Gamestate::GameOver:
-		overGame = new GameOver(false);
+		
 		break;
 	}
 }
 void Game::updateGameplay()
 {
 	if(stat->close){
-		Gamestate::GameOver;
+		state = Gamestate::GameOver;
  		qDebug() << "Game Over";
+		gameOver->setVictoire(false);
+		stack->setCurrentWidget(gameOver);
 		return;
 	}
 	for (auto actor : listActor)
@@ -108,7 +110,7 @@ void Game::updateGameplay()
 				delete actor;
 				
 			}
-			landing = new Landing(this, plane, stat, promptText);
+			landing = new Landing(this, plane, stat, promptText, stack, gameOver);
 			state = Gamestate::Landing;
 		}
 	}

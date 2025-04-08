@@ -5,7 +5,7 @@ class Landing : public QObject
 {
 	Q_OBJECT
 public:
-	Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt);
+	Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStackedWidget* stack, GameOver* gameOverPage);
 	void initPiste();
 	void updateLanding();
 	int readInputAtterrissage();
@@ -25,6 +25,9 @@ private:
 		Success,
 		Failure
 	};
+
+	QStackedWidget* stack;
+	GameOver* gameOver;
 	LandingPhase landingPhase = LandingPhase::Ralentissement;
 	QTimer* landingTimer;
 	vector<QGraphicsPixmapItem*> runwayTilePixmap;

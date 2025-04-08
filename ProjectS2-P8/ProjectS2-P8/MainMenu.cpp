@@ -2,18 +2,8 @@
 
 MainMenu::MainMenu()
 {
-	setWindowTitle("Menu Principale");
-	resize(1920, 1080);
-    
-	//Bouton commencer le jeu
-	NextPage = new Button(this);
-	NextPage->setText("Commencer!");
-	NextPage->setGeometry(1360, 745, 150, 50);
-
-	//Bouton pour passer a la page suivante
-	BackPage = new Button(this);
-	BackPage->setText("Revenir");
-	BackPage->setGeometry(5, 745, 150, 50);
+    setWindowTitle("Menu Principale");
+    resize(1920, 1080);
 
     //Afficher 5 meilleurs scores
     QMap <int, QString>  map = getBestScore(5);
@@ -29,45 +19,71 @@ MainMenu::MainMenu()
     TextScore->setGeometry(1070, 157, 1000, 550);
     TextScore->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
+    //Message de bienvenu
+    Bonjour = QString("Bonjour %1 \nMeilleur socre: %2")
+        .arg(Stat::playerName)
+        .arg(QString::number(Stat::previousScore));
+    Welcome = new UserName(Bonjour, this, 35, TEXTE, Qt::white);
+    Welcome->setGeometry(0, 0, 950, 105);
 
-    //Welcome = new UserName()
+    //Bouton commencer le jeu
+    NextPage = new Button(this);
+    NextPage->setText("Commencer!");
+    NextPage->setGeometry(350, 150, 150, 50);
+
+    //Bouton pour passer a la page suivante
+    BackPage = new Button(this);
+    BackPage->setText("Revenir");
+    BackPage->setGeometry(50, 150, 150, 50);
 }
 
 void MainMenu::paintEvent(QPaintEvent* event)
 {
-
     QPainter painter(this);
 
     //Image de fond
-    QPixmap fond("sprites/background/Sky.png");
+    QPixmap fond("sprites/background/BackgroundDecoAtte.png");
     painter.drawPixmap(0, 0, width(), height(), fond);
 
-	//Image Tour de control
-	QPixmap tower("sprites/background/ControlTower.png");
-	painter.drawPixmap(0, 55, 175, 725, tower);
+    //Image aeroport
+    QPixmap airport = ImageManager::getInstance().getImage(AIRPORT);
+    painter.drawPixmap(350, 270, 650, 550, airport);
 
-	//Image aeroport
-	QPixmap airport("sprites/background/Airport.png");
-	painter.drawPixmap(0, 560, 624, 242, airport);
+    //Image de la piste
+    QPixmap runway("sprites/background/PisteComplete.png");
+    painter.drawPixmap(0, 693, 4000, 150, runway);
 
-	//Image de la piste
-	QPixmap runway("sprites/background/PisteComplete.png");
-	painter.drawPixmap(0, 760, runway);
+    //Image avion
+    if (login::SkinChecked == 1)
+    {
+        QPixmap avion("sprites/avion/avion1.png");
+        painter.drawPixmap(0, 670, 240, 125, avion);
+    }
+    else if (login::SkinChecked == 2)
+    {
+        QPixmap chopper("sprites/avion/chopper.png");
+        painter.drawPixmap(0, 670, 240, 125, chopper);
+    }
+    else if (login::SkinChecked == 3)
+    {
+        QPixmap jet("sprites/avion/jet.png");
+        painter.drawPixmap(0, 670, 240, 125, jet);
+    }
 
-	//Image avion
-	QPixmap avion("sprites/avion/avion1.png");
-	painter.drawPixmap(150, 705, 200, 150, avion);
 
-	//Image du tableau des scores
+    //Image du tableau des scores
     QPixmap bord("sprites/background/LeaderbordTableau.png");
     painter.drawPixmap(1050, 150, 450, 550, bord);
-	QPixmap crown("sprites/background/LeaderbordCrown.png");
-	painter.drawPixmap(1050, 0, 450, 150, crown);
+    QPixmap crown("sprites/background/LeaderbordCrown.png");
+    painter.drawPixmap(1050, 0, 450, 150, crown);
 
-
+    qDebug() << Stat::playerName;
+    Welcome->setText(QString("Bonjour %1 \nMeilleur socre: %2")
+        .arg(Stat::playerName)
+        .arg(QString::number(Stat::previousScore)));
     //On fini le paint event
     QWidget::paintEvent(event);
-   
+
 }
 
 /* Comment les afficher:

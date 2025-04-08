@@ -17,7 +17,7 @@ public:
     bool Prochaine = false;
     Button* NextPage;
     int score = 0;
-    int SkinChecked = 0;
+    static int SkinChecked;
     bool ButtonPushed();
 
 private:

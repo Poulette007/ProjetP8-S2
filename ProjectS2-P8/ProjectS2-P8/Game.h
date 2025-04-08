@@ -29,6 +29,7 @@ private:
 	json msg_envoi;
 	QGraphicsPixmapItem* looseBackGround;
 	GameOver* overGame;
+	QStackedWidget* stack;
 	bool startLoose = true;
 	// Stat QT 
 	QDashboard *dash;

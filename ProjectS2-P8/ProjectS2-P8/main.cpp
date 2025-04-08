@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
 	    GenereObstacle.start(2000);
     });
     QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
-
+		relancerProgram();
         });
 	
 

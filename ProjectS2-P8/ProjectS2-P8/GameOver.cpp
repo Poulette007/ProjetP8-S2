@@ -7,7 +7,7 @@ GameOver::GameOver(bool victoire)
 	resize(1920, 1080);
 	Retour = new Button(this);
 	Retour->setText("Retour au menu");
-	Retour->raise(); // force à être au-dessus visuellement
+	Retour->raise();
 	Retour->show();
 	Retour->setGeometry(650, 650, 150, 50);	
 }
