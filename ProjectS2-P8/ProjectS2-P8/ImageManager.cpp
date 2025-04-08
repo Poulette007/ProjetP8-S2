@@ -6,12 +6,14 @@
 #define CHOPPER_PATH "sprites/avion/chopper.png"
 #define GAZ_PATH "sprites/objet/gas.png"
 #define WIND_PATH "sprites/objet/vent.png"
-#define BIRD_PATH "sprites/objet/arbre1.png"
+#define BIRD_PATH "sprites/objet/bird.png"
 #define TREE_PATH "sprites/objet/arbre2.png"
 #define LOOSE_PATH "sprites/background/Loose.png"
 #define RUNWAY_PATH "sprites/background/piste.png"
 #define AIGUILLE_PATH "sprites/Stat/Baton.png"
 #define CADRAN_PATH "sprites/Stat/CadranT.png"
+#define BACKGROUND_GAME_PATH "sprites/background/BackgroundGame.png"
+#define BACKGROUND_ATTERRISSAGE_DECOLAGE_PATH "sprites/background/BackgroundDecoAtte.png"
 
 ImageManager::ImageManager() {
     loadImages();
@@ -34,7 +36,9 @@ void ImageManager::loadImages() {
 		{RUNWAY, RUNWAY_PATH},
         {LOOSE, LOOSE_PATH},
 		{CADRAN, CADRAN_PATH},
-        {AIGUILLE, AIGUILLE_PATH}
+        {AIGUILLE, AIGUILLE_PATH},
+		{BACKGROUND_GAME, BACKGROUND_GAME_PATH},
+		{BACKGROUND_ATTERRISSAGE_DECOLAGE, BACKGROUND_ATTERRISSAGE_DECOLAGE_PATH}
 
     };
     //for (const auto& [type, path] : paths) {
@@ -58,16 +62,36 @@ void ImageManager::loadImages() {
         QPixmap pixmap(path);
         if (pixmap.isNull()) {
             std::cerr << "Erreur: Impossible de charger l'image " << path.toStdString() << std::endl;
+		}
+		else if (type == BACKGROUND_GAME || type == BACKGROUND_ATTERRISSAGE_DECOLAGE) {
+			QSize newSize(1920, 1080);
+			QPixmap scaledPixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			QPixmap finalPixmap(newSize);
+			QPainter painter(&finalPixmap);
+			QPoint center((newSize.width() - scaledPixmap.width()) / 2,
+				(newSize.height() - scaledPixmap.height()) / 2);
+			painter.drawPixmap(center, scaledPixmap);
+			images[type] = finalPixmap;
+        }
+        else if (type == BIRD)
+        {
+			QSize newSize(200, 200);
+			QPixmap scaledPixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+			QPixmap finalPixmap(newSize);
+			finalPixmap.fill(Qt::transparent);
+			QPainter painter(&finalPixmap);
+			QPoint center((newSize.width() - scaledPixmap.width()) / 2,
+				(newSize.height() - scaledPixmap.height()) / 2);
+			painter.drawPixmap(center, scaledPixmap);
+			images[type] = finalPixmap;
         }
         else {
             QSize newSize(300, 300);
             QPixmap scaledPixmap = pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-            // Créer une pixmap vide avec la taille cible
             QPixmap finalPixmap(newSize);
-            finalPixmap.fill(Qt::transparent);  // Remplir avec la transparence
+            finalPixmap.fill(Qt::transparent);
 
-            // Dessiner l'image redimensionnée au centre
             QPainter painter(&finalPixmap);
             QPoint center((newSize.width() - scaledPixmap.width()) / 2,
                 (newSize.height() - scaledPixmap.height()) / 2);

@@ -28,7 +28,6 @@ class Game
 private: 
 	json msg_envoi;
 	QGraphicsPixmapItem* looseBackGround;
-	QGraphicsPixmapItem* BackGroundVol;
 	GameOver* overGame;
 	bool startLoose = true;
 	// Stat QT 
@@ -69,7 +68,7 @@ public:
 	Takeoff* takeoff;
 	Landing* landing;
 	Stat* stat;
-	QGraphicsTextItem* promptText;
+	FormatTextPixmap* promptText;
 	Gamestate state;
 	QStackedWidget* s;
 	GameOver* gameOver;

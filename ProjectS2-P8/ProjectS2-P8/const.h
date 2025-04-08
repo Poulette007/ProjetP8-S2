@@ -18,10 +18,10 @@
 
 
 extern QGraphicsScene* gameScene;
-
-#define GAZ_FUEL 30
-#define WIND_FUEL -20
-#define BIRD_FUEL -40
+extern QGraphicsPixmapItem* BackGroundVol;
+#define GAZ_FUEL 15
+#define WIND_FUEL -10
+#define BIRD_FUEL -20
 
 #define MAX_SPEED 100
 #define MIN_SPEED 2

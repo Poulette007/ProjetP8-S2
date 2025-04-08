@@ -4,7 +4,7 @@ class Takeoff : public QObject
 {
 	Q_OBJECT
 public:
-	Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStackedWidget* stack, GameOver* gameOverPage);
+	Takeoff(Game* game, Plane* p, Stat* s, FormatTextPixmap* prompt, QStackedWidget* stack, GameOver* gameOverPage);
 	void initPiste();
 	void updateTakeoff();
 	int readInputDecollage();
@@ -28,7 +28,9 @@ private:
 	TakeoffPhase takeoffPhase = TakeoffPhase::AccelerationInitiale;
 	Plane* plane;
 	Stat* stat;
-	QGraphicsTextItem* promptText;
+	FormatTextPixmap* promptText;
+	QGraphicsPixmapItem* tower;
+	QGraphicsPixmapItem* airport;
 	string directionPrompt;
 	Game* gameref;
 	QStackedWidget* stack;
@@ -42,5 +44,6 @@ private:
 	int input;
 	int speed=0;
 	int recquiredSpeed = 200;
+	bool upPlane = true;
 };
 

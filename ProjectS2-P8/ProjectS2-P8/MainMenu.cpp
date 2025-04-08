@@ -23,7 +23,7 @@ MainMenu::MainMenu()
         BestScores += QString("%1%2 %3k \n\n\n")
             .arg(QString::number(i++))
             .arg(it.value(), -10, QChar('\t'))
-            .arg(QString::number(it.key()));
+            .arg(QString::number(it.key()/1000));
     }
     TextScore = new UserName(BestScores, this, 25, TEXTE, Qt::black);
     TextScore->setGeometry(1070, 157, 1000, 550);

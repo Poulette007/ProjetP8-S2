@@ -1,7 +1,7 @@
 #include "Takeoff.h"
 #include "ImageManager.h"
 #include "const.h"
-Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStackedWidget* stack, GameOver* gameOverPage)
+Takeoff::Takeoff(Game* game, Plane* p, Stat* s, FormatTextPixmap* prompt, QStackedWidget* stack, GameOver* gameOverPage)
 {
 	initPiste();
 	takeoffTimer = new QTimer(this);
@@ -15,22 +15,34 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStac
 	this->gameOver = gameOverPage;
 	inputCount = 0;
 	plane->setPos(0, 1080-plane->pixmap().height()-10);
-	plane->setZValue(1);	//1er plan
+	plane->setZValue(2);	//1er plan
 	shuffleDirection();
 }
 void Takeoff::initPiste()
 {
 	longeurPiste = QRandomGenerator::global()->bounded(100, 250);
-	for (int i = 0; i < longeurPiste; i++)
+	int i = 0;
+	for (i = 0; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
 		runwayTile->setScale(0.65);
-		runwayTile->setPos(i*runwayTile->pixmap().width()/2 + (1080/5), 1080-(runwayTile->pixmap().height()/2)-60);
-		runwayTile->setZValue(0);
+		runwayTile->setPos(i*runwayTile->pixmap().width()/2 - 40, 1080-(runwayTile->pixmap().height()/2)-60);
+		runwayTile->setZValue(1);
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);
 	}
+	//Image Tour de control
+	
+	//QPixmap towerPixmap("sprites/background/ControlTower.png");
+	//towerPixmap = towerPixmap.scaled(400, 600, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+	//QGraphicsPixmapItem* controlTower = new QGraphicsPixmapItem();
+	//controlTower->setPixmap(towerPixmap);
+	//controlTower->setPos(i * controlTower->pixmap().width() / 4 + (1080 / 5), 1080 - (controlTower->pixmap().height()));
+	//controlTower->setZValue(1);
+	//runwayTilePixmap.push_back(controlTower);
+	//gameScene->addItem(controlTower);
 }
 void Takeoff::updateTakeoff()
 {
@@ -82,13 +94,25 @@ void Takeoff::updateAccelerationInitiale()
 		if (inputCount < 8)
 		{
 			//petit deplacement initial
+			stat->changeSpeed(1);
 			plane->setPos(plane->x() + 50, plane->y());
 		}
 		else
 		{
-			takeoffPhase = TakeoffPhase::Acceleration;
-			gameref->setupStatOnGame();
+			if (tower) {
+				gameScene->removeItem(tower); // retire de la scène
+				delete tower;                 // libère la mémoire
+				tower = nullptr;
+			}
 
+			if (airport) {
+				gameScene->removeItem(airport);
+				delete airport;
+				airport = nullptr;
+			}
+			plane->setPos(1080/5 + (plane->pixmap().width() / 2) + 40 , plane->y());
+			gameref->setupStatOnGame();
+			takeoffPhase = TakeoffPhase::Acceleration;
 		}
 		input = 0;	//faut juste etre sur de le reset a cause de ma logique de merde
 	}
@@ -98,11 +122,13 @@ void Takeoff::updateAcceleration()
 	if (input == SPACEBAR || input == BOUTON_BAS)
 	{
   		speed += 15;	
+		stat->setSpeed(speed % 10 + 2);
 		input = 0;
 	}
 	countRalentissement++;
 	if (countRalentissement % 2 == 0)
 	{
+		stat->setSpeed(speed % 10 + 2);
 		speed -= 1;
 		if (speed < 10)
 			speed = 10;
@@ -129,12 +155,14 @@ void Takeoff::updateHeight()
 	{
 		if (input == CLAVIER_W || input == BOUTON_HAUT)
 		{ 
+			stat->changeFuel(10);
 			successCount++;
 			shuffleDirection();
 			input = 0;
 		}
 		else if(input == CLAVIER_A || input == CLAVIER_S || input == CLAVIER_D)
 		{
+			stat->changeFuel(-5);
 			failCount++;
 			input = 0;
 		}
@@ -145,12 +173,14 @@ void Takeoff::updateHeight()
 	{
 		if (input == CLAVIER_A || input == BOUTON_GAUCHE) 
 		{
+			stat->changeFuel(10);
 			successCount++;
 			shuffleDirection();
 			input = 0;
 		}
 		else if (input == CLAVIER_W || input == CLAVIER_S || input == CLAVIER_D)
 		{
+			stat->changeFuel(-5);
 			failCount++;
 			input = 0;
 		}
@@ -159,12 +189,14 @@ void Takeoff::updateHeight()
 	{
 		if (input == CLAVIER_D || input == BOUTON_DROIT)
 		{
+			stat->changeFuel(10);
 			successCount++;
 			input = 0;
 			shuffleDirection();
 		}
 		else if (input == CLAVIER_W || input == CLAVIER_S || input == CLAVIER_A)
 		{
+			stat->changeFuel(-5);
 			failCount++;
 			input = 0;
 		}
@@ -173,18 +205,22 @@ void Takeoff::updateHeight()
 	{
  		if (input == CLAVIER_S || input == BOUTON_BAS) 
 		{
+			stat->changeFuel(10);
 			successCount++;
 			shuffleDirection();
 			input = 0;
 		}
 		else if (input == CLAVIER_W || input == CLAVIER_A || input == CLAVIER_D)
 		{
+			stat->changeFuel(-5);
 			failCount++;
 			input = 0;
 		}	
 	}
 	
 	if (successCount >= 4) {
+		promptText->setPlainText("Decollage reussi!");
+		stat->setSpeed(15);
 		takeoffPhase = TakeoffPhase::Success;
 	}
 	else if (failCount >= 5) {
@@ -260,12 +296,17 @@ void Takeoff::animationTakeoff()
 			touteLaPiste = true;
 		}
 	}
-		if (plane->y() > 1080 / 3)
+		if (plane->y() > 1080 / 4)
 		{
 			plane->setPos(plane -> x(), plane->y() - 5);
 		}
 		else 
 		{
+			if (upPlane) {
+				stat->changeHeight(-1080 / 4);
+				stat->changeHeight(-1080 / 4);
+				upPlane = false;
+			}
 			plane->setRotation(0);
 		}
 		qDebug() << "toute la piste:" << touteLaPiste;
@@ -275,5 +316,6 @@ void Takeoff::animationTakeoff()
 			takeoffTimer->stop();
 			promptText->setPlainText("");
 			gameref->state = Game::Gamestate::Gameplay;
+			BackGroundVol->setPixmap(ImageManager::getInstance().getImage(BACKGROUND_GAME));
 		}
 }

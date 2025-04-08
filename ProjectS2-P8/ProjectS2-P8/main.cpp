@@ -14,6 +14,7 @@
 
 #include "const.h"
 QGraphicsScene* gameScene = nullptr;
+QGraphicsPixmapItem* BackGroundVol = nullptr;
 #include "ImageManager.h"
 #include "ConnectionSerie.h"
 #include <QStyleFactory>
@@ -105,13 +106,13 @@ int main(int argc, char* argv[])
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() { 
         if (game->state == Game::Gamestate::Decollage) {
             game->takeoff->readInputDecollage();
-            GenereObstacle.stop();
+            //GenereObstacle.stop();
     }});
 	// Atterrissage
     QObject::connect(&readKeyTimer, &QTimer::timeout, [&]() {
         if (game->state == Game::Gamestate::Landing) {
             game->landing->readInputAtterrissage();
-            GenereObstacle.stop();
+            //GenereObstacle.stop();
 
     }});
     

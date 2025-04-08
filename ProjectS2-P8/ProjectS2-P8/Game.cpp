@@ -10,12 +10,12 @@
 Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 {
 	BackGroundVol = new QGraphicsPixmapItem();
-	BackGroundVol->setPixmap(QPixmap("sprites/background/BackgroundVol").scaled(1920 + 10, 1080 + 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	BackGroundVol->setPixmap(QPixmap(ImageManager::getInstance().getImage(BACKGROUND_ATTERRISSAGE_DECOLAGE)));
 	gameScene->addItem(BackGroundVol);
-	BackGroundVol->show();
-	BackGroundVol->setPos(WIDTH_DASHBOARD, -10);
+	BackGroundVol->setPos(0, 0);
 
-	listActor = vector<Actor*>();
+
+	listActor = vector<Actor*>();	
 	plane = new Plane(START_PLANE_X, 1080/4);
 	gameScene->addItem(plane);
 	plane->setPos(WIDTH_DASHBOARD, 2 * 1080 / 4);
@@ -26,9 +26,7 @@ Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 	count = 0;
 	landingCount = 200;
 	msg_envoi["led"] = 1;
-	promptText = new QGraphicsTextItem();
-	promptText->setDefaultTextColor(Qt::yellow);
-	promptText->setFont(QFont("Consolas", 24));
+	promptText = new FormatTextPixmap("", nullptr, 20, TEXTE, Qt::yellow);
 	promptText->setPos(500, 100);
 	gameScene->addItem(promptText);
 	takeoff = new Takeoff(this, plane, stat, promptText, stack, gameOverPage);
@@ -97,7 +95,7 @@ void Game::updateGameplay()
 	plane->setPos(plane->x(), stat->getHeight());
 	afficherStat();
 	manageCollision();
-	if (true)
+	if (possibleLanding())
 	{
 		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible et appuyez sur k pout initialiser la sequence datterissage!");
 		if (GetAsyncKeyState('K') < 0 && plane->y()<1080/4)
@@ -259,56 +257,58 @@ void Game::setupStatOnGame()
 
 
 void Game::generateObstacles() {
-	random = rand() % 7;
-	obstacle = rand() % 3;
-	posY = rand() % 3;
-	distance = 0;
-	switch (random)
-	{
-	case 0: // Deux obstacles côte à côte
-		distance = rand() % 400 + 150;
-		createObstacle(obstacle, posY);
-		createObstacle(rand() % 4, (posY + 1) % 3);
-		break;
-	case 1: // Muon et obstacle
-		distance = rand() % 400 + 200;
-		createObstacle(obstacle, posY);
-		stat->muonTrue = true;
-		break;
-	case 2: // Obstacle simple
-		createObstacle(obstacle, posY);
-		break;
-	case 3: // Mur complet
-		for (int i = 0; i < 3; ++i){
-			createObstacle(rand() % 4, i);
-			distance = rand() % 400 + 200 * i;
-		}
-		break;
-	case 4: // Centre seulement
-		// distance = rand() % 100 + 50;
-		createObstacle(rand() % 4, 1);
-		break;
-	case 5: // Trou au milieu
-		//distance = rand() % 100 + 75;
-		createObstacle(rand() % 4, 0);
-		distance = rand() % 400 + 150;
-		createObstacle(rand() % 4, 2);
-		stat->muonTrue = true;
-		break;
-	case 6: // 2 vent + 1 random
-		createObstacle(1, posY);
-		distance = 350;
-		createObstacle(1, posY);
-		distance = random % 400 + 180;
-		createObstacle(rand() % 4, (posY + 1 )% 3);
-		break;
-	}
+	if (state == Gamestate::Gameplay) {
 
-	if (stat->muonTrue)
-	{
-		listActor.push_back(new Tree(ACTOR_POS_X, 1080 * 3/4));
-		gameScene->addItem(listActor.back());
-		stat->muonTrue = false;
+		random = rand() % 7;
+		obstacle = rand() % 3;
+		posY = rand() % 3;
+		distance = 0;
+		switch (random)
+		{
+		case 0: // Deux obstacles côte à côte
+			distance = rand() % 400 + 150;
+			createObstacle(obstacle, posY);
+			createObstacle(rand() % 4, (posY + 1) % 3);
+			break;
+		case 1: // Muon et obstacle
+			distance = rand() % 400 + 200;
+			createObstacle(obstacle, posY);
+			stat->muonTrue = true;
+			break;
+		case 2: // Obstacle simple
+			createObstacle(obstacle, posY);
+			break;
+		case 3: // Mur complet
+			for (int i = 0; i < 3; ++i) {
+				createObstacle(rand() % 4, i);
+				distance = rand() % 400 + 200 * i;
+			}
+			break;
+		case 4: // Centre seulement
+			// distance = rand() % 100 + 50;
+			createObstacle(rand() % 4, 1);
+			break;
+		case 5: // Trou au milieu
+			//distance = rand() % 100 + 75;
+			createObstacle(rand() % 4, 0);
+			distance = rand() % 400 + 150;
+			createObstacle(rand() % 4, 2);
+			stat->muonTrue = true;
+			break;
+		case 6: // 2 vent + 1 random
+			createObstacle(1, posY);
+			distance = 350;
+			createObstacle(1, posY);
+			distance = random % 400 + 180;
+			createObstacle(rand() % 4, (posY + 1) % 3);
+			break;
+		}
+		if (stat->muonTrue)
+		{
+			listActor.push_back(new Tree(ACTOR_POS_X, 1080 * 3 / 4));
+			gameScene->addItem(listActor.back());
+			stat->muonTrue = false;
+		}
 	}
 
 }

@@ -10,15 +10,17 @@
 #include "Stat.h"
 #include "const.h"
 #include "ImageManager.h"
+#include "UserName.h"
 
 class QDashboard : public QGraphicsPixmapItem {
 private:
     QGraphicsTextItem* statsText;
-
-    QPixmap tankPixmap;
-    QGraphicsPixmapItem* tankPixmapItem;
     QGraphicsPixmapItem* backgroundItem;
 
+	FormatTextPixmap* infoFuel;
+	FormatTextPixmap* infoHeight;
+	FormatTextPixmap* infoSpeed;
+	FormatTextPixmap* infoScore;
 
 	QGraphicsPixmapItem* itemAiguilleFuel;
 	QGraphicsPixmapItem* itemAiguilleHeight;
@@ -38,7 +40,6 @@ public:
     void update();
     void updateTexte();
 	void updateCadran(const QPointF& position);
-    void updatePixmapTank();
 private:
     
 };

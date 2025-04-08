@@ -28,6 +28,7 @@ public:
 	static int getSpeed();
 	static int getScore();
 	static int getHeight();
+	static int getHeightRevers();
 	void readManette();
 	void readKeybord(char);
 

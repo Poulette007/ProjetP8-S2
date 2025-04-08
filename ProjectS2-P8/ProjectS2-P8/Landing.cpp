@@ -1,6 +1,9 @@
-#include "Landing.h"
-#include "ImageManager.h"
+#define NOMINMAX
 #include "const.h"
+#include "ImageManager.h"
+#include "Landing.h"
+#include <algorithm>
+
 Landing::Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 {
 	initPiste();
@@ -17,16 +20,17 @@ Landing::Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt)
 void Landing::initPiste()
 {
 	longeurPiste = QRandomGenerator::global()->bounded(100, 300);
+	BackGroundVol->setPixmap(QPixmap(ImageManager::getInstance().getImage(BACKGROUND_ATTERRISSAGE_DECOLAGE)));
 	//pour remplir le debut de la piste d'arbres
-	for (int i = 0; i < longeurPiste / 8; i++)
-	{
-		QGraphicsPixmapItem* arbre = new QGraphicsPixmapItem();
-		arbre->setPixmap(ImageManager::getInstance().getImage(TREE));
-		arbre->setPos(i * arbre->pixmap().width()+1900, 1080 - arbre->pixmap().height());
-		arbre->setZValue(0);	//arriere plan
-		gameScene->addItem(arbre);
-		runwayTilePixmap.push_back(arbre);
-	}
+	//for (int i = 0; i < longeurPiste / 8; i++)
+	//{
+	//	QGraphicsPixmapItem* arbre = new QGraphicsPixmapItem();
+	//	arbre->setPixmap(ImageManager::getInstance().getImage(TREE));
+	//	arbre->setPos(i * arbre->pixmap().width()+1900, 1080 - arbre->pixmap().height());
+	//	arbre->setZValue(0);	//arriere plan
+	//	gameScene->addItem(arbre);
+	//	runwayTilePixmap.push_back(arbre);
+	//}
 	//remplissage du reste de la piste par des tuiles de piste
 	for (int i = longeurPiste / 8; i < longeurPiste; i++)
 	{
@@ -67,6 +71,7 @@ void Landing::updateLanding()
 		updateAtterrissage();
 		break;
 	case LandingPhase::Success:
+		saveScore();
 		break;
 	case LandingPhase::Failure:
 		break;
@@ -110,7 +115,7 @@ void Landing::updateRalentissement()
 			promptText->setPlainText("Ralentir l'avion de 25%\nVitesse: " + vitesse);
 			landingPhase = LandingPhase::Descente;
 			speed = 25;
-			stat->setSpeed(stat->getSpeed() / 2 + 1);
+			stat->setSpeed(stat->getSpeed() / 4 + 1);
 			input = 0;
 		}
 	}
@@ -128,7 +133,7 @@ void Landing::updateRalentissement()
 		{
 			promptText->setPlainText("Ralentir l'avion de 10%\nVitesse: " + vitesse);
 			landingPhase = LandingPhase::Descente;
-			stat->setSpeed(stat->getSpeed() / 4 + 1);
+			stat->setSpeed(stat->getSpeed() / 10 + 1);
 			speed = 10;
 			input = 0;
 		}
@@ -215,6 +220,7 @@ void Landing::updateAtterrissage()
 			speed = 0;
 			stat->setSpeed(0);
 			promptText->setPlainText("imobilisez l'avion avec les freins, A ou droite sur manette : OK");
+			stat->setSpeed(0);
 			landingPhase = LandingPhase::Success;
 			input = 0;
 		}
@@ -266,4 +272,41 @@ int Landing::readInputAtterrissage()
 		}
 	}
 	return input;
+}
+void Landing::saveScore()
+{
+	QFile file("Database.csv");
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		qWarning() << "Impossible d’ouvrir le fichier.";
+		return;
+	}
+
+	QTextStream in(&file);
+	QStringList lines;
+
+	while (!in.atEnd()) {
+		QString line = in.readLine();
+		QStringList parts = line.split(",");
+
+		if (parts.size() == 2 && parts[0].trimmed() == stat->playerName) {
+			// Remplace le score
+			line = stat->playerName + "," + QString::number(stat->getScore());
+		}
+
+		lines.append(line);
+	}
+	file.close();
+
+	// Réécriture du fichier avec les nouvelles lignes
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+		qWarning() << "Erreur lors de l’écriture du fichier.";
+		return;
+	}
+
+	QTextStream out(&file);
+	for (const QString& line : lines) {
+		out << line << "\n";
+	}
+
+	file.close();
 }

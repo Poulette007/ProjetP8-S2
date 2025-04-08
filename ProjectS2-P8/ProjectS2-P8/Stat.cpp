@@ -25,19 +25,19 @@ int Stat::previousScore = 0;
 Stat::Stat()
 {
 	
-	changeFuel(100);
+	changeFuel(60);
 	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
 	changeScore(0);
-	changeHeight(PALLIER_2); //Hauteur pour debut quand en vol (nombres semi-bullshit)
+	changeHeight(PALLIER_4); //Hauteur pour debut quand en vol (nombres semi-bullshit)
 	delay = 0;
 }
 
 Stat::Stat(int scoreIni)
 {
-	changeFuel(100);
+	changeFuel(60);
 	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
 	changeScore(scoreIni);
-	changeHeight(PALLIER_2); //Hauteur pour debut quand en vol (nombres semi-bullshit)
+	changeHeight(PALLIER_4); //Hauteur pour debut quand en vol (nombres semi-bullshit)
 	delay = 0;
 }
 
@@ -119,6 +119,26 @@ void Stat::countFuel()
 int Stat::getHeight()
 {
 	return height;
+
+}
+int Stat::getHeightRevers()
+{
+	if (height == PALLIER_1)
+	{
+		return PALLIER_4;
+	}
+	else if (height == PALLIER_2)
+	{
+		return PALLIER_3;
+	}
+	else if (height == PALLIER_3)
+	{
+		return PALLIER_2;
+	}
+	else if (height == PALLIER_4)
+	{
+		return PALLIER_1;
+	}
 }
 void Stat::readManette()
 {

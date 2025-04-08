@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include <qfile.h>
 class Landing : public QObject
 {
 	Q_OBJECT
@@ -8,6 +9,7 @@ public:
 	void initPiste();
 	void updateLanding();
 	int readInputAtterrissage();
+	void saveScore();
 public slots:
 	void updateRalentissement();
 	void updateDescente();

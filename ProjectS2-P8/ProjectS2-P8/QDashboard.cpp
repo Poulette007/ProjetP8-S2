@@ -2,22 +2,39 @@
 #include <QFontDatabase>
 #include <QGraphicsProxyWidget>
 #include <QDebug>
+#include "UserName.h"
+
 QDashboard::QDashboard(Stat* s) {
 	stat = s;
 	statsText = new QGraphicsTextItem();
 	statsText = gameScene->addText("");
-	statsText->setZValue(1);
-
+	statsText->setZValue(4);
+	lastHeight = 100;
 	QPixmap background("sprites/Stat/Dashboard.png");
 	background = background.scaled(WIDTH_DASHBOARD, HEIGHT_DASHBOARD, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 	backgroundItem = new QGraphicsPixmapItem();
 	backgroundItem->setPixmap(background);
-	backgroundItem->setZValue(0);
+	backgroundItem->setZValue(4);
 	backgroundItem->setPos(-10, -10);
 	gameScene->addItem(backgroundItem);
 	
-	
+	QString gaz = "Gaz: " + QString::number(stat->getFuel());
+	infoFuel = new FormatTextPixmap(gaz, this, 16, TEXTE, Qt::white);
+	infoFuel->setZValue(4);
+	QString height = "Hauteur: " + QString::number(stat->getHeightRevers());
+	infoHeight = new FormatTextPixmap(height, this, 16, TEXTE, Qt::white);
+	infoHeight->setZValue(4);
+
+	QString speed = "Vitesse: " + QString::number(stat->getSpeed()) + "00km/h";
+	infoSpeed = new FormatTextPixmap(speed, this, 16, TEXTE, Qt::white);
+	infoSpeed->setZValue(4);
+
+	QString score = "Score: " + QString::number(stat->getScore());
+	infoScore = new FormatTextPixmap(score, this, 16, TEXTE, Qt::white);
+	infoScore->setZValue(4);
+
+
 	itemAiguilleFuel = new QGraphicsPixmapItem();
 	itemAiguilleHeight = new QGraphicsPixmapItem();
 	itemAiguilleSpeed = new QGraphicsPixmapItem();
@@ -26,7 +43,7 @@ QDashboard::QDashboard(Stat* s) {
 	itemCadranHeight = new QGraphicsPixmapItem();
 	itemCadranSpeed = new QGraphicsPixmapItem();
 	
-		itemAiguilleFuel->setPixmap(ImageManager::getInstance().getImage(AIGUILLE).scaled(
+	itemAiguilleFuel->setPixmap(ImageManager::getInstance().getImage(AIGUILLE).scaled(
 			100, 100,
 			Qt::KeepAspectRatio,
 			Qt::SmoothTransformation
@@ -52,7 +69,7 @@ QDashboard::QDashboard(Stat* s) {
 	statsText->setPos(backgroundItem->boundingRect().width() / 2 - statsText->boundingRect().width() / 2,
 		backgroundItem->boundingRect().height() / 2 - statsText->boundingRect().height() / 2);
 
-	gameScene->addItem(statsText);
+	//gameScene->addItem(statsText);
 
 	gameScene->addItem(itemAiguilleFuel);
 	gameScene->addItem(itemAiguilleHeight);
@@ -61,16 +78,20 @@ QDashboard::QDashboard(Stat* s) {
 	gameScene->addItem(itemCadranFuel);
 	gameScene->addItem(itemCadranHeight);
 	gameScene->addItem(itemCadranSpeed);
-	
+
+	gameScene->addItem(infoFuel);
+	gameScene->addItem(infoHeight);
+	gameScene->addItem(infoSpeed);
+	gameScene->addItem(infoScore);
 }
 void QDashboard::update()
 {
 	updateTexte();
-	updateCadran(QPointF(0 , 0));
+	updateCadran(QPointF(50 , 100));
 }
 
 void QDashboard::updateTexte() {
-	QString textHtml = "<div style='"
+	/*QString textHtml = "<div style='"
 		"color: #39200d;"
 		"font-size: 50px;"
 		"font-weight: bold;"
@@ -82,49 +103,22 @@ void QDashboard::updateTexte() {
 		"Hauteur: " + QString::number(stat->getHeight()) + "<br><br>"
 		"Vitesse: " + QString::number(stat->getSpeed()) + "<br><br>"
 		"Score: " + QString::number(stat->getScore()) +
-		"</div>";
-	statsText->setHtml(textHtml);
-}
-
-void QDashboard::updatePixmapTank()
-{
-	// Assurer que tankPixmap a une taille correcte
-	if (tankPixmap.isNull()) {
-		tankPixmap = QPixmap(200, 300);
-	}
-	tankPixmap.fill(Qt::transparent);
-
-	QPainter painter(&tankPixmap);
-	painter.setRenderHint(QPainter::Antialiasing);
-
-	// Dessiner le contour du réservoir
-	painter.setPen(Qt::black);
-	painter.drawRect(10, 10, 100, 280);
-
-	// Dessiner le gaz
-	int fill_height = static_cast<int>(2.8 * stat->getFuel());
-	painter.setBrush(QColor(0, 150, 255, 180));
-	painter.drawRect(10, 290 - fill_height, 100, fill_height);
-
-	// Mettre à jour l'image affichée
-	QTransform transform;
-	transform.scale(2, 1.5);
-	tankPixmapItem->setTransform(transform);
-	tankPixmapItem->setPixmap(tankPixmap);
+		"</div>";*/
+	// statsText->setHtml(textHtml);
 }
 void QDashboard::updateCadran(const QPointF& position)
 {
 	// Cadran
-	itemCadranFuel->setZValue(2);
+	itemCadranFuel->setZValue(4);
 	itemCadranFuel->setPos(position);
-	itemCadranHeight->setZValue(2);
-	itemCadranHeight->setPos(position + QPointF(0, 400));
-	itemCadranSpeed->setZValue(2);
-	itemCadranSpeed->setPos(position + QPointF(0, 800));
+	itemCadranHeight->setZValue(4);
+	itemCadranHeight->setPos(position + QPointF(0, 300));
+	itemCadranSpeed->setZValue(4);
+	itemCadranSpeed->setPos(position + QPointF(0, 600));
 
-	itemAiguilleFuel->setZValue(3);
-	itemAiguilleHeight->setZValue(3);
-	itemAiguilleSpeed->setZValue(3);
+	itemAiguilleFuel->setZValue(5);
+	itemAiguilleHeight->setZValue(5);
+	itemAiguilleSpeed->setZValue(5);
 
 
 	// FUEL
@@ -132,17 +126,21 @@ void QDashboard::updateCadran(const QPointF& position)
 	itemAiguilleFuel->setTransformOriginPoint(0, itemAiguilleFuel->pixmap().height() / 2);
 	QPointF centreCadran = position + QPointF(itemCadranFuel->pixmap().width() / 2.0, itemCadranFuel->pixmap().height() / 3);
 	itemAiguilleFuel->setPos(centreCadran);
+	infoFuel->setPos(position.x(), position.y() + itemCadranFuel->pixmap().height() / 2);
 	itemAiguilleFuel->setRotation(stat->getFuel() - MAX_FUEL);
+	infoFuel->setText("Gaz: " + QString::number(stat->getFuel()) + "k litre");
 
 	// HAUTEUR
-	if (stat->getHeight() != lastHeight)
+	if (stat->getHeightRevers() != lastHeight)
 	{
-		lastHeight = stat->getHeight();
+		lastHeight = stat->getHeightRevers();
 		itemAiguilleHeight->setOffset(0, -itemAiguilleHeight->pixmap().height() / 2);
 		itemAiguilleHeight->setTransformOriginPoint(0, itemAiguilleHeight->pixmap().height() / 2);
-		QPointF centreCadran = position + QPointF(itemCadranHeight->pixmap().width() / 2.0, itemCadranHeight->pixmap().height() / 3) + QPointF(0, 400);
+		QPointF centreCadran = position + QPointF(itemCadranHeight->pixmap().width() / 2.0, itemCadranHeight->pixmap().height() / 3) + QPointF(0, 300);
 		itemAiguilleHeight->setPos(centreCadran);
-		itemAiguilleHeight->setRotation((lastHeight- 1080)/ 10);
+		infoHeight->setPos(position.x(), position.y() + itemCadranHeight->pixmap().height() + 200);
+		itemAiguilleHeight->setRotation((lastHeight - 1080)/ 10);
+		infoHeight->setText("Hauteur: " + QString::number(stat->getHeightRevers()) + "m");
 	}
 	
 	// VITESSE
@@ -151,8 +149,12 @@ void QDashboard::updateCadran(const QPointF& position)
 		lastSpeed = stat->getSpeed();
 		itemAiguilleSpeed->setOffset(0, -itemAiguilleSpeed->pixmap().height() / 2);
 		itemAiguilleSpeed->setTransformOriginPoint(0, itemAiguilleSpeed->pixmap().height() / 2);
-		QPointF centreCadran = position + QPointF(itemCadranSpeed->pixmap().width() / 2.0, itemCadranSpeed->pixmap().height() / 3) + QPointF(0, 800);
+		QPointF centreCadran = position + QPointF(itemCadranSpeed->pixmap().width() / 2.0, itemCadranSpeed->pixmap().height() / 3) + QPointF(0, 600);
 		itemAiguilleSpeed->setPos(centreCadran);
+		infoSpeed->setPos(position.x(), position.y() + itemCadranSpeed->pixmap().height() + 500);
 		itemAiguilleSpeed->setRotation(stat->getSpeed() - MAX_SPEED);
+		infoSpeed->setText("Vitesse: " + QString::number(stat->getSpeed()) + "00km/h");
 	}
+	infoScore->setPos(0, 50);
+	infoScore->setText("Score: " + QString::number(stat->getScore()));
 }
