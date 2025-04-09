@@ -23,16 +23,6 @@ void Landing::initPiste()
 {
 	longeurPiste = QRandomGenerator::global()->bounded(100, 300);
 	BackGroundVol->setPixmap(QPixmap(ImageManager::getInstance().getImage(BACKGROUND_ATTERRISSAGE_DECOLAGE)));
-	//pour remplir le debut de la piste d'arbres
-	//for (int i = 0; i < longeurPiste / 8; i++)
-	//{
-	//	QGraphicsPixmapItem* arbre = new QGraphicsPixmapItem();
-	//	arbre->setPixmap(ImageManager::getInstance().getImage(TREE));
-	//	arbre->setPos(i * arbre->pixmap().width()+1900, 1080 - arbre->pixmap().height());
-	//	arbre->setZValue(0);	//arriere plan
-	//	gameScene->addItem(arbre);
-	//	runwayTilePixmap.push_back(arbre);
-	//}
 	//remplissage du reste de la piste par des tuiles de piste
 	for (int i = longeurPiste / 8; i < longeurPiste; i++)
 	{
@@ -73,13 +63,14 @@ void Landing::updateLanding()
 		updateAtterrissage();
 		break;
 	case LandingPhase::Success:
-		qDebug() << "Game Over";
+		gameref->state = Game::Gamestate::GameOver;
 		gameOver->setVictoire(true);
 		stack->setCurrentWidget(gameOver);
 		saveScore();
 		break;
 	case LandingPhase::Failure:
-		qDebug() << "Game Over";
+		gameref->etteinManette();
+		gameref->state = Game::Gamestate::GameOver;
 		gameOver->setVictoire(false);
 		stack->setCurrentWidget(gameOver);
 		break;
@@ -89,16 +80,19 @@ void Landing::updateRalentissement()
 {
 	//diminuer la vitesse de l'avion de 50%
 	QString vitesse = QString::number(speed);
-	
+	int pot = abs((ConnectionSerie::getValue("pot")));
+	pot = (pot / 7) % 100; // Convertit la valeur en pourcentage
 	if (speed > 50)
 	{
 		promptText->setPlainText("Ralentir l'avion de 50%\nVitesse: " + vitesse);
-		if (input == CLAVIER_A || input == BOUTON_GAUCHE)
+		speed = pot;
+		qDebug() << "Vitesse : " << speed;
+		/*if (input == CLAVIER_A || input == BOUTON_GAUCHE)
 		{
 			speed -= 8;
 			input = 0;
 			qDebug() << "Vitesse : " << speed;
-		}
+		}*/
 		if (speed <= 50)
 		{
 			promptText->setPlainText("Ralentir l'avion de 50%\nVitesse: " + vitesse);
@@ -112,12 +106,14 @@ void Landing::updateRalentissement()
 	else if (speed > 25)
 	{
 		promptText->setPlainText("Ralentir l'avion de 25%\nVitesse: " + vitesse);
-		if (input == CLAVIER_A || input == BOUTON_GAUCHE)
+		speed = pot;
+		qDebug() << "Vitesse : " << speed;
+		/*if (input == CLAVIER_A || input == BOUTON_GAUCHE)
 		{
 			speed -= 5;
 			input = 0;
 			qDebug() << "Vitesse : " << speed;
-		}
+		}*/
 		if (speed <= 25)
 		{
 			promptText->setPlainText("Ralentir l'avion de 25%\nVitesse: " + vitesse);
@@ -131,12 +127,14 @@ void Landing::updateRalentissement()
 	else if (speed > 10)
 	{
 		promptText->setPlainText("Ralentir l'avion de 10%\nVitesse: " + vitesse);
-		if (input == CLAVIER_A || input == BOUTON_GAUCHE)
+		speed = pot;
+		qDebug() << "Vitesse : " << speed;
+		/*if (input == CLAVIER_A || input == BOUTON_GAUCHE)
 		{
 			speed -= 2;
 			input = 0;
 			qDebug() << "Vitesse : " << speed;
-		}
+		}*/
 		if (speed <= 10)
 		{
 			promptText->setPlainText("Ralentir l'avion de 10%\nVitesse: " + vitesse);

@@ -29,7 +29,7 @@ public:
 	static int getScore();
 	static int getHeight();
 	static int getHeightRevers();
-	void readManette();
+	void readManette(int);
 	void readKeybord(char);
 
 	static void changeFuel(int F);
