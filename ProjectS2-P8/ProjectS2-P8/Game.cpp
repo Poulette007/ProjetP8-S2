@@ -52,7 +52,21 @@ void Game::readKeyBoardGame()
 	if (GetAsyncKeyState('D') < 0)
 	{
 		stat->readKeybord('D');
-	}	
+	}
+	//stat->readManette(); //ez
+	if (ConnectionSerie::hasData())
+	{
+		if (ConnectionSerie::getValue("JH") == 1)
+		{
+			stat->readKeybord('W');
+		}
+		if (ConnectionSerie::getValue("JB") == 1)
+		{
+			stat->readKeybord('S');
+		}
+		int pot = ConnectionSerie::getValue("pot");
+		stat->readManette(pot);
+	}
 }
 void Game::update()
 {
@@ -69,7 +83,6 @@ void Game::update()
 		landing->updateLanding();
 		break;
 	case Gamestate::GameOver:
-		
 		break;
 	}
 }
@@ -99,8 +112,8 @@ void Game::updateGameplay()
 	manageCollision();
 	if (possibleLanding())
 	{
-		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible et appuyez sur k pout initialiser la sequence datterissage!");
-		if (GetAsyncKeyState('K') < 0 && plane->y()<1080/4)
+		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible et appuyez sur k (ou cercle) pout initialiser la sequence datterissage!");
+		if ((GetAsyncKeyState('K') < 0 || ConnectionSerie::getValue("BD")==0) && plane->y()<1080 / 4)
 		{
 			for (auto actor : listActor)
 			{
@@ -179,12 +192,6 @@ void Game::gotoxy(int x, int y)
 }
 void Game::afficherStat()
 {
-	// DEBUG
-	//gotoxy(0, 6);
-	//cout << "Gaz: " << stat->getFuel() << endl;
-	//cout << "Vitesse: " << stat->getSpeed() << endl;
-	//cout << "Pointage: " << stat->getScore() << endl;
-	//cout << "Hauteur: " << stat->getHeight() << endl;
 	
 	afficherStatManette();
 	afficherStatOnGame();

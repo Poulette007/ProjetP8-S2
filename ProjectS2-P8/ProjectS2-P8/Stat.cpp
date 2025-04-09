@@ -140,8 +140,9 @@ int Stat::getHeightRevers()
 		return PALLIER_1;
 	}
 }
-void Stat::readManette()
+void Stat::readManette(int pot)
 {
+	/*
 	int pot = 0;
 	int joy_haut = 0;
 	int joy_bas = 0;
@@ -152,6 +153,7 @@ void Stat::readManette()
 		joy_haut = ConnectionSerie::getValue("JH");
 		joy_bas = ConnectionSerie::getValue("JB");
 	}
+
 	//section pour le controle de la hauteur par le baton de joi
 	if (joy_haut == 1)
 	{
@@ -160,7 +162,7 @@ void Stat::readManette()
 	if (joy_bas == 1)
 	{
 		changeHeight(DESCENDRE_1_PALLIER);
-	}
+	}*/
 	//section pour le controle de la vitesse par le pots
 	if (pot > 0 && pot < 134)
 	{

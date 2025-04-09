@@ -47,6 +47,8 @@ extern QGraphicsPixmapItem* BackGroundVol;
 #define JOY_BAS 210
 #define JOY_GAUCHE 211
 #define JOY_DROIT 212
+#define SHAKE 213
+
 
 // new defines
 #define WIDTH_DASHBOARD 1920 / 5 + 10

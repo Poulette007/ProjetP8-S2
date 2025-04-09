@@ -70,7 +70,7 @@ void Takeoff::initPiste()
 void Takeoff::updateTakeoff()
 {
 	//qDebug() << "Takeoff phase:" << static_cast<int>(takeoffPhase);
-
+	gameref->afficherStatManette();
 	//pour le defilement de la piste
 	if (takeoffPhase != TakeoffPhase::AccelerationInitiale)
 	{
@@ -110,7 +110,7 @@ void Takeoff::updateTakeoff()
 
 void Takeoff::updateAccelerationInitiale()
 {
-	if (input == SPACEBAR || input == BOUTON_BAS)
+	if (input == SPACEBAR || input == BOUTON_BAS || input == SHAKE)
 	{
 		speed += 10;
 		inputCount++;
@@ -142,9 +142,9 @@ void Takeoff::updateAccelerationInitiale()
 }
 void Takeoff::updateAcceleration()
 {
-	if (input == SPACEBAR || input == BOUTON_BAS)
+	if (input == SPACEBAR || input == BOUTON_BAS || input == SHAKE)
 	{
-  		speed += 15;	
+  		speed += 8;	
 		stat->setSpeed(speed % 10 + 2);
 		input = 0;
 	}
@@ -201,7 +201,7 @@ void Takeoff::updateHeight()
 			shuffleDirection();
 			input = 0;
 		}
-		else if (input == CLAVIER_W || input == CLAVIER_S || input == CLAVIER_D)
+		else if (input == CLAVIER_W || input == CLAVIER_S || input == CLAVIER_D || input == BOUTON_DROIT || input == BOUTON_HAUT || input == BOUTON_BAS)
 		{
 			stat->changeFuel(-5);
 			failCount++;
@@ -217,7 +217,7 @@ void Takeoff::updateHeight()
 			input = 0;
 			shuffleDirection();
 		}
-		else if (input == CLAVIER_W || input == CLAVIER_S || input == CLAVIER_A)
+		else if (input == CLAVIER_W || input == CLAVIER_S || input == CLAVIER_A || input == BOUTON_HAUT || input == BOUTON_BAS|| input == BOUTON_GAUCHE)
 		{
 			stat->changeFuel(-5);
 			failCount++;
@@ -233,7 +233,7 @@ void Takeoff::updateHeight()
 			shuffleDirection();
 			input = 0;
 		}
-		else if (input == CLAVIER_W || input == CLAVIER_A || input == CLAVIER_D)
+		else if (input == CLAVIER_W || input == CLAVIER_A || input == CLAVIER_D || input == BOUTON_HAUT || input == BOUTON_DROIT || input == BOUTON_GAUCHE)
 		{
 			stat->changeFuel(-5);
 			failCount++;
@@ -291,6 +291,10 @@ int Takeoff::readInputDecollage()
 		{
 			input = BOUTON_HAUT;
 		}
+		if (ConnectionSerie::getValue("AX") == 1)
+		{
+			input = SHAKE;
+		}
 	}
 	return input;
 }
@@ -298,6 +302,7 @@ int Takeoff::readInputDecollage()
 void Takeoff::shuffleDirection()
 {
 	static vector<string> directions = { "haut", "gauche", "droite", "bas" };
+	//vector<string> directions = { "Triangle", "Carre", "Cercle", "X" };
 	std::shuffle(directions.begin(), directions.end(), std::random_device());
 	directionPrompt = directions.front();
 }
