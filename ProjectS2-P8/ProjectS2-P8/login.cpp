@@ -14,8 +14,8 @@ login::login()
 
 
     //Texte Entrez votre nom:
-    Authen = new UserName("Entrez votre nom:", this, 20, TITLE);
-    Authen->setGeometry(430, 250, 400, 35);
+    Authen = new UserName("Entrez votre nom", this, 30, TITLE);
+    Authen->setGeometry(430, 240, 600, 45);
 
     //Zone d'ecriture du nom
     Nom = new QLineEdit(this);
@@ -29,12 +29,12 @@ login::login()
         "background: rgba(194, 255, 255, 1);""}");
 
     //Texte Nouveau joueur:
-    New = new UserName("Nouveau joueur?", this, 10, TEXTE);
-    New->setGeometry(433, 329, 165, 20);
+    New = new UserName("Nouveau joueur?", this, 15, TEXTE);
+    New->setGeometry(433, 329, 250, 20);
 
     //Creation boite a cocher pour savoir si nouveau joueur
     NewPlayer = new QCheckBox(this);
-    NewPlayer->move(600, 327);
+    NewPlayer->move(685, 327);
     NewPlayer->resize(30, 30);
 
     //Creation boite a cocher pour savoir si nouveau joueur

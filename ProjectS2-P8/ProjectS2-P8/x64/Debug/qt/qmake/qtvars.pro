@@ -1,4 +1,5 @@
 CONFIG += no_fixpath
+<<<<<<< HEAD
 QT = core
 CONFIG += no_fixpath
 QT = core
@@ -927,6 +928,8 @@ QT = core qml widgets designer
 CONFIG += no_fixpath
 QT = core qml widgets designer
 CONFIG += no_fixpath
+=======
+>>>>>>> QT
 QT = core qml widgets designer
 CONFIG += no_fixpath
 QT = core qml widgets designer
@@ -967,7 +970,10 @@ QT = core qml widgets designer
 CONFIG += no_fixpath
 QT = core qml widgets designer
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> QT
 CONFIG += no_fixpath
 QT = core qml widgets designer
 CONFIG += no_fixpath
@@ -1004,6 +1010,9 @@ CONFIG += no_fixpath
 QT = core qml widgets designer
 CONFIG += no_fixpath
 QT = core qml widgets designer
+<<<<<<< HEAD
 >>>>>>> decollage/atterissage_QT
+=======
+>>>>>>> QT
 CONFIG += no_fixpath
 QT = core qml widgets designer

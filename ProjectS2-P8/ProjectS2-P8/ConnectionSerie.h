@@ -13,7 +13,6 @@ using namespace std;
 class ConnectionSerie
 {
 private:
-	
 	std::string com = "COM7";
 	static string raw_msg;
 	static json json_data;
@@ -24,6 +23,7 @@ public:
 	static bool Envoie(json j_msg);
 	static bool ReceiveRaw(SerialPort* SP, std::string& msg);
 	static bool isConnected();
+	static void closeSerial();
 
 	static int getValue(const string index);
 	json getJson();

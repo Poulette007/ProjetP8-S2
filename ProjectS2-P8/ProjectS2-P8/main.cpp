@@ -24,11 +24,16 @@ bool isRelance = false;
 
 void relancerProgram()
 {
-	QString programPath = QCoreApplication::applicationFilePath();
-	QStringList arguments = QCoreApplication::arguments();
-    arguments << "--relance";  // argument fictif pour différencier
+    QString programPath = QCoreApplication::applicationFilePath();
+    QStringList arguments;
+    
+    arguments << "--relance" << Stat::playerName << QString::number(Stat::previousScore)
+        << QString::number(login::SkinChecked);  // argument lors du redemanrrage de l'application
 
     QProcess::startDetached(programPath, arguments);
+
+    ConnectionSerie::closeSerial();
+
     QCoreApplication::exit(0);  // quitte le programme actuel
 }
 
@@ -40,6 +45,10 @@ int main(int argc, char* argv[])
     QStringList args = QCoreApplication::arguments();
 	if (args.contains("--relance"))
 	{
+        Stat::playerName = args[2];
+        Stat::previousScore = args[3].toInt();
+        login::SkinChecked = args[4].toInt();
+        Stat::skinPlane = (args[4].toInt()-1);
 		isRelance = true;
 	}
 	else
@@ -150,7 +159,7 @@ int main(int argc, char* argv[])
     //Show et run!
     if (isRelance)
     {
-		Pages->setCurrentIndex(1);
+        Pages->setCurrentIndex(1);
     }
     else
     {

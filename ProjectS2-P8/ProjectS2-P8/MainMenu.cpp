@@ -10,7 +10,7 @@ MainMenu::MainMenu()
     auto it = map.end();
     while (it != map.begin()) {
         --it;
-        BestScores += QString("%1%2 %3k \n\n\n")
+        BestScores += QString("%1 %2%3k \n\n\n")
             .arg(QString::number(i++))
             .arg(it.value(), -10, QChar('\t'))
             .arg(QString::number(it.key()/1000));

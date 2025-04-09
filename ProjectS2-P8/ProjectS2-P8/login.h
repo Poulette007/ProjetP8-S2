@@ -14,7 +14,6 @@ class login :
 {
 public:
     login();
-    bool Prochaine = false;
     Button* NextPage;
     int score = 0;
     static int SkinChecked;
