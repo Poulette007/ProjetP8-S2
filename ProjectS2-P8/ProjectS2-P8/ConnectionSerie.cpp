@@ -152,3 +152,8 @@ bool ConnectionSerie::isConnected()
 {
 	return SP->isConnected();
 }
+
+void ConnectionSerie::closeSerial()
+{
+    CloseHandle(SP->handler);
+}

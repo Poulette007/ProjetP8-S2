@@ -1,19 +1,22 @@
 #include "login.h"
 #include <QFile>
 #include <QMessageBox>
+#include <Stat.h>
+
+int login::SkinChecked = 0;
 
 login::login()
 {
     setWindowTitle("Authentification");
-    resize(1920, 1080);
-    
+    //resize(1920, 1080);
+
     //Image de fond
-    
+
 
     //Texte Entrez votre nom:
-    Authen = new UserName("Entrez votre nom:", this, 20, TITLE);
-    Authen->setGeometry(430, 250, 400, 35);
-   
+    Authen = new UserName("Entrez votre nom", this, 30, TITLE);
+    Authen->setGeometry(430, 240, 600, 45);
+
     //Zone d'ecriture du nom
     Nom = new QLineEdit(this);
     Nom->setGeometry(432, 295, 680, 35);
@@ -26,12 +29,12 @@ login::login()
         "background: rgba(194, 255, 255, 1);""}");
 
     //Texte Nouveau joueur:
-    New = new UserName("Nouveau joueur?", this, 10, TEXTE);
-    New->setGeometry(433, 329, 165, 20);
+    New = new UserName("Nouveau joueur?", this, 15, TEXTE);
+    New->setGeometry(433, 329, 250, 20);
 
     //Creation boite a cocher pour savoir si nouveau joueur
     NewPlayer = new QCheckBox(this);
-    NewPlayer->move(600, 327);
+    NewPlayer->move(685, 327);
     NewPlayer->resize(30, 30);
 
     //Creation boite a cocher pour savoir si nouveau joueur
@@ -58,10 +61,10 @@ login::login()
     connect(Plane, &QCheckBox::clicked, this, &login::PlaneCheckBox);
     connect(Chopper, &QCheckBox::clicked, this, &login::ChopperCheckBox);
     connect(Jet, &QCheckBox::clicked, this, &login::JetCheckBox);
-    
+
     //Connect checkbox de NewPlayer avec sa fonction
     connect(NewPlayer, &QCheckBox::clicked, this, &login::NewPlayerCheckBox);
- }
+}
 
 void login::PlaneCheckBox()
 {
@@ -69,7 +72,7 @@ void login::PlaneCheckBox()
     Chopper->setChecked(false);
     Jet->setChecked(false);
     SkinChecked = 1;
-    return;
+    Stat::skinPlane = 0;
 }
 
 void login::ChopperCheckBox()
@@ -78,7 +81,7 @@ void login::ChopperCheckBox()
     Chopper->setChecked(true);
     Jet->setChecked(false);
     SkinChecked = 2;
-    return;
+    Stat::skinPlane = 1;
 }
 
 void login::JetCheckBox()
@@ -87,7 +90,7 @@ void login::JetCheckBox()
     Chopper->setChecked(false);
     Jet->setChecked(true);
     SkinChecked = 3;
-    return;
+    Stat::skinPlane = 2;
 }
 
 void login::NewPlayerCheckBox()
@@ -125,8 +128,8 @@ bool login::ButtonPushed()
         Stat::playerName = Nom->text();
         Stat::previousScore = score;
         return true;
-    } 
-    else if (!PlayerIsNew && !userExist){
+    }
+    else if (!PlayerIsNew && !userExist) {
         QMessageBox::critical(nullptr, "Erreur", "Nom d'utilisateur n'existe pas\n Veuillez reessayer ou choisir un autre nom");
         return false;
     }
