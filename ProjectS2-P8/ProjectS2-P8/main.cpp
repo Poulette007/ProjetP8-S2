@@ -97,8 +97,23 @@ int main(int argc, char* argv[])
     QTimer timer;
     QTimer readKeyTimer;
     QTimer GenereObstacle;
+	QTimer MuonTimer;
+
 
     // Game
+	QObject::connect(&MuonTimer, &QTimer::timeout, [&]() {
+		if (game->state == Game::Gamestate::Gameplay) {
+            if (ConnectionSerie::getValue("Muon") == 1)
+            {
+                stat->muonTrue = true;
+                if (stat->muonTrue)
+                {
+                    game->listActor.push_back(new Tree(1920, 1080 * 3 / 4));
+                    gameScene->addItem(game->listActor.back());
+                    stat->muonTrue = false;
+                }
+            }
+		}});
     QObject::connect(&timer, &QTimer::timeout, [&]() {
         if (game->state == Game::Gamestate::Gameplay) {
             game->update();
@@ -129,8 +144,11 @@ int main(int argc, char* argv[])
     // Connect les bouttons pour changer de page
     // Start et stop les timers 
     QObject::connect(LoginPage->NextPage, &QPushButton::clicked, [&]() {
-        if(LoginPage->ButtonPushed())
-            Pages->setCurrentIndex(1);
+        if (LoginPage->ButtonPushed())
+        {
+           Pages->setCurrentIndex(1);
+        }
+		    
         });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
 		login::SkinChecked = 0;
@@ -143,11 +161,13 @@ int main(int argc, char* argv[])
         view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
         });
     QObject::connect(MenuPage->NextPage, &QPushButton::clicked, [&]() {
+		stat->changeFuel(60);
         Pages->setCurrentIndex(2);
         game->changePlanePixmap();
         timer.start(16 - stat->speedfactor);
         readKeyTimer.start(80);
 	    GenereObstacle.start(2000);
+		MuonTimer.start(750);
     });
     QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
 		relancerProgram();

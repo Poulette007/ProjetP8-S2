@@ -40,5 +40,7 @@ private:
 	int longeurPiste;
 	int speed = 100;
 	bool trainSorti = false;
+	int lastPot = 0;
+	bool frein = false;
 };
 

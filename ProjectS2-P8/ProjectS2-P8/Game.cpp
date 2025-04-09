@@ -25,7 +25,7 @@ Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 	count = 0;
 	landingCount = 200;
 	msg_envoi["led"] = 1;
-	promptText = new FormatTextPixmap("", nullptr, 13, TEXTE, Qt::yellow);
+	promptText = new FormatTextPixmap("", nullptr, 25, TEXTE, Qt::yellow);
 	promptText->setPos(500, 100);
 	gameScene->addItem(promptText);
 	takeoff = new Takeoff(this, plane, stat, promptText, stack, gameOverPage);
@@ -109,8 +109,9 @@ void Game::updateGameplay()
 	manageCollision();
 	if (possibleLanding())
 	{
-		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible,\n augmentez votre vitesse en haut de 15000 kmh, et appuyez sur k (ou cercle) pout initialiser la sequence datterissage!");
-		qDebug() << "speed:" << stat->getSpeed();
+		promptText->setPlainText("Atterrissage possible! Recquis:\nAltitude: 810M\nVitesse: 15 000Km/h\nAppuyez sur DROIT");
+		promptText->setPos(700, 100);
+		//qDebug() << "speed:" << stat->getSpeed();
 		if (((GetAsyncKeyState('K') < 0 || ConnectionSerie::getValue("BD")==0)) && plane->y()<1080 / 4 && stat->getSpeed()>10)
 		{
 			for (auto actor : listActor)
@@ -130,8 +131,8 @@ void Game::updateGameplay()
 }
 bool Game::possibleLanding()
 {
-	qDebug() << "count:" << count;
-	qDebug() << "landingCount:" << landingCount;
+	//qDebug() << "count:" << count;
+	//qDebug() << "landingCount:" << landingCount;
 	if (plane->y() < 360 && count >= landingCount && count <= (landingCount + 150))
 	{
 		return true;
@@ -268,6 +269,10 @@ void Game::generateObstacles() {
 		obstacle = rand() % 3;
 		posY = rand() % 3;
 		distance = 0;
+		/*if (ConnectionSerie::getValue("Muon") == 1)
+		{
+			stat->muonTrue = true;
+		}*/
 		switch (random)
 		{
 		case 0: // Deux obstacles côte à côte
@@ -278,7 +283,7 @@ void Game::generateObstacles() {
 		case 1: // Muon et obstacle
 			distance = rand() % 400 + 200;
 			createObstacle(obstacle, posY);
-			stat->muonTrue = true;
+			//stat->muonTrue = true;
 			break;
 		case 2: // Obstacle simple
 			createObstacle(obstacle, posY);
@@ -298,7 +303,7 @@ void Game::generateObstacles() {
 			createObstacle(rand() % 4, 0);
 			distance = rand() % 400 + 150;
 			createObstacle(rand() % 4, 2);
-			stat->muonTrue = true;
+			//stat->muonTrue = true;
 			break;
 		case 6: // 2 vent + 1 random
 			createObstacle(1, posY);
@@ -308,12 +313,12 @@ void Game::generateObstacles() {
 			createObstacle(rand() % 4, (posY + 1) % 3);
 			break;
 		}
-		if (stat->muonTrue)
+		/*if (stat->muonTrue)
 		{
 			listActor.push_back(new Tree(ACTOR_POS_X, 1080 * 3 / 4));
 			gameScene->addItem(listActor.back());
 			stat->muonTrue = false;
-		}
+		}*/
 	}
 
 }

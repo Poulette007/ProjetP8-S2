@@ -16,15 +16,27 @@ Landing::Landing(Game* game, Plane* p, Stat* s, QGraphicsTextItem* prompt, QStac
 	gameref = game;
 	promptText = prompt;
 	this->gameOver = gameOverPage;
-	
+	promptText->setPlainText("");
+	promptText->setPos(500, 100);
 }
 
 void Landing::initPiste()
 {
-	longeurPiste = QRandomGenerator::global()->bounded(100, 300);
+	longeurPiste = QRandomGenerator::global()->bounded(100, 225);
 	BackGroundVol->setPixmap(QPixmap(ImageManager::getInstance().getImage(BACKGROUND_ATTERRISSAGE_DECOLAGE)));
 	//remplissage du reste de la piste par des tuiles de piste
-	for (int i = longeurPiste / 8; i < longeurPiste; i++)
+	int i = 0;
+	for (i = 0; i < longeurPiste / 8; i++)
+	{
+		QGraphicsPixmapItem* arbre = new QGraphicsPixmapItem();
+		arbre->setPixmap(ImageManager::getInstance().getImage(TREE));
+		arbre->setScale(1.5);
+		arbre->setPos(i * arbre->pixmap().width() / 2 - 40, 1080 - (arbre->pixmap().height() / 2) - 60);
+		arbre->setZValue(1);	//arriere plan
+		gameScene->addItem(arbre);
+		runwayTilePixmap.push_back(arbre);
+	}
+	for (i = longeurPiste / 8; i < longeurPiste; i++)
 	{
 		QGraphicsPixmapItem* runwayTile = new QGraphicsPixmapItem();
 		runwayTile->setPixmap(ImageManager::getInstance().getImage(RUNWAY));
@@ -34,6 +46,14 @@ void Landing::initPiste()
 		gameScene->addItem(runwayTile);
 		runwayTilePixmap.push_back(runwayTile);
 	}
+	//ajout une barriere de fin de piste
+	QGraphicsPixmapItem* barriere = new QGraphicsPixmapItem();
+	barriere->setPixmap(ImageManager::getInstance().getImage(BARRIERE));
+	barriere->setScale(1.5);
+	barriere->setPos(i * barriere->pixmap().width() / 2 + (1080 / 5), 1080 - (barriere->pixmap().height() / 2) - 250);
+	barriere->setZValue(1);
+	gameScene->addItem(barriere);
+	runwayTilePixmap.push_back(barriere);
 }
 
 void Landing::updateLanding()
@@ -44,10 +64,13 @@ void Landing::updateLanding()
 		qDebug() << "you crashed.";
 	}
 	int scrollSpeed = std::max(5, speed / 5);
-	for (auto tile : runwayTilePixmap) {
-		tile->setPos(tile->x() - scrollSpeed, tile->y());
+	if (!frein)
+	{
+		for (auto tile : runwayTilePixmap) {
+			tile->setPos(tile->x() - scrollSpeed, tile->y());
+		}
 	}
-	promptText->setPlainText("");
+	gameref->afficherStat();
 	switch (landingPhase)
 	{
 	case LandingPhase::Ralentissement:
@@ -82,20 +105,24 @@ void Landing::updateRalentissement()
 	QString vitesse = QString::number(speed);
 	int pot = abs((ConnectionSerie::getValue("pot")));
 	pot = (pot / 7) % 100; // Convertit la valeur en pourcentage
+	if (pot == 0)
+	{
+		pot = lastPot;
+		return;
+	}
+	lastPot = pot;
+	qDebug() << "pot: " << pot;
 	if (speed > 50)
 	{
-		promptText->setPlainText("Ralentir l'avion de 50%\nVitesse: " + vitesse);
-		speed = pot;
-		qDebug() << "Vitesse : " << speed;
-		/*if (input == CLAVIER_A || input == BOUTON_GAUCHE)
+		if (pot > 10)
 		{
-			speed -= 8;
-			input = 0;
-			qDebug() << "Vitesse : " << speed;
-		}*/
+			speed = pot;
+			stat->setSpeed(pot+1);
+		}
+		promptText->setPlainText("Ralentir l'avion a 50\nVitesse: " + vitesse+ "/100");
 		if (speed <= 50)
 		{
-			promptText->setPlainText("Ralentir l'avion de 50%\nVitesse: " + vitesse);
+			promptText->setPlainText("Ralentir l'avion de 50\nVitesse: " + vitesse +"/100");
 			landingPhase = LandingPhase::Descente;
 			stat->setSpeed(stat->getSpeed() / 2 + 1);
 			speed = 50;
@@ -108,12 +135,6 @@ void Landing::updateRalentissement()
 		promptText->setPlainText("Ralentir l'avion de 25%\nVitesse: " + vitesse);
 		speed = pot;
 		qDebug() << "Vitesse : " << speed;
-		/*if (input == CLAVIER_A || input == BOUTON_GAUCHE)
-		{
-			speed -= 5;
-			input = 0;
-			qDebug() << "Vitesse : " << speed;
-		}*/
 		if (speed <= 25)
 		{
 			promptText->setPlainText("Ralentir l'avion de 25%\nVitesse: " + vitesse);
@@ -129,12 +150,6 @@ void Landing::updateRalentissement()
 		promptText->setPlainText("Ralentir l'avion de 10%\nVitesse: " + vitesse);
 		speed = pot;
 		qDebug() << "Vitesse : " << speed;
-		/*if (input == CLAVIER_A || input == BOUTON_GAUCHE)
-		{
-			speed -= 2;
-			input = 0;
-			qDebug() << "Vitesse : " << speed;
-		}*/
 		if (speed <= 10)
 		{
 			promptText->setPlainText("Ralentir l'avion de 10%\nVitesse: " + vitesse);
@@ -151,32 +166,32 @@ void Landing::updateDescente()
 	//diminuer la hauteur de l'avion de 2 positions
 	if(plane->y() < (1080 - plane->pixmap().height()) / 2 )
 	{
-		promptText->setPlainText("Descendre de moitié. Hauteur: " + QString::number(speed));
+		promptText->setPlainText("Diminuez l'altitude a 540m\nAltitude: " + QString::number(1080-plane->y()-(plane->pixmap().height())/2));
 		if (input == CLAVIER_S || input == JOY_BAS)
 		{
-			plane->setY(plane->y() + 25);
+			plane->setY(plane->y() + 35);
 			input = 0;
 		}
 		//reussite
 		if (plane->y() >= (1080 - plane->pixmap().height()) / 2 )
 		{
-			promptText->setPlainText("Descendre de moitié. Hauteur: " + QString::number(speed));
+			promptText->setPlainText("Diminuez l'altitude a 540m\nAltitude: " + QString::number(1080 - plane->y()-plane->pixmap().height()));
 			landingPhase = LandingPhase::Ralentissement;
 			input = 0;
 		}
 	}
 	else if (plane->y() < 800 - plane->pixmap().height() / 2)
 	{
-		promptText->setPlainText("Descendre a 10%. Hauteur: " + QString::number(speed));
+		promptText->setPlainText("Diminuez l'altitude a 108m\nAltitude: " + QString::number(1080 - plane->y() - plane->pixmap().height()));
 		if (input == CLAVIER_S || input == JOY_BAS)
 		{
-			plane->setY(plane->y() + 25);
+			plane->setY(plane->y() + 35);
 			input = 0;
 		}
 		//reussite
 		if (plane->y() >= 800 - plane->pixmap().height() / 2)
 		{
-			promptText->setPlainText("Descendre a 10%: " + QString::number(speed));
+			promptText->setPlainText("Diminuez l'altitude a 108m\nAltitude: " + QString::number(1080 - plane->y() - plane->pixmap().height()));
 			landingPhase = LandingPhase::TrainAtterrissage;
 			input = 0;
 		}
@@ -184,10 +199,10 @@ void Landing::updateDescente()
 	//toucher le sol hauteur : 1080 - plane.height - 10
 	else if (plane->y() < 1080 - plane->pixmap().height() - 10)
 	{
-		promptText->setPlainText("Toucher le sol");
+		promptText->setPlainText("Touchez le sol");
 			if (input == CLAVIER_S || input == JOY_BAS)
 			{
-				plane->setY(plane->y() + 10);
+				plane->setY(plane->y() + 25);
 				input = 0;
 			}
 		//toucher le sol good
@@ -201,10 +216,10 @@ void Landing::updateDescente()
 }
 void Landing::updateTrainAtterrissage()
 {
-	promptText->setPlainText("Sortir le train d'atterrissage, W ou haut sur manette");
+	promptText->setPlainText("Sortir le train d'atterrissage\nAppuyez sur le triangle");
 	if (input == CLAVIER_W || input == BOUTON_HAUT)
 	{
-		promptText->setPlainText("Sortir le train d'atterrissage, W ou haut sur manette : OK");
+		promptText->setPlainText("Sortir le train d'atterrissage\nAppuyez sur le triangle: OK");
 		landingPhase = LandingPhase::Ralentissement;
 		input = 0;
 		trainSorti = true;
@@ -213,23 +228,36 @@ void Landing::updateTrainAtterrissage()
 void Landing::updateAtterrissage()
 {
 	QString vitesse = QString::number(speed);
-	promptText->setPlainText("imobilisez l'avion avec les freins. A A ou droite sur manette, Vitesse:" + vitesse);
-	if (input == CLAVIER_A || input == BOUTON_GAUCHE)
+	promptText->setPlainText("Immobilisez l'avion avec les freins\nAppuyez sur le Cercle\nVitesse:" + vitesse + "Km/h");
+	if ((input == CLAVIER_D || input == BOUTON_DROIT) && !frein)
 	{
-		if (speed > 0)
+		frein = true;
+		speed = 250;
+	}
+	if (frein)
+	{
+		if (speed >= 125)
 		{
+			plane->setX(plane->x() + 5);
 			speed -= 1;
-			input = 0;
+		}
+		else if (speed < 125 && speed >50)
+		{
+			plane->setX(plane->x() + 3);
+			speed -= 1;
+		}
+		else if (speed <= 50 && speed >0)
+		{
+			plane->setX(plane->x() + 2);
+			speed -= 1;
 		}
 		else if (speed <= 0)
 		{
-			speed = 0;
-			stat->setSpeed(0);
-			promptText->setPlainText("imobilisez l'avion avec les freins, A ou droite sur manette : OK");
-			stat->setSpeed(0);
+			promptText->setPlainText("Atterrissage reussi!");
 			landingPhase = LandingPhase::Success;
-			input = 0;
+			speed = 0;
 		}
+		
 	}
 }
 int Landing::readInputAtterrissage()
@@ -272,7 +300,7 @@ int Landing::readInputAtterrissage()
 		{
 			input = BOUTON_HAUT;
 		}
-		if (ConnectionSerie::getValue("JB") == 0)
+		if (ConnectionSerie::getValue("JB") != 0)
 		{
 			input = JOY_BAS;
 		}

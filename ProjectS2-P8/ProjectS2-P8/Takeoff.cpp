@@ -57,7 +57,7 @@ void Takeoff::initPiste()
 	barriere->setZValue(1);
 	gameScene->addItem(barriere);
 	runwayTilePixmap.push_back(barriere);
-	promptText->setPlainText("Il faut rechauffer le moteur avant le decollage, montez le levier de vitesse: ");
+	promptText->setPlainText("Prechauffez moteurs!\nMontez le levier de vitesse: ");
 }
 void Takeoff::updateTakeoff()
 {
@@ -89,6 +89,7 @@ void Takeoff::updateTakeoff()
 		updateAcceleration();
 		break;
 	case TakeoffPhase::ChangerPot:
+		promptText->setPlainText("Ajustez le levier de vitesse a 50% " + QString::number(lastPot) + " /100");
 		updateChangerPot();
 		break;
 	case TakeoffPhase::Height:
@@ -116,23 +117,22 @@ void Takeoff::updateRechauffement()
 		pot = lastPot;
 		return;
 	}
-		
 	lastPot = pot;
 	QString intensiterMot = QString::number(pot);
 	qDebug ()<< "pot: " << pot;
 	if (moteurChaud)
 	{
-		promptText->setPlainText("Le moteur est chaud, decollage imminent. Redescendre le levier a 0: "+ intensiterMot+" /100");
 		if (pot == 0)
 		{
 			pot = lastPot;
 			return;
 		}
+		promptText->setPlainText("Le moteur est chaud, decollage imminent.\nRedescendre le levier a 0: "+ intensiterMot+" /100");
 		if (pot < 20)
 			takeoffPhase = TakeoffPhase::AccelerationInitiale;
 	}
 	else if (pot < 90)
-		promptText->setPlainText("Il faut rechauffer le moteur avant le decollage, montez le levier de vitesse: " + intensiterMot + " /100");
+		promptText->setPlainText("Prechauffez moteurs!\nMontez le levier de vitesse: " + intensiterMot + "/100");
 	
 	else if (pot > 93)
 	{
@@ -144,7 +144,13 @@ void Takeoff::updateChangerPot()
 {
 	int pot = abs((ConnectionSerie::getValue("pot")));
 	pot = (pot / 7) % 100; // Convertit la valeur en pourcentage
-	promptText->setPlainText("Ajustez le levier de vitesse a la moitie de la course: " + QString::number(pot) + " /100");
+	if (pot == 0)
+	{
+		pot = lastPot;
+		return;
+	}
+	lastPot = pot;
+	promptText->setPlainText("Ajustez le levier de vitesse a 50% " + QString::number(pot) + " /100");
 	if (pot > 40 && pot < 60)
 	{
 		stat->readManette(pot);		//fix le speed du jeu a la valeur du pot
@@ -155,7 +161,7 @@ void Takeoff::updateAccelerationInitiale()
 {
 	QString vitesse = QString::number(speed);
 	QString vitesseRecquise = QString::number(recquiredSpeed);
-	promptText->setPlainText("Agitez la manette pour accelerer! Vitesse: " + vitesse + "Vitesse recquise: " + vitesseRecquise);
+	promptText->setPlainText("Agitez la manette pour accelerer!\nVitesse recquise: " + vitesseRecquise +"\nVitesse: " + vitesse);
 	if (input == SPACEBAR || input == BOUTON_BAS || input == SHAKE)
 	{
 		speed += 10;
@@ -191,34 +197,33 @@ void Takeoff::updateAcceleration()
 	if (input == SPACEBAR || input == BOUTON_BAS || input == SHAKE)
 	{
   		speed += 8;	
-		//stat->setSpeed(speed % 10 + 2);
+		stat->setSpeed(speed % 10 + 2);
 		input = 0;
 	}
 	countRalentissement++;
 	if (countRalentissement % 2 == 0)
 	{
-		//stat->setSpeed(speed % 10 + 2);
+		stat->setSpeed(speed % 10 + 2);
 		speed -= 1;
 		if (speed < 10)
 			speed = 10;
 	}
-	// stat->changeSpeed(speed);
 	if (speed >= recquiredSpeed)
 	{
 		takeoffPhase = TakeoffPhase::ChangerPot;
 	}
 	QString vitesse = QString::number(speed);
 	QString vitesseRecquise = QString::number(recquiredSpeed);
-	promptText->setPlainText("Agitez la manette pour accelerer! Vitesse: " + vitesse + "  Vitesse recquise: "+ vitesseRecquise);
+	promptText->setPlainText("Agitez la manette pour accelerer!\nVitesse recquise: " + vitesseRecquise + "\nVitesse: " + vitesse);
 }
 void Takeoff::updateHeight()
 {
 	//affichage de la direction recquise a lecran
 	QString prompt = QString::fromStdString("Appuyez sur " + directionPrompt);
-	promptText->setPlainText("Appuyez sur: " + QString::fromStdString(directionPrompt)+ " Reussite: "+ QString::number(successCount)+ 
-		"/4 Echec: "+ QString::number(failCount)+ "/5");
+	promptText->setPlainText("Appuyez sur: " + QString::fromStdString(directionPrompt)+ "\nReussite: "+ QString::number(successCount)+ 
+		"/4\nEchec: "+ QString::number(failCount)+ "/5");
 
- 	if (directionPrompt == "haut")
+ 	if (directionPrompt == "Triangle"/*"haut"*/)
 	{
 		if (input == CLAVIER_W || input == BOUTON_HAUT)
 		{ 
@@ -236,7 +241,7 @@ void Takeoff::updateHeight()
 		
 		
 	}
-	else if (directionPrompt == "gauche")
+	else if (directionPrompt == "Carre"/*"gauche"*/)
 	{
 		if (input == CLAVIER_A || input == BOUTON_GAUCHE) 
 		{
@@ -252,7 +257,7 @@ void Takeoff::updateHeight()
 			input = 0;
 		}
 	}
-	else if (directionPrompt == "droite")
+	else if (directionPrompt == "O"/*"droite"*/)
 	{
 		if (input == CLAVIER_D || input == BOUTON_DROIT)
 		{
@@ -268,7 +273,7 @@ void Takeoff::updateHeight()
 			input = 0;
 		}
 	}
-	else if (directionPrompt == "bas")
+	else if (directionPrompt == "X"/*"bas"*/)
 	{
  		if (input == CLAVIER_S || input == BOUTON_BAS) 
 		{
@@ -287,7 +292,7 @@ void Takeoff::updateHeight()
 	
 	if (successCount >= 4) {
 		promptText->setPlainText("Decollage reussi!");
-		//stat->setSpeed(15);
+		stat->setSpeed(100/8);
 		takeoffPhase = TakeoffPhase::Success;
 	}
 	else if (failCount >= 5) {
@@ -345,8 +350,8 @@ int Takeoff::readInputDecollage()
 
 void Takeoff::shuffleDirection()
 {
-	static vector<string> directions = { "haut", "gauche", "droite", "bas" };
-	//vector<string> directions = { "Triangle", "Carre", "Cercle", "X" };
+	//static vector<string> directions = { "haut", "gauche", "droite", "bas" };
+	static vector<string> directions = { "Triangle", "Carre", "O", "X" };
 	std::shuffle(directions.begin(), directions.end(), std::random_device());
 	directionPrompt = directions.front();
 }

@@ -111,7 +111,7 @@ void ImageManager::loadImages() {
 QPixmap ImageManager::getImage(ImageType type) const{
    // std::cout << "getImage() appelé avec type: " << type << std::endl;
     if (type >= 0 && type < images.size() + 1) {
-        std::cout << "type: " << type << std::endl;
+       // std::cout << "type: " << type << std::endl;
         return images.at(type);
     }
     std::cerr << "Erreur : accès hors limites dans ImageManager::getImage(" << type << "). Taille: " << images.size() << std::endl;

@@ -25,8 +25,8 @@ int Stat::previousScore = 0;
 Stat::Stat()
 {
 	
-	changeFuel(60);
-	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
+	changeFuel(10);
+	changeSpeed(100/8); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
 	changeScore(0);
 	changeHeight(PALLIER_4); //Hauteur pour debut quand en vol (nombres semi-bullshit)
 	delay = 0;
@@ -34,7 +34,7 @@ Stat::Stat()
 
 Stat::Stat(int scoreIni)
 {
-	changeFuel(60);
+	changeFuel(10);
 	changeSpeed(MIN_SPEED); //Vitesse de base quand en vol (je bullshit des nombres pour l'instant)
 	changeScore(scoreIni);
 	changeHeight(PALLIER_4); //Hauteur pour debut quand en vol (nombres semi-bullshit)
