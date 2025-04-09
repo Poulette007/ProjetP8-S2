@@ -11,7 +11,7 @@
 #define LOOSE_PATH "sprites/background/GameOver.png"
 #define RUNWAY_PATH "sprites/background/piste.png"
 #define AIGUILLE_PATH "sprites/Stat/Baton.png"
-#define CADRAN_PATH "sprites/Stat/CadranT.png"
+#define CADRAN_PATH "sprites/Stat/Cadran.png"
 #define BACKGROUND_GAME_PATH "sprites/background/BackgroundGame.png"
 #define BACKGROUND_ATTERRISSAGE_DECOLAGE_PATH "sprites/background/BackgroundDecoAtte.png"
 #define AIRPORT_PATH "sprites/background/Airport.png"

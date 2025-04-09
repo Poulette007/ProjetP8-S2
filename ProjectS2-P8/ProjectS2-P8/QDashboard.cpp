@@ -126,7 +126,7 @@ void QDashboard::updateCadran(const QPointF& position)
 	itemAiguilleFuel->setTransformOriginPoint(0, itemAiguilleFuel->pixmap().height() / 2);
 	QPointF centreCadran = position + QPointF(itemCadranFuel->pixmap().width() / 2.0, itemCadranFuel->pixmap().height() / 3);
 	itemAiguilleFuel->setPos(centreCadran);
-	infoFuel->setPos(position.x(), position.y() + itemCadranFuel->pixmap().height() / 2);
+	infoFuel->setPos(position.x(), position.y() + itemCadranFuel->pixmap().height()/2 + 50);
 	itemAiguilleFuel->setRotation(stat->getFuel() - MAX_FUEL);
 	infoFuel->setText("Gaz: " + QString::number(stat->getFuel()) + "k litre");
 
@@ -155,6 +155,7 @@ void QDashboard::updateCadran(const QPointF& position)
 		itemAiguilleSpeed->setRotation(stat->getSpeed() - MAX_SPEED);
 		infoSpeed->setText("Vitesse: " + QString::number(stat->getSpeed()) + "00km/h");
 	}
-	infoScore->setPos(0, 50);
 	infoScore->setText("Score: " + QString::number(stat->getScore()));
+	infoScore->setPos(1920 / 5 - 300, 50);
+
 }

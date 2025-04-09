@@ -295,13 +295,13 @@ void Landing::saveScore()
 	while (!in.atEnd()) {
 		QString line = in.readLine();
 		QStringList parts = line.split(",");
-
-		if (parts.size() == 2 && parts[0].trimmed() == stat->playerName) {
-			// Remplace le score
-			line = stat->playerName + "," + QString::number(stat->getScore());
+		if (gameref->stat->getScore() > gameref->stat->previousScore) {
+			if (parts.size() == 2 && parts[0].trimmed() == stat->playerName) {
+				// Remplace le score
+				line = stat->playerName + "," + QString::number(stat->getScore());
+			}
+			lines.append(line);
 		}
-
-		lines.append(line);
 	}
 	file.close();
 

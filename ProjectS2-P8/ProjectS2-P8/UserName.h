@@ -95,6 +95,7 @@ public:
         setFont(font);
         setDefaultTextColor(color);
         setPlainText(text);
+        this->setZValue(11);
     }
 
     void setText(const QString& newText) {

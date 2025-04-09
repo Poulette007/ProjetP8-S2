@@ -99,17 +99,15 @@ void Game::updateGameplay()
 	manageCollision();
 	if (possibleLanding())
 	{
-		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible et appuyez sur k pout initialiser la sequence datterissage!");
+		promptText->setPlainText("Atterrissage : montez au max et pressez K !");
 		if (GetAsyncKeyState('K') < 0 && plane->y()<1080/4)
 		{
 			for (auto actor : listActor)
 			{
-				// actor->setPos(actor->x() - (actor->getSpeed() * stat->getSpeed()), actor->y());
-				gameScene->removeItem(actor); // Retirer l'acteur de la scène Qt
-				listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
+				gameScene->removeItem(actor);
 				delete actor;
-				
 			}
+			listActor.clear();	
 			landing = new Landing(this, plane, stat, promptText, stack, gameOver);
 			state = Gamestate::Landing;
 		}
@@ -161,10 +159,13 @@ void Game::manageCollision()
 	{
 		if (listActor[i]->x() <= plane->x() + plane->pixmap().width() && listActor[i]->y() == plane->y())
 		{
-			CollionDetected(listActor[i]);
-			gameScene->removeItem(listActor[i]);
-			delete listActor[i];
-			listActor.erase(listActor.begin() + i);
+			Actor* actor = listActor[i];
+			CollionDetected(actor);
+			gameScene->removeItem(actor);
+			listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
+			delete actor;
+			//listActor.erase(listActor.begin() + i);
+
 		}
 	}
 }
