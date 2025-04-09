@@ -296,17 +296,15 @@ void Landing::saveScore()
 		QString line = in.readLine();
 		QStringList parts = line.split(",");
 		if (gameref->stat->getScore() > gameref->stat->previousScore) {
-		if (parts.size() == 2 && parts[0].trimmed() == stat->playerName) {
-			// Remplace le score
-			line = stat->playerName + "," + QString::number(stat->getScore());
-			stat->previousScore = stat->getScore();
+			if (parts.size() == 2 && parts[0].trimmed() == stat->playerName) {
+				// Remplace le score
+				line = stat->playerName + "," + QString::number(stat->getScore());
+				stat->previousScore = stat->getScore();
+			}
 		}
-
 		lines.append(line);
 	}
-	}
 	file.close();
-
 	// Réécriture du fichier avec les nouvelles lignes
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
 		qWarning() << "Erreur lors de l’écriture du fichier.";

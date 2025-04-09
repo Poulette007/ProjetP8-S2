@@ -18,6 +18,11 @@ public:
     int score = 0;
     static int SkinChecked;
     bool ButtonPushed();
+    QCheckBox* Plane;
+    QCheckBox* Chopper;
+    QCheckBox* Jet;
+    QCheckBox* NewPlayer;
+    bool PlayerIsNew = false;
 
 private:
     void PlaneCheckBox();
@@ -31,11 +36,7 @@ private:
     UserName* Authen;
     QLineEdit* Nom;
     UserName* New;
-    QCheckBox* NewPlayer;
-    QCheckBox* Plane;
-    QCheckBox* Chopper;
-    QCheckBox* Jet;
-    bool PlayerIsNew = false;
+    
 
 };
 

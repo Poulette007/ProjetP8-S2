@@ -133,6 +133,12 @@ int main(int argc, char* argv[])
             Pages->setCurrentIndex(1);
         });
     QObject::connect(MenuPage->BackPage, &QPushButton::clicked, [&]() {
+		login::SkinChecked = 0;
+        LoginPage->Plane->setChecked(false);
+        LoginPage->Chopper->setChecked(false);
+        LoginPage->Jet->setChecked(false);
+		LoginPage->NewPlayer->setChecked(false);
+		LoginPage->PlayerIsNew = false;
         Pages->setCurrentIndex(0);
         view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
         });
