@@ -3,7 +3,7 @@
 #include "const.h"
 Takeoff::Takeoff(Game* game, Plane* p, Stat* s, FormatTextPixmap* prompt, QStackedWidget* stack, GameOver* gameOverPage)
 {
-	initPiste();
+	
 	takeoffTimer = new QTimer(this);
 	connect(takeoffTimer, &QTimer::timeout, this, &Takeoff::updateTakeoff);
 	takeoffTimer->start(30);
@@ -14,6 +14,7 @@ Takeoff::Takeoff(Game* game, Plane* p, Stat* s, FormatTextPixmap* prompt, QStack
 	this->stack = stack;
 	this->gameOver = gameOverPage;
 	inputCount = 0;
+	initPiste();
 	plane->setPos(0, 1080-plane->pixmap().height()-10);
 	plane->setZValue(2);	//1er plan
 	shuffleDirection();
@@ -26,22 +27,13 @@ void Takeoff::initPiste()
 	QPixmap resizedAirport = originalAirport.scaled(800, 700, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	QGraphicsPixmapItem* airport = new QGraphicsPixmapItem(resizedAirport);
 
-	// Chargement et redimensionnement de la tour de contrôle
-	//QPixmap originalTower = ImageManager::getInstance().getImage(TOUR);
-	//QPixmap resizedTower = originalTower.scaled(1000, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-	//QGraphicsPixmapItem* controlTower = new QGraphicsPixmapItem(resizedTower);
-
 	// Positionnement
 	airport->setPos(500, 1080 - resizedAirport.height() - 50);
-
-//	controlTower->setPos(800, 1080 - resizedTower.height() - 150);
-
 	// Z-order et ajout à la scène
 	airport->setZValue(0);
 	//controlTower->setZValue(0);
 	gameScene->addItem(airport);
 	//gameScene->addItem(controlTower);
-
 	// Ajout au vecteur de défilement
 	runwayTilePixmap.push_back(airport);
 	//runwayTilePixmap.push_back(controlTower);
@@ -65,14 +57,13 @@ void Takeoff::initPiste()
 	barriere->setZValue(1);
 	gameScene->addItem(barriere);
 	runwayTilePixmap.push_back(barriere);
-
+	promptText->setPlainText("Il faut rechauffer le moteur avant le decollage, montez le levier de vitesse: ");
 }
 void Takeoff::updateTakeoff()
 {
-	//qDebug() << "Takeoff phase:" << static_cast<int>(takeoffPhase);
 	gameref->afficherStatManette();
 	//pour le defilement de la piste
-	if (takeoffPhase != TakeoffPhase::AccelerationInitiale)
+	if (takeoffPhase != TakeoffPhase::AccelerationInitiale && takeoffPhase != TakeoffPhase::Rechauffement)
 	{
 		int scrollSpeed = std::max(5, speed / 5);
 		for (auto tile : runwayTilePixmap) {
@@ -85,15 +76,20 @@ void Takeoff::updateTakeoff()
 		QGraphicsPixmapItem* lastTile = runwayTilePixmap.back();
 		if (lastTile->x() + lastTile->pixmap().width() * lastTile->scale() < plane->x()) {
 			takeoffPhase = TakeoffPhase::Failure;
-			qDebug() << "you crashed.";
 		}
 	}
 	switch (takeoffPhase) {
+	case TakeoffPhase::Rechauffement:
+		updateRechauffement();
+		break;
 	case TakeoffPhase::AccelerationInitiale:
 		updateAccelerationInitiale();
 		break;
 	case TakeoffPhase::Acceleration:
 		updateAcceleration();
+		break;
+	case TakeoffPhase::ChangerPot:
+		updateChangerPot();
 		break;
 	case TakeoffPhase::Height:
 		updateHeight();
@@ -102,14 +98,64 @@ void Takeoff::updateTakeoff()
 		animationTakeoff();
 		break;
 	case TakeoffPhase::Failure:
+		gameref->etteinManette();
 		gameOver->setVictoire(false); 
 		stack->setCurrentWidget(gameOver);
+		gameref->state = Game::Gamestate::GameOver;
 		break;
 	}
 }
-
+void Takeoff::updateRechauffement()
+{
+	int pot =abs((ConnectionSerie::getValue("pot")));
+	if (pot >700)
+		pot = 700; // Limite la valeur à 700
+	pot = (pot / 7) % 100; // Convertit la valeur en pourcentage
+	if (pot == 0 && !moteurChaud)
+	{
+		pot = lastPot;
+		return;
+	}
+		
+	lastPot = pot;
+	QString intensiterMot = QString::number(pot);
+	qDebug ()<< "pot: " << pot;
+	if (moteurChaud)
+	{
+		promptText->setPlainText("Le moteur est chaud, decollage imminent. Redescendre le levier a 0: "+ intensiterMot+" /100");
+		if (pot == 0)
+		{
+			pot = lastPot;
+			return;
+		}
+		if (pot < 20)
+			takeoffPhase = TakeoffPhase::AccelerationInitiale;
+	}
+	else if (pot < 90)
+		promptText->setPlainText("Il faut rechauffer le moteur avant le decollage, montez le levier de vitesse: " + intensiterMot + " /100");
+	
+	else if (pot > 93)
+	{
+		moteurChaud = true;
+	}
+	
+}
+void Takeoff::updateChangerPot()
+{
+	int pot = abs((ConnectionSerie::getValue("pot")));
+	pot = (pot / 7) % 100; // Convertit la valeur en pourcentage
+	promptText->setPlainText("Ajustez le levier de vitesse a la moitie de la course: " + QString::number(pot) + " /100");
+	if (pot > 40 && pot < 60)
+	{
+		stat->readManette(pot);		//fix le speed du jeu a la valeur du pot
+		takeoffPhase = TakeoffPhase::Height;
+	}
+}
 void Takeoff::updateAccelerationInitiale()
 {
+	QString vitesse = QString::number(speed);
+	QString vitesseRecquise = QString::number(recquiredSpeed);
+	promptText->setPlainText("Agitez la manette pour accelerer! Vitesse: " + vitesse + "Vitesse recquise: " + vitesseRecquise);
 	if (input == SPACEBAR || input == BOUTON_BAS || input == SHAKE)
 	{
 		speed += 10;
@@ -145,13 +191,13 @@ void Takeoff::updateAcceleration()
 	if (input == SPACEBAR || input == BOUTON_BAS || input == SHAKE)
 	{
   		speed += 8;	
-		stat->setSpeed(speed % 10 + 2);
+		//stat->setSpeed(speed % 10 + 2);
 		input = 0;
 	}
 	countRalentissement++;
 	if (countRalentissement % 2 == 0)
 	{
-		stat->setSpeed(speed % 10 + 2);
+		//stat->setSpeed(speed % 10 + 2);
 		speed -= 1;
 		if (speed < 10)
 			speed = 10;
@@ -159,13 +205,11 @@ void Takeoff::updateAcceleration()
 	// stat->changeSpeed(speed);
 	if (speed >= recquiredSpeed)
 	{
-		takeoffPhase = TakeoffPhase::Height;
+		takeoffPhase = TakeoffPhase::ChangerPot;
 	}
 	QString vitesse = QString::number(speed);
 	QString vitesseRecquise = QString::number(recquiredSpeed);
-	//qDebug() << "Vitesse:" << vitesse << "Vitesse recquise:" << vitesseRecquise;
-	promptText->setPlainText("Vitesse: " + vitesse + "Vitesse recquise: "+ vitesseRecquise);
-	//qDebug() << "Scrolling runway at speed" << scrollSpeed;
+	promptText->setPlainText("Agitez la manette pour accelerer! Vitesse: " + vitesse + "  Vitesse recquise: "+ vitesseRecquise);
 }
 void Takeoff::updateHeight()
 {
@@ -243,7 +287,7 @@ void Takeoff::updateHeight()
 	
 	if (successCount >= 4) {
 		promptText->setPlainText("Decollage reussi!");
-		stat->setSpeed(15);
+		//stat->setSpeed(15);
 		takeoffPhase = TakeoffPhase::Success;
 	}
 	else if (failCount >= 5) {
@@ -337,7 +381,6 @@ void Takeoff::animationTakeoff()
 			}
 			plane->setRotation(0);
 		}
-		qDebug() << "toute la piste:" << touteLaPiste;
 		if (touteLaPiste && plane->y() < 1080 / 2)
 		{
 			plane->setRotation(0);

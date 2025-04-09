@@ -6,7 +6,6 @@
 #define ACTOR_POS_X 1920
 #define START_PLANE_X int(1920/3)
 
-
 Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 {
 	BackGroundVol = new QGraphicsPixmapItem();
@@ -26,14 +25,13 @@ Game::Game(Stat* s, QStackedWidget* stack, GameOver* gameOverPage)
 	count = 0;
 	landingCount = 200;
 	msg_envoi["led"] = 1;
-	promptText = new FormatTextPixmap("", nullptr, 20, TEXTE, Qt::yellow);
+	promptText = new FormatTextPixmap("", nullptr, 13, TEXTE, Qt::yellow);
 	promptText->setPos(500, 100);
 	gameScene->addItem(promptText);
 	takeoff = new Takeoff(this, plane, stat, promptText, stack, gameOverPage);
 	//state = Gamestate::Decollage;
 	
 }
-
 void Game::readKeyBoardGame()
 {
 
@@ -53,7 +51,6 @@ void Game::readKeyBoardGame()
 	{
 		stat->readKeybord('D');
 	}
-	//stat->readManette(); //ez
 	if (ConnectionSerie::hasData())
 	{
 		if (ConnectionSerie::getValue("JH") == 1)
@@ -89,8 +86,8 @@ void Game::update()
 void Game::updateGameplay()
 {
 	if(stat->close){
+		etteinManette();
 		state = Gamestate::GameOver;
- 		qDebug() << "Game Over";
 		gameOver->setVictoire(false);
 		stack->setCurrentWidget(gameOver);
 		return;
@@ -112,8 +109,9 @@ void Game::updateGameplay()
 	manageCollision();
 	if (possibleLanding())
 	{
-		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible et appuyez sur k (ou cercle) pout initialiser la sequence datterissage!");
-		if ((GetAsyncKeyState('K') < 0 || ConnectionSerie::getValue("BD")==0) && plane->y()<1080 / 4)
+		promptText->setPlainText("Atterrissage possible, allez a la plus haute altitude possible,\n augmentez votre vitesse en haut de 15000 kmh, et appuyez sur k (ou cercle) pout initialiser la sequence datterissage!");
+		qDebug() << "speed:" << stat->getSpeed();
+		if (((GetAsyncKeyState('K') < 0 || ConnectionSerie::getValue("BD")==0)) && plane->y()<1080 / 4 && stat->getSpeed()>10)
 		{
 			for (auto actor : listActor)
 			{
@@ -148,7 +146,6 @@ bool Game::possibleLanding()
 	count++;
 	return false;
 }
-
 void Game::changePlanePixmap()
 {
 	switch (stat->skinPlane)
@@ -167,7 +164,6 @@ void Game::changePlanePixmap()
 		break;
 	}
 }
-
 void Game::manageCollision()
 {
 	for (int i = listActor.size() - 1; i >= 0; --i)
@@ -197,7 +193,6 @@ void Game::afficherStat()
 	afficherStatOnGame();
 	
 }
-
 void Game::afficherStatManette()
 {
 	//affiche gaz sur bargraph manette
@@ -248,23 +243,23 @@ void Game::afficherStatManette()
 	msg_envoi["LCD"] = "score: " + std::to_string(stat->getScore());
 	ConnectionSerie::Envoie(msg_envoi);
 }
-
+void Game::etteinManette()
+{
+	msg_envoi["BAR"] = 0;
+	msg_envoi["led"] = 0;
+	msg_envoi["LCD"] = "score: " + std::to_string(stat->getScore())+ "Partie termine!";
+	ConnectionSerie::Envoie(msg_envoi);
+}
 void Game::afficherStatOnGame()
 {
 	dash->update();
 }
-
 void Game::setupStatOnGame()
 {
 	dash = new QDashboard(stat);
 	gameScene->addItem(dash);
 	
 }     
-#define OBSTACLE_MIN_DIST 700   
-#define SCREEN_HEIGHT 1080
-#define RANGEE_HEIGHT (SCREEN_HEIGHT / 4) 
-
-
 void Game::generateObstacles() {
 	if (state == Gamestate::Gameplay) {
 

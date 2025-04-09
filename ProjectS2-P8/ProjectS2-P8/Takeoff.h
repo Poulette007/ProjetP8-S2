@@ -7,6 +7,8 @@ public:
 	Takeoff(Game* game, Plane* p, Stat* s, FormatTextPixmap* prompt, QStackedWidget* stack, GameOver* gameOverPage);
 	void initPiste();
 	void updateTakeoff();
+	void updateRechauffement();
+	void updateChangerPot();
 	int readInputDecollage();
 	void shuffleDirection();
 	void animationTakeoff();
@@ -19,13 +21,15 @@ private:
 	vector<QGraphicsPixmapItem*> runwayTilePixmap;
 	enum class TakeoffPhase
 	{
+		Rechauffement,
 		AccelerationInitiale,
 		Acceleration,
+		ChangerPot,
 		Height,
 		Success,
 		Failure
 	};
-	TakeoffPhase takeoffPhase = TakeoffPhase::AccelerationInitiale;
+	TakeoffPhase takeoffPhase = TakeoffPhase::Rechauffement;
 	Plane* plane;
 	Stat* stat;
 	FormatTextPixmap* promptText;
@@ -45,5 +49,7 @@ private:
 	int speed=0;
 	int recquiredSpeed = 200;
 	bool upPlane = true;
+	bool moteurChaud = false;
+	int lastPot = 0;
 };
 

@@ -26,7 +26,7 @@ class Landing; // évite l'inclusion circulaire
 class Game
 {
 private: 
-	json msg_envoi;
+	
 	QGraphicsPixmapItem* looseBackGround;
 	GameOver* overGame;
 	QStackedWidget* stack;
@@ -63,8 +63,10 @@ public:
 
 	vector<Actor*> listActor;
 	void afficherStatManette();
+	void etteinManette();
 	void afficherStatOnGame();
 	void setupStatOnGame();
+	json msg_envoi;
 	Plane *plane;
 	Takeoff* takeoff;
 	Landing* landing;
