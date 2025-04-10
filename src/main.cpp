@@ -13,20 +13,19 @@
 /*------------------------------ Constantes ---------------------------------*/
 
 #define BAUD 115200        // Frequence de transmission serielle
+//#define BAUD 9600        // Frequence de transmission serielle
 
 /*---------------------------- Variables globales ---------------------------*/
 
 volatile bool shouldSend_ = false;  // Drapeau prêt à envoyer un message
 volatile bool shouldRead_ = false;  // Drapeau prêt à lire un message
 
-int ledState = 0;
-int pinLED = 7;
-
 //Moteur vibrant
 int moteur_vibration = 42;
 
 //DEL bleue
 int DEL_PIN = 33;
+int ledState = 0;
 
 //Joystick
 int joystickY = A1;
@@ -37,19 +36,19 @@ int joystickXValue= 0;
 
 int joystickTresh = 10;
 
-bool clavierHaut = false;
-bool clavierBas = false;
-bool clavierDroit = false;
-bool clavierGauche = false;
-bool jeuHaut = false;
-bool jeuBas = false;
+bool clavierHaut = 0;
+bool clavierBas = 0;
+bool clavierDroit = 0;
+bool clavierGauche = 0;
+bool jeuHaut = 0;
+bool jeuBas = 0;
 
 //potentiometre
 int potValue = 0;
 int potTresh = 5;
 int pinPOT = A0;
 
-//Bouton poussoir
+//Boutons poussoir
 int BoutonGauche = 50;
 int BoutonDroit = 51;
 int BoutonBas = 52;
@@ -77,7 +76,7 @@ int pinZValue = 0;
 int accTresh = 3;
 
 int angleAvion = 0;
-
+int lastAccelValue = 0;
 int vecteur[20] = {0};
 
 //bargraph
@@ -92,13 +91,28 @@ int bar8 = 36;
 int bar9 = 38;
 int bar10 = 40;
 
+// Débounce pour les boutons
+unsigned long lastDebounceTimeBG = 0;
+unsigned long lastDebounceTimeBD = 0;
+unsigned long lastDebounceTimeBB = 0;
+unsigned long lastDebounceTimeBH = 0;
+const int debounceDelay = 10;  // Délai de debounce en millisecondes
+
 //LCD
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
+//Muons
+int pinMuon = A8;
+int triggerMuon = 517;
+bool valeurMuon = false;
+int amplitutdeMuon = 0;
+
+
 
 //bool
 bool trigger = false;
+bool shaking = false;
 
 /*------------------------- Prototypes de fonctions -------------------------*/
 void sendMsg(); 
@@ -112,14 +126,15 @@ void testJoystick();
 void testMoteurVibrant();
 void testEcranLCDs(String info, int curseurX, int curseurY);
 void testEcranLCDi(int info, int curseurX, int curseurY);
-void testDEL();
-void demoAudit2();
+void detecteurMuon();
 /*---------------------------- Fonctions "Main" -----------------------------*/
 
 void setup() {
   Serial.begin(BAUD);               // Initialisation de la communication serielle
-  pinMode(pinLED, OUTPUT);
-  digitalWrite(pinLED, ledState);
+  
+  //Del
+  pinMode(DEL_PIN, OUTPUT);
+  digitalWrite(DEL_PIN, ledState);
 
   //bargraph
   pinMode(bar1, OUTPUT);
@@ -146,9 +161,6 @@ void setup() {
   lcd.begin(16, 2);
   // Print a message to the LCD.
   //lcd.print("hello, world!");
-
-  //DEL
-  pinMode(DEL_PIN, OUTPUT);
 }
 
 /* Boucle principale (infinie) */
@@ -156,23 +168,25 @@ void loop() {
 
   if(shouldRead_){
     readMsg();
-    sendMsg();
   }
-
+  detecteurMuon();
+  sendMsg();
+  
   testPotentiometre();
   potValue = analogRead(pinPOT);
 
   testBouton();
 
+  
   lectureAccelerometre();
   pinXValue = analogRead(pinX);
 
-
+  
   joystickXValue = analogRead(joystickX);
   joystickYValue = analogRead(joystickY);
   testJoystick();
-
-  delay(50);  // delais de 10 ms
+  //faut que le arduino soit plus lent que l'ordi
+  delay(90);  
 }
 
 /*---------------------------Definition de fonctions ------------------------*/
@@ -197,12 +211,16 @@ void testPotentiometre(){
 
 }
 
+
 /*---------------------------Definition de fonctions ------------------------
 Fonction du test bouton
 Sortie : état du bouton
 -----------------------------------------------------------------------------*/
 
 void testBouton(){
+
+  /**/
+  //old version
   if(!(BoutonGaucheValue = digitalRead(BoutonGauche)))
     trigger = true;
   if(!(BoutonDroitValue = digitalRead(BoutonDroit)))
@@ -220,60 +238,49 @@ Sortie : valeur de la résistance en X et en Y
 
 void testJoystick(){
   //tests des valeurs du joystick
-  /*if((joystickXValue - analogRead(joystickX))>= joystickTresh){
-    trigger = true;
-  }
-  if((analogRead(joystickX) - joystickXValue)>= joystickTresh){
-    trigger = true;
-  }
-  if((joystickYValue - analogRead(joystickY))>= joystickTresh){
-    trigger = true;
-  }
-  if((analogRead(joystickY) - joystickYValue)>= joystickTresh){
-    trigger = true;
-  }*/
+
   if(!clavierBas && !clavierDroit && !clavierGauche && !clavierHaut && !jeuBas && !jeuHaut)
   {
-    if(joystickYValue > 900 && joystickXValue > 150 && joystickXValue < 800)
+    /*if(joystickYValue > 900 && joystickXValue > 150 && joystickXValue < 800)
     {
-      clavierHaut = true;
+      clavierHaut = 1;
       trigger = true;
     }
     if(joystickYValue < 100 && joystickXValue > 200 && joystickXValue < 800)
     {
-      clavierBas = true;
+      clavierBas = 1;
       trigger = true;
     }
     if(joystickXValue > 900 && joystickYValue > 200 && joystickYValue < 800)
     {
-      clavierGauche = true;
+      clavierGauche = 1;
       trigger = true;
-    }
+    }*/
     if(joystickXValue < 100 && joystickYValue > 200 && joystickYValue < 800)
     {
-      clavierDroit = true;
+      clavierDroit = 1;
       trigger = true;
     }
-    if(joystickYValue > 850)
+    if(joystickYValue > 750)
     {
-      jeuHaut = true;
+      jeuHaut = 1;
       trigger = true;
     }
-    if(joystickYValue < 150)
+    if(joystickYValue < 250)
     {
-      jeuBas = true;
+      jeuBas = 1;
       trigger = true;
     }
   }
-  if( joystickXValue < 800 && joystickXValue > 200 &&  joystickYValue < 800 && joystickYValue > 200)
+  if( joystickXValue < 750 && joystickXValue > 250 &&  joystickYValue < 750 && joystickYValue > 250)
   {
-    clavierBas = false;
-    clavierDroit = false;
-    clavierGauche = false;
-    clavierHaut = false;
+    clavierBas = 0;
+    clavierDroit = 0;
+    clavierGauche = 0;
+    clavierHaut = 0;
 
-    jeuBas = false;
-    jeuHaut = false;
+    jeuBas = 0;
+    jeuHaut = 0;
   }
 }
 
@@ -284,7 +291,7 @@ Sortie : valeur X,Y,Z
 
 void lectureAccelerometre(){
 
-  if((350 >= analogRead(pinX) && analogRead(pinX)>= 302) && angleAvion != 2)
+  /*if((350 >= analogRead(pinX) && analogRead(pinX)>= 302) && angleAvion != 2)
   {
     trigger = true;
     angleAvion = 2;
@@ -301,9 +308,22 @@ void lectureAccelerometre(){
   {
     trigger = true;
     angleAvion = 0;
+  }*/
+  int accelValue = analogRead(pinX);
+  if(abs(accelValue - lastAccelValue)>=35)
+  {
+    
+    shaking = true;
+    //Serial.println("Shaking detected!");
+    lastAccelValue = accelValue;
+    trigger = true;
 
   }
-
+  else
+  {
+    
+    shaking = false;
+  }
 }
 
 /*---------------------------Definition de fonctions ------------------------
@@ -386,75 +406,18 @@ void testEcranLCDi(int info, int curseurX, int curseurY){
   lcd.print(info);
 }
 
+void detecteurMuon(){
 
-/*---------------------------Definition de fonctions ------------------------
-Fonction d'automatisation des tests pour l'audit
-Sortie : affichage de messages à l'écran
------------------------------------------------------------------------------*/
-void demoAudit2()
-{
-  testEcranLCDs("Accelerometre", 0, 0);
-  for (int i=0; i<100; i++){
-    lectureAccelerometre();
-    delay(100);
+  //valeurMuon = false;
+  amplitutdeMuon = analogRead(pinMuon);
+
+  if(amplitutdeMuon >= triggerMuon){
+    valeurMuon = !valeurMuon;
+    trigger = true;
   }
-  delay(1000);
-  lcd.clear();
 
-  testEcranLCDs("Test du bargraph", 0, 0);
-  for (int i = 0; i < 4; i++){
-    testBargraph();
-    delay(1000);
-  }
-  delay(1000);
-  lcd.clear();
-
-  testEcranLCDs("Test des boutons", 0, 0);
-  while (!NORD || !SUD || !EST || !OUEST){
-    testBouton();
-  }
-  delay(1000);
-  lcd.clear();
-
-  testEcranLCDs("Test du pot", 0, 0);
-  for (int i=0; i<100; i++){
-    testPotentiometre();
-    delay(100);
-  }
-  delay(1000);
-  lcd.clear();
-
-  testEcranLCDs("Test du joystick", 0, 0);
-  delay(1000);
-  for (int i=0; i<100; i++){
-    testJoystick();
-    delay(100);
-  }
-  delay(1000);
-  lcd.clear();
-
-  testEcranLCDs("Test du moteur", 0, 0);
-  for (int i=0; i<2; i++){
-    testMoteurVibrant();
-    delay(100);
-  }
-  delay(1000);
-  lcd.clear();
-
-  testEcranLCDs("Test DEL bleue", 0, 0);
-  for (int i=0; i<2; i++){
-    testDEL();
-    delay(100);
-  }  
-  delay(1000);
-  lcd.clear();
-
-  testEcranLCDs("Fin des tests!!!", 0, 0);
-  delay(1000);
-  lcd.clear();
+  //Serial.println(amplitutdeMuon);
 }
-
-
 /*---------------------------Definition de fonctions ------------------------
 Fonction d'envoi
 Entrée : Aucun
@@ -462,29 +425,31 @@ Sortie : Aucun
 Traitement : Envoi du message
 -----------------------------------------------------------------------------*/
 void sendMsg() {
-  StaticJsonDocument<500> doc;
+  StaticJsonDocument<1024> doc;
+  while (Serial.available() > 0) { Serial.read(); }
   // Elements du message
   // doc["time"] = millis();
   // doc["analog"] = potValue;
-  doc["potentio"] = potValue;
-  doc["BoutonGauche"] = BoutonGaucheValue;
-  doc["BoutonDroit"] = BoutonDroitValue;
-  doc["BoutonBas"] = BoutonBasValue;
-  doc["BoutonHaut"] = BoutonHautValue;
+  doc["pot"] = potValue;
+  doc["BG"] = BoutonGaucheValue;
+  doc["BD"] = BoutonDroitValue;
+  doc["BB"] = BoutonBasValue;
+  doc["BH"] = BoutonHautValue;
 
   //tests des valeur
   //doc["joystickX"] = joystickXValue;
   //doc["joystickY"] = joystickYValue;
 
-  doc["clavierGauche"] = clavierGauche;
-  doc["clavierDroit"] = clavierDroit;
-  doc["clavierBas"] = clavierBas;
-  doc["clavierHaut"] = clavierHaut;
-  doc["jeuBas"] = jeuBas;
-  doc["jeuHaut"] = jeuHaut;
+  doc["CG"] = clavierGauche;
+  doc["CD"] = clavierDroit;
+  doc["CB"] = clavierBas;
+  doc["CH"] = clavierHaut;
+  doc["JB"] = jeuBas;
+  doc["JH"] = jeuHaut;
 
-  doc["accelX"] = angleAvion; 
-
+  //doc["AX"] = angleAvion; 
+  doc["AX"] = shaking;
+  doc["Muon"]  = valeurMuon;
 
   // JsonArray array = doc.createNestedArray("vecteur");
   // for (int i = 0; i < 20; i++) {
@@ -495,8 +460,10 @@ void sendMsg() {
 
   // Envoie
   if(trigger){
+    
     serializeJson(doc, Serial);
     Serial.println();
+    valeurMuon = false;
     trigger = false;
     shouldSend_ = false;
   }
@@ -512,7 +479,7 @@ Traitement : Réception du message
 void readMsg(){
   // Lecture du message Json
   StaticJsonDocument<500> doc;
-  JsonVariant parse_msg;
+  JsonVariant parse_msg, bargraph, lcda, moteur;
 
   // Lecture sur le port Seriel
   DeserializationError error = deserializeJson(doc, Serial);
@@ -529,6 +496,171 @@ void readMsg(){
   parse_msg = doc["led"];
   if (!parse_msg.isNull()) {
     // mettre la led a la valeur doc["led"]
-    digitalWrite(pinLED,doc["led"].as<bool>());
+    digitalWrite(DEL_PIN,doc["led"].as<bool>());
   }
+
+  bargraph = doc["BAR"];
+  if (bargraph <= 10 && bargraph >= 0)
+  {
+    if(bargraph == 10)
+    {
+      digitalWrite(bar1, HIGH);
+      digitalWrite(bar2, HIGH);
+      digitalWrite(bar3, HIGH);
+      digitalWrite(bar4, HIGH);
+      digitalWrite(bar5, HIGH);
+      digitalWrite(bar6, HIGH);
+      digitalWrite(bar7, HIGH);
+      digitalWrite(bar8, HIGH);
+      digitalWrite(bar9, HIGH);
+      digitalWrite(bar10, HIGH);
+    }
+    else if(bargraph == 9)
+    {
+      digitalWrite(bar1, 1);
+      digitalWrite(bar2, 1);
+      digitalWrite(bar3, 1);
+      digitalWrite(bar4, 1);
+      digitalWrite(bar5, 1);
+      digitalWrite(bar6, 1);
+      digitalWrite(bar7, 1);
+      digitalWrite(bar8, 1);
+      digitalWrite(bar9, 1);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 8)
+    {
+      digitalWrite(bar1, 1);
+      digitalWrite(bar2, 1);
+      digitalWrite(bar3, 1);
+      digitalWrite(bar4, 1);
+      digitalWrite(bar5, 1);
+      digitalWrite(bar6, 1);
+      digitalWrite(bar7, 1);
+      digitalWrite(bar8, 1);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 7)
+    {
+      digitalWrite(bar1, 1);
+      digitalWrite(bar2, 1);
+      digitalWrite(bar3, 1);
+      digitalWrite(bar4, 1);
+      digitalWrite(bar5, 1);
+      digitalWrite(bar6, 1);
+      digitalWrite(bar7, 1);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 6)
+    {
+      digitalWrite(bar1, 1);
+      digitalWrite(bar2, 1);
+      digitalWrite(bar3, 1);
+      digitalWrite(bar4, 1);
+      digitalWrite(bar5, 1);
+      digitalWrite(bar6, 1);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 5)
+    {
+      digitalWrite(bar1, 1);
+      digitalWrite(bar2, 1);
+      digitalWrite(bar3, 1);
+      digitalWrite(bar4, 1);
+      digitalWrite(bar5, 1);
+      digitalWrite(bar6, 0);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 4)
+    {
+      digitalWrite(bar1, HIGH);
+      digitalWrite(bar2, HIGH);
+      digitalWrite(bar3, HIGH);
+      digitalWrite(bar4, HIGH);
+      digitalWrite(bar5, 0);
+      digitalWrite(bar6, 0);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 3)
+    {
+      digitalWrite(bar1, HIGH);
+      digitalWrite(bar2, HIGH);
+      digitalWrite(bar3, HIGH);
+      digitalWrite(bar4, 0);
+      digitalWrite(bar5, 0);
+      digitalWrite(bar6, 0);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 2)
+    {
+      digitalWrite(bar1, HIGH);
+      digitalWrite(bar2, HIGH);
+      digitalWrite(bar3, 0);
+      digitalWrite(bar4, 0);
+      digitalWrite(bar5, 0);
+      digitalWrite(bar6, 0);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 1)
+    {
+      digitalWrite(bar1, HIGH);
+      digitalWrite(bar2, 0);
+      digitalWrite(bar3, 0);
+      digitalWrite(bar4, 0);
+      digitalWrite(bar5, 0);
+      digitalWrite(bar6, 0);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+    else if(bargraph == 0)
+    {
+      digitalWrite(bar1, 0);
+      digitalWrite(bar2, 0);
+      digitalWrite(bar3, 0);
+      digitalWrite(bar4, 0);
+      digitalWrite(bar5, 0);
+      digitalWrite(bar6, 0);
+      digitalWrite(bar7, 0);
+      digitalWrite(bar8, 0);
+      digitalWrite(bar9, 0);
+      digitalWrite(bar10, 0);     
+    }
+  }
+  else
+  {
+    Serial.println("Json du bargraph en dehors de 0 a 10");
+  }
+
+    //LCD JSON
+    lcda = doc["LCD"];
+    if (!lcda.isNull()){
+      lcd.setCursor(0,0);
+      lcd.print(doc["LCD"].as<String>());
+    }
+
+    //moteur
+    moteur = doc["MV"];
+    if (!parse_msg.isNull()) {
+      digitalWrite(moteur_vibration, doc["MV"].as<bool>());
+    }
 }
