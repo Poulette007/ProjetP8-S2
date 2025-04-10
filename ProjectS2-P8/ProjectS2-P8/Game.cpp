@@ -175,13 +175,24 @@ void Game::manageCollision()
 			listActor.erase(std::remove(listActor.begin(), listActor.end(), actor), listActor.end());
 			delete actor;
 			//listActor.erase(listActor.begin() + i);
-
+		}
+		else if (isCollision)
+		{
+			msg_envoi["MV"] = 0;
+			ConnectionSerie::Envoie(msg_envoi);
+			isCollision = false;
 		}
 	}
 }
-void Game::CollionDetected(Actor* actor)
+void Game::CollionDetected(Actor * actor)
 {
 	actor->action(*stat);
+	if (!isCollision)
+	{
+		msg_envoi["MV"] = 1;
+		ConnectionSerie::Envoie(msg_envoi);
+		isCollision = true;
+	}
 }
 void Game::gotoxy(int x, int y)
 {

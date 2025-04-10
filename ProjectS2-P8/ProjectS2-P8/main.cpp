@@ -157,6 +157,7 @@ int main(int argc, char* argv[])
         LoginPage->Jet->setChecked(false);
 		LoginPage->NewPlayer->setChecked(false);
 		LoginPage->PlayerIsNew = false;
+        Stat::previousScore = 0;
         Pages->setCurrentIndex(0);
         view->fitInView(gameScene->sceneRect(), Qt::KeepAspectRatio);
         });
@@ -167,7 +168,7 @@ int main(int argc, char* argv[])
         timer.start(16 - stat->speedfactor);
         readKeyTimer.start(80);
 	    GenereObstacle.start(2000);
-		MuonTimer.start(750);
+		MuonTimer.start(500);
     });
     QObject::connect(GameOverPage->Retour, &QPushButton::clicked, [&]() {
 		relancerProgram();

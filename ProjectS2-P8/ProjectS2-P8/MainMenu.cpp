@@ -20,7 +20,7 @@ MainMenu::MainMenu()
     TextScore->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     //Message de bienvenu
-    Bonjour = QString("Bonjour %1 \nMeilleur socre: %2")
+    Bonjour = QString("Bonjour %1 \nVotre meilleur score: %2")
         .arg(Stat::playerName)
         .arg(QString::number(Stat::previousScore));
     Welcome = new UserName(Bonjour, this, 35, TEXTE, Qt::white);

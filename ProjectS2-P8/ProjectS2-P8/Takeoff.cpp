@@ -119,7 +119,6 @@ void Takeoff::updateRechauffement()
 	}
 	lastPot = pot;
 	QString intensiterMot = QString::number(pot);
-	qDebug ()<< "pot: " << pot;
 	if (moteurChaud)
 	{
 		if (pot == 0)
