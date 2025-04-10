@@ -109,7 +109,7 @@ void Game::updateGameplay()
 	manageCollision();
 	if (possibleLanding())
 	{
-		promptText->setPlainText("Atterrissage possible! Recquis:\nAltitude: 810M\nVitesse: 15 000Km/h\nAppuyez sur DROIT");
+		promptText->setPlainText("Atterrissage possible! Recquis:\nAltitude: 810M\nVitesse: 15 000Km/h\nAppuyez sur O");
 		promptText->setPos(700, 100);
 		//qDebug() << "speed:" << stat->getSpeed();
 		if (((GetAsyncKeyState('K') < 0 || ConnectionSerie::getValue("BD")==0)) && plane->y()<1080 / 4 && stat->getSpeed()>10)

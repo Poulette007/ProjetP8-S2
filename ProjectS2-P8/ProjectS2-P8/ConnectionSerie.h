@@ -13,7 +13,7 @@ using namespace std;
 class ConnectionSerie
 {
 private:
-	std::string com = "COM7";
+	std::string com = "COM3";
 	static string raw_msg;
 	static json json_data;
 public:
